@@ -1,0 +1,10 @@
+.text-indent-remove:before{background-image:url(../images/ui/editor/text_indent_remove.png);}
+.folder:before{background-image:url(../images/ui/editor/folder.png);}
+.folder-add:before{background-image:url(../images/ui/editor/folder_add.png);}
+.folder-go:before{background-image:url(../images/ui/editor/folder_go.png);}
+.folder-edit:before{background-image:url(../images/ui/editor/folder_edit.png);}
+.folder-delete:before{background-image:url(../images/ui/editor/folder_delete.png);}
+.style-delete:before{background-image:url(../images/ui/editor/style_delete.png);}
+.page-copy:before{background-image:url(../images/ui/editor/page_copy.png);}
+.link-break:before{background-image:url(../images/ui/editor/link_break.png);}
+.cut:before{background-image:url(../images/ui/editor/cut.png);}

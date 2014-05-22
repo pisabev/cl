@@ -1,0 +1,302 @@
+part of action;
+
+class Button extends CJSElement {
+    CJSElement<ButtonElement> domAction;
+    List sub = new List();
+	String _name;
+
+    Button () : super (new SpanElement()) {
+		setClass('ui-button');
+        domAction = new CJSElement(new ButtonElement()).setClass('ui-button-inner').appendTo(this);
+        setState(true);
+    }
+
+	setName(String name) {
+		_name = name;
+		return this;
+	}
+
+	getName() => _name;
+
+    addSub (button) {
+        sub.add(button);
+		var ul = new CJSElement(new UListElement())..appendTo(this);
+		new CJSElement(new LIElement())..appendTo(ul).append(button);
+        return this;
+    }
+
+    setIcon (icon, [pos]) {
+        domAction.addClass(icon + ' icon');
+        if (pos != null)
+            domAction.setStyle({'backgroundPosition': pos});
+        return this;
+    }
+
+    setWidth(int width) {
+        domAction.setWidth(width);
+        return this;
+    }
+
+    setDataTip(String text, [String pos = 'bottom']) {
+        addClass('$pos-tip');
+        dom.setAttribute('data-tips', text);
+        return this;
+    }
+
+    setTitle (title) {
+        if (title != null) {
+            domAction.dom.text = title;
+			domAction.addClass('ui-button-title');
+        } else
+            domAction.removeClass('ui-button-title');
+        return this;
+    }
+
+    disable () => setState(false);
+
+	enable () => setState(true);
+
+    setState (state) {
+        super.setState(state);
+        if (state)
+            removeClass('ui-button-disabled').addClass('ui-button-active');
+        else
+            removeClass('ui-button-active').addClass('ui-button-disabled');
+        return this;
+    }
+}
+
+class ButtonOption extends CJSElement {
+    Button domAction;
+    Button domActionOptions;
+    CJSElement domList;
+    bool _showed = false;
+    List sub = new List();
+    String _name;
+
+    ButtonOption () : super (new SpanElement()) {
+        setClass('ui-button-option');
+        domAction = new Button().appendTo(this).addClass('ui-main');
+        domActionOptions = new Button().appendTo(this).addClass('ui-option').addAction((e) => domAction.domAction.dom.focus());
+        domAction.domAction.addAction(_showList,'focus');
+        domAction.domAction.addAction(_showList,'blur');
+        domList = new CJSElement(new UListElement()).addClass('ui-button-ul').appendTo(this).hide();
+        setState(true);
+    }
+
+    setName(String name) {
+        _name = name;
+        return this;
+    }
+
+    getName() => _name;
+
+    addSub (button) {
+        //var width = button.appendTo(document.body).getWidth();
+        //domAction.setWidth(width);
+        new CJSElement(new LIElement()).append(button).appendTo(domList);
+        return this;
+    }
+
+    _showList([e]) {
+        if(!_showed) {
+            domList.show();
+            _showed = true;
+            addClass('ui-open');
+            var pos = domList.getPosition(),
+                width = getWidth(),
+                height = domAction.getHeight();
+            domList.appendTo(document.body)
+            .setStyle({
+                'position':'absolute',
+                'top':'${pos['top']+height}px',
+                'left':'${pos['left']}px',
+                'width': '${width}px'});
+        } else {
+            domList.hide();
+            _showed = false;
+            removeClass('ui-open');
+            domList.appendTo(this)
+            .setStyle({
+                'position':'relative',
+                'top':'0px',
+                'left':'0px'});
+            domList.hide();
+        }
+    }
+
+    setIcon (icon, [pos]) {
+        domAction.setIcon(icon, pos);
+        return this;
+    }
+
+    setTitle (title) {
+        domAction.setTitle(title);
+        return this;
+    }
+
+    disable () => setState(false);
+
+    enable () => setState(true);
+
+    setState (state) {
+        domAction.setState(state);
+        domActionOptions.setState(state);
+        return this;
+    }
+
+    addAction(func, [event = 'click']) {
+        domAction.addAction(func, event);
+        return this;
+    }
+}
+
+class Link extends CJSElement {
+  	CJSElement domAction;
+
+  	Link () : super(new SpanElement()) {
+		domAction = new CJSElement(new AnchorElement()).appendTo(this);
+  	}
+
+  	setIcon (icon, [pos]) {
+      	domAction.setClass(icon + ' icon');
+      	if (pos)
+          	domAction.setStyle({'backgroundPosition': pos});
+      	return this;
+  	}
+
+  	setTitle (title) {
+      	domAction.dom.text = title;
+		domAction.setStyle({'paddingRight':'3px'});
+        return this;
+    }
+
+}
+
+class Menu extends ElementCollection {
+    CJSElement container;
+
+    Menu (this.container) {
+        container.addClass('ui-menu');
+    }
+
+    add (el) {
+        super.add(el);
+        container.append(el);
+        return this;
+    }
+
+    remove (name) {
+        var el = super.remove(name);
+        if (el != null)
+            container.removeChild(el);
+    }
+
+    initButtons ([List arr]) {
+        indexOfElements.forEach((el) => el.setState(false));
+        if(arr is List)
+            arr.forEach((el) => el.setState(true));
+    }
+
+    hide  () {
+        container.hide();
+        return this;
+    }
+
+    show () {
+        container.show();
+        return this;
+    }
+}
+
+class FileUploader extends Button {
+    static const String hook_before = 'hook_before';
+    static const String hook_loading = 'hook_loading';
+    static const String hook_loaded = 'hook_loaded';
+
+    CJSElement form;
+    dynamic id;
+    utils.Observer observer;
+
+    FileUploader () : super () {
+        observer = new utils.Observer();
+        createForm();
+        setStyle({'position':'relative','overflow':'hidden'}).append(form);
+    }
+
+    setUpload (String upload) {
+        var d = new FormElement();
+        form.dom.action = upload;
+        return this;
+    }
+
+    setState (bool state) {
+        super.setState(state);
+        if(form == null)
+            return this;
+        if(!state)
+            form.hide();
+        else
+            form.show();
+        return this;
+    }
+
+    createForm () {
+        form = new CJSElement(new FormElement());
+        form.dom.method = 'post';
+        form.dom.enctype = 'multipart/form-data';
+        var input = new CJSElement(new InputElement());
+        input.dom.type = 'file';
+        input.dom.name = 'filename[]';
+        input.dom.multiple = true;
+        input.setStyle({
+                'opacity':'0',
+                'position':'absolute',
+                'top':'-100px',
+                'right':'0px',
+                'font-size':'200px',
+                'cursor':'pointer',
+                'text-align':'right'
+            })
+            .addAction((e) {
+                if(input.dom.files.length > 0) {
+                    var fs = [];
+                    input.dom.files.forEach((f) => fs.add(f.name));
+                    submit(fs);
+                }
+            }, 'change')
+            .appendTo(form);
+    }
+
+    submit (List filenames) {
+        var iframe_cont, iframe;
+        var clean = () => iframe_cont.remove();
+        var frame = () {
+            var n = 'f${new Random().nextInt(1000) * 99999}';
+            iframe_cont = new CJSElement(new DivElement()).appendTo(document.body);
+            iframe = new CJSElement(new IFrameElement());
+            iframe.dom.src = 'about:blank';
+            iframe.dom.id = n;
+            iframe.dom.name = n;
+            iframe.setStyle({'display':'none'}).appendTo(iframe_cont);
+            return n;
+        };
+        var loaded = () {
+			observer.execHooks(hook_loaded, filenames);
+			clean();
+        };
+        var submitForm = (f) {
+            f.dom.target = frame();
+            if(observer.execHooks(hook_before, filenames)) {
+                observer.execHooks(hook_loading, filenames);
+				iframe.addAction((e) => loaded(),'load');
+                f.dom.submit();
+            } else {
+                clean();
+            }
+        };
+        submitForm(form);
+        return true;
+    }
+
+}

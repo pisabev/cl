@@ -369,6 +369,7 @@ class DatePickerRange extends CJSElement{
 
 class Tree {
 	dynamic id;
+    String _ref;
 	String value, type;
     String clas = 'value';
     bool loadChilds = false;
@@ -391,6 +392,7 @@ class Tree {
 		id = o['id'];
         value = o['value'];
         type = o['type'];
+        _ref = '$id:$type';
         loadChilds = o['loadchilds'];
         if (o['clas'] != null)
             clas += ' ${o['clas']}';
@@ -541,7 +543,7 @@ class Tree {
         level = lev;
         isLast = lstNode;
         leftSide = lftSide;
-        treeBuilder.indexOfObjects[id.toString()] = this;
+        treeBuilder.indexOfObjects[_ref] = this;
 
         if (childs.length > 0) {
             if (treeBuilder.startOpen && level!=0)
@@ -571,7 +573,7 @@ class TreeCheck extends Tree {
         	side = row.insertCell(-1),
         	node = row.insertCell(-1),
         	check = row.insertCell(-1),
-        	value = row.insertCell(-1);
+        	val = row.insertCell(-1);
         domNode = new AnchorElement();
         domValue = new AnchorElement();
         domNode.className = this.folderNode();
@@ -582,7 +584,7 @@ class TreeCheck extends Tree {
         domValue.onMouseDown.listen((e) => clickedFolder());
         side.append(folderSide());
         node.append(domNode);
-        value.append(domValue);
+        val.append(domValue);
 		domInput = initChecked(check);
     }
 
@@ -590,11 +592,11 @@ class TreeCheck extends Tree {
         var input = new InputElement();
         input.type = 'checkbox';
         var checkObj = treeBuilder.checkObj;
-        if (checkObj[id] || (parent != null && parent.checked)) {
+        if (checkObj.contains(_ref) || (parent != null && parent.checked)) {
             input.checked = true;
             checked = true;
         }
-        input.onClick = ((e) => checkOperate());
+        input.onClick.listen((e) => checkOperate());
         container.append(input);
         return input;
     }
@@ -637,6 +639,14 @@ class TreeCheck extends Tree {
                 childs[i].removeCheck();
     }
 
+    add (o) {
+        var childFolder = new TreeCheck(o);
+        childs.add(childFolder);
+        childFolder.parent = this;
+        childFolder.treeBuilder = treeBuilder;
+        return childFolder;
+    }
+
 }
 
 class TreeChoice extends TreeCheck {
@@ -655,24 +665,32 @@ class TreeChoice extends TreeCheck {
         }
         return false;
     }
+
+    add (o) {
+        var childFolder = new TreeChoice(o);
+        childs.add(childFolder);
+        childFolder.parent = this;
+        childFolder.treeBuilder = treeBuilder;
+        return childFolder;
+    }
 }
 
 class TreeBuilder<E extends Tree> extends CJSElement {
     E main, current;
     Map indexOfObjects = new Map();
-    Map checkObj = new Map();
+    List checkObj;
     bool startOpen = false;
     Map icons = new Map();
     Function action, actionCheck, load;
 
     TreeBuilder (o) : super (new DivElement()){
-        this.action = (o['action'] is Function)? o['action'] : () {};
-        this.actionCheck = (o['actionCheck'] is Function)? o['actionCheck'] : () {};
-        this.load = o['load'];
-        this.icons = (o['icons'] is Map)? o['icons']: {};
-        this.checkObj = o['checkObj'];
+        action = (o['action'] is Function)? o['action'] : (_) {};
+        actionCheck = (o['actionCheck'] is Function)? o['actionCheck'] : (_) {};
+        load = o['load'];
+        icons = (o['icons'] is Map)? o['icons']: {};
+        checkObj = o['checkObj'];
         var init = {'value':o['value'], 'id':(o['id'] != null)? o['id'] : 0, 'type':o['type'], 'loadchilds': true};
-        var folder = (checkObj != null)? ((checkObj is Map)? new TreeCheck(init) : new TreeChoice(init)) : new Tree(init);
+        var folder = (checkObj != null)? ((checkObj is List)? new TreeCheck(init) : new TreeChoice(init)) : new Tree(init);
 		folder.treeBuilder = this;
         folder.initialize(0, true, '');
         folder.renderObj();
@@ -686,7 +704,7 @@ class TreeBuilder<E extends Tree> extends CJSElement {
     }
 
     getChecked () {
-        checkObj = {};
+        checkObj = new List();
         setChecked(main);
         return checkObj;
     }
@@ -694,7 +712,7 @@ class TreeBuilder<E extends Tree> extends CJSElement {
     setChecked (Tree folder) {
         for (var i=0, l = folder.childs.length; i<l; i++)
             if (folder.childs[i].checked)
-                checkObj[folder.childs[i].id] = true;
+                checkObj.add(folder.childs[i]._ref);
             else
                 setChecked(folder.childs[i]);
     }

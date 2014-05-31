@@ -12,21 +12,23 @@ main() {
       var set = {
           'user': 'user',
           'menu': {'title': 'Menu', 'icon': 'user'},
-          'menu_left': [
-              {'title':'Editor', 'key':'1', 'ref':'main', 'action': ()=>editor(ap)},
-              {'title':'Tree', 'key':'2', 'ref':'main', 'action': ()=>tree(ap)},
-              {'title':'DatePicker', 'key':'3', 'ref':'main', 'action': ()=>datePicker(ap)},
-              {'title':'DatePickerRange', 'key':'4', 'ref':'main', 'action': ()=>datePickerRange(ap)},
-              {'title':'Tab', 'key':'5', 'ref':'main', 'action': ()=>ap.load('Tab', ()=>new Tab())},
-              {'title':'Test', 'key':'5', 'ref':'main', 'action': ()=>ap.load('Test', ()=>new DatePicker())},
-              {'title':'Grid', 'key':'5', 'ref':'main', 'action': ()=>ap.load('grid', ()=>new Grid())},
-              {'title':'GridData', 'key':'6', 'ref':'main', 'action': ()=>ap.load('gridData', ()=>new GridData())},
-          ],
+          'menu_left': [],
           'menu_right': [
               {'title': 'Settings', 'action': (){}}
           ]
       };
-      ap.set(set);
+      ap.initStartMenu('Test');
+      ap.setMenu([
+            {'title':'Editor', 'key':'1', 'ref':'main', 'action': ()=>editor(ap)},
+            {'title':'Tree', 'key':'2', 'ref':'main', 'action': ()=>tree(ap)},
+            {'title':'DatePicker', 'key':'3', 'ref':'main', 'action': ()=>datePicker(ap)},
+            {'title':'DatePickerRange', 'key':'4', 'ref':'main', 'action': ()=>datePickerRange(ap)},
+            {'title':'Tab', 'key':'5', 'ref':'main', 'action': ()=>ap.load('Tab', ()=>new Tab())},
+            {'title':'Test', 'key':'5', 'ref':'main', 'action': ()=>ap.load('Test', ()=>new DatePicker())},
+            {'title':'Grid', 'key':'5', 'ref':'main', 'action': ()=>ap.load('grid', ()=>new Grid())},
+            {'title':'GridData', 'key':'6', 'ref':'main', 'action': ()=>ap.load('gridData', ()=>new GridData())},
+        ]);
+      //ap.set(set);
 }
 
 class Tab extends app.Item {
@@ -191,8 +193,8 @@ tree(app.Application ap) {
 	win.setTitle('Tree');
 	win.render(500, 500, 200, 200);
 	win.initLayout();
-
-	gui.TreeBuilder tree = new gui.TreeBuilder({
+    gui.TreeBuilder tree;
+	tree = new gui.TreeBuilder({
 		'value': 'tree',
 		'type': 'article_products',
 		'id':1,
@@ -201,18 +203,33 @@ tree(app.Application ap) {
 			'product_group': 'group',
 			'product_default' :'product'
 		},
+        'checkObj': ['2:product_group'],
 		'action': (_) {},
+        'actionCheck' :(t) {
+            print(tree.getChecked());
+        },
 		'load': (renderer, item) {
 			renderer(item, {
 				'data': [{
 					'd': {'id':2, 'type': 'product_group', 'value':'electronics', 'loadchilds': false},
 					'p': 'item',
 					'r': 'ref1'
-					}],
+					},
+                {
+                    'd': {'id':3, 'type': 'product_group', 'value':'laptops', 'loadchilds': false},
+                    'p': 'item',
+                    'r': 'ref2'
+                },
+                {
+                    'd': {'id':4, 'type': 'product_group', 'value':'laptopsinner', 'loadchilds': false},
+                    'p': 'ref2',
+                    'r': 'ref1'
+                }],
 				'meta':''
 			});
 		}
 	});
+    tree.refreshTree();
 	tree.appendTo(win.getContent());
 }
 

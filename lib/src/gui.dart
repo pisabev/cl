@@ -369,8 +369,9 @@ class DatePickerRange extends CJSElement{
 
 class Tree {
 	dynamic id;
+    dynamic value;
     String _ref;
-	String value, type;
+	String type;
     String clas = 'value';
     bool loadChilds = false;
     List childs = new List();
@@ -411,7 +412,7 @@ class Tree {
         if(icon != null)
             clas += ' $icon icon';
         domValue.className = clas;
-        domValue.append(new Text(value));
+        domValue.append((value is String)? new Text(value) : value);
         domNode.onClick.listen((e) => operateNode(true));
         domValue.onMouseDown.listen((e) => clickedFolder());
         side.append(folderSide());
@@ -579,7 +580,7 @@ class TreeCheck extends Tree {
         domNode.className = this.folderNode();
         clas += ' ${folderImage()} icon';
         domValue.className = clas;
-        domValue.append(new Text(value));
+        domValue.append((value is String)? new Text(value) : value);
         domNode.onClick.listen((e) => operateNode(true));
         domValue.onMouseDown.listen((e) => clickedFolder());
         side.append(folderSide());

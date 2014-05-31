@@ -578,7 +578,9 @@ class TreeCheck extends Tree {
         domNode = new AnchorElement();
         domValue = new AnchorElement();
         domNode.className = this.folderNode();
-        clas += ' ${folderImage()} icon';
+        var icon = folderImage();
+        if(icon != null)
+            clas += ' $icon icon';
         domValue.className = clas;
         domValue.append((value is String)? new Text(value) : value);
         domNode.onClick.listen((e) => operateNode(true));

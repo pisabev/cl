@@ -196,7 +196,6 @@ tree(app.Application ap) {
     gui.TreeBuilder tree;
 	tree = new gui.TreeBuilder({
 		'value': 'tree',
-		'type': 'article_products',
 		'id':1,
 		'icons': {
 			'article_products': 'article',

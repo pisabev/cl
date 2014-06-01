@@ -1,8 +1,5 @@
 part of base;
 
-//var exp = new Expando();
-//exp[dom] = '2222';
-
 class CJSElement<E extends Element> {
 
     E dom;

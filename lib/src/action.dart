@@ -77,9 +77,14 @@ class ButtonOption extends CJSElement {
     ButtonOption () : super (new SpanElement()) {
         setClass('ui-button-option');
         domAction = new Button().appendTo(this).addClass('ui-main');
-        domActionOptions = new Button().appendTo(this).addClass('ui-option').addAction((e) => domAction.domAction.dom.focus());
-        domAction.domAction.addAction(_showList,'focus');
-        domAction.domAction.addAction(_showList,'blur');
+        domActionOptions = new Button().appendTo(this).addClass('ui-option');
+        domActionOptions.addAction(_showList,'click');
+        var doc = new CJSElement(document);
+        domActionOptions.addAction((e) => doc.addAction((MouseEvent e) {
+            doc.removeAction('mousedown.button_option');
+            if(sub.any((but) => but.domAction.dom != e.target))
+                _showList(e);
+        },'mousedown.button_option'),'click');
         domList = new CJSElement(new UListElement()).addClass('ui-button-ul').appendTo(this).hide();
         setState(true);
     }
@@ -92,8 +97,8 @@ class ButtonOption extends CJSElement {
     getName() => _name;
 
     addSub (button) {
-        //var width = button.appendTo(document.body).getWidth();
-        //domAction.setWidth(width);
+        sub.add(button);
+        button.addAction(_showList, 'click');
         new CJSElement(new LIElement()).append(button).appendTo(domList);
         return this;
     }

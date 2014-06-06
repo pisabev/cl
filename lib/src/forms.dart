@@ -854,14 +854,16 @@ class InputLoader extends InputFunction {
     }
 
     _showList() {
+        var width = getWidth(),
+            shift = getHeightInnerShift() / 2,
+            left = getPosition();
         domList.show();
-        var pos = domList.getPosition(),
-            width = getWidth();
+        var pos = domList.getPosition();
         domList.appendTo(document.body)
         .setStyle({
             'position':'absolute',
-            'top':'${pos['top']}px',
-            'left':'${pos['left']}px',
+            'top':'${pos['top'] + shift}px',
+            'left':'${left['left']}px',
             'width': '${width}px'});
     }
 

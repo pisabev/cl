@@ -112,7 +112,6 @@ class Application {
     warning (Map o) => new Messager(this, o).show();
 
     setData(String key, String value) {
-        print(data['client']['settings']);
         data['client']['settings'][key] = value;
         data_persist(data);
     }

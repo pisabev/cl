@@ -862,7 +862,7 @@ class StartMenu extends CJSElement {
             b.setTitle(o['title']);
             if(o['icon'] != null)
 				b.setIcon(o['icon']);
-            b.addAction((e) => o['action']);
+            b.addAction((e) => o['action']());
             b.addAction(removeMenu);
             b.appendTo(cont_right);
         });

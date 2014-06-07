@@ -3,6 +3,7 @@ part of app;
 class Application {
 
     Map data;
+    Function data_persist = (Map data) => null;
 
 	Element container;
 
@@ -109,6 +110,13 @@ class Application {
     }
 
     warning (Map o) => new Messager(this, o).show();
+
+    setData(String key, String value) {
+        data['settings'][key] = value;
+        data_persist(data);
+    }
+
+    getData(String key) => data['settings'][key];
 
 }
 

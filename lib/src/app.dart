@@ -112,11 +112,11 @@ class Application {
     warning (Map o) => new Messager(this, o).show();
 
     setData(String key, String value) {
-        data['settings'][key] = value;
+        data['client']['settings'][key] = value;
         data_persist(data);
     }
 
-    getData(String key) => data['settings'][key];
+    getData(String key) => data['client']['settings'][key];
 
 }
 

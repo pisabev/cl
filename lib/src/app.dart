@@ -3,7 +3,7 @@ part of app;
 class Application {
 
     Map data;
-    Function data_persist = (Map data) => null;
+    Function data_persist = (Map data) => new Future.value(null);
 
 	Element container;
 
@@ -113,7 +113,6 @@ class Application {
 
     setData(String key, String value) {
         data['client']['settings'][key] = value;
-        data_persist(data);
     }
 
     getData(String key) => data['client']['settings'][key];

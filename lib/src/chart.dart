@@ -476,12 +476,14 @@ class Pie {
         int time = 0,
             step = 10,
             duration = 500;
-        new Timer.periodic(new Duration(milliseconds: step), (t) {
+        anim() {
             var v = EasingEngine.easeOutExponential(time += step, duration, 1, 0);
             _drawFrame(v);
             if(v >= 1)
-                t.cancel();
-        });
+                return;
+            else
+                window.requestAnimationFrame(anim);
+        };
     }
 
     _drawFrame([rotateAnimation = 1]) {

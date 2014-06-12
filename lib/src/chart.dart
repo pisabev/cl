@@ -476,7 +476,7 @@ class Pie {
         int time = 0,
             step = 10,
             duration = 500;
-        frame([int time]) {
+        frame([int t]) {
             var v = EasingEngine.easeOutExponential(time += step, duration, 1, 0);
             _drawFrame(v);
             if(v >= 1)

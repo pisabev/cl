@@ -473,10 +473,9 @@ class Pie {
 	}
 
     draw() {
-        DateTime time = new DateTime.now();
-        int duration = 500;
+        DateTime start = new DateTime.now();
         frame([int t]) {
-            var v = EasingEngine.easeOutExponential(new DateTime.now().difference(time).inMilliseconds, duration, 1, 0);
+            var v = EasingEngine.easeOutExponential(new DateTime.now().difference(start).inMilliseconds, 500, 1, 0);
             _drawFrame(v);
             if(v >= 1)
                 return;

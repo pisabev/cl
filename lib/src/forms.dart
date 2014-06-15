@@ -171,13 +171,13 @@ class InputField<E extends InputElement> extends FormElement<E> {
         addAction((e) {
             var sel_start = dom.selectionStart,
             sel_end = dom.selectionEnd;
-            setValue(e, dom.value, false);
+            setValue(dom.value, false);
             dom.selectionStart = sel_start;
             dom.selectionEnd = sel_end;
         }, 'keyup');
     }
 
-    setValue(KeyboardEvent e, dynamic value, [bool silent = false]) {
+    setValue(dynamic value, [bool silent = false]) {
         if(type == INT) {
             dom.value = (value == null)? '' : value.toString();
             if(value is String && !value.isEmpty)

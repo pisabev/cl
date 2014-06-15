@@ -577,7 +577,7 @@ class InputDateRange extends _FieldBuilder<InputField> {
 
 	InputDateRange () : super (new InputField(new InputElement(), 'date')){
 		addClass('ui-field-input date-range');
-		field2 = new InputField('date').appendTo(this);
+		field2 = new InputField(new InputElement(), 'date').appendTo(this);
 		field.setStyle({'width':'70px','float':'left'});
 		field2.setStyle({'width':'70px','float':'left'});
 		field2.addAction((e) => focus(), 'focus');

@@ -168,12 +168,16 @@ class InputField<E extends InputElement> extends FormElement<E> {
         }
         addAction(_validateValue, 'blur');
         addAction(_validateInput, 'keydown');
-        addAction((e) => setValue(e, dom.value, false), 'keyup');
+        addAction((e) {
+            var sel_start = dom.selectionStart,
+            sel_end = dom.selectionEnd;
+            setValue(e, dom.value, false);
+            dom.selectionStart = sel_start;
+            dom.selectionEnd = sel_end;
+        }, 'keyup');
     }
 
     setValue(KeyboardEvent e, dynamic value, [bool silent = false]) {
-        var sel_start = dom.selectionStart,
-            sel_end = dom.selectionEnd;
         if(type == INT) {
             dom.value = (value == null)? '' : value.toString();
             if(value is String && !value.isEmpty)
@@ -196,8 +200,6 @@ class InputField<E extends InputElement> extends FormElement<E> {
             dom.value = (value == null)? '' : value.toString();
             super.setValue(value, silent);
         }
-        dom.selectionStart = sel_start;
-        dom.selectionEnd = sel_end;
         return this;
     }
 

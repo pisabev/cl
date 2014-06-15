@@ -271,7 +271,7 @@ class Customer extends ItemBuilder {
         t2.addRow(['Address',new cl_form.Input().setName('address').setContext('customer_data')]);
 
         t3.addRow(['Company',new cl_form.Input('int').setName('invoice_firm').setContext('customer_data')]);
-        t3.addRow(['Address',new cl_form.Input().setName('invoice_address').setContext('customer_data')]);
+        t3.addRow(['Address',new cl_form.Input('float').setName('invoice_address').setContext('customer_data')]);
         t3.addRow(['VAT',new cl_form.Input(cl_form.InputField.INT).setName('invoice_uid').setContext('customer_data')]);
         t3.addRow(['VAT2',new cl_form.Input().addValidation((e) {
             return new Future.value(false);

@@ -132,7 +132,7 @@ class FormElement<E extends InputElementBase> extends DataElement<E> {
 
 }
 
-class InputField<E extends InputElementBase> extends FormElement<E> {
+class InputField<E extends InputElement> extends FormElement<E> {
 
     static const String hook_validate_error = 'hook_validate_error';
     static const String hook_validate_ok = 'hook_validate_ok';
@@ -168,10 +168,12 @@ class InputField<E extends InputElementBase> extends FormElement<E> {
         }
         addAction(_validateValue, 'blur');
         addAction(_validateInput, 'keydown');
-        addAction((e) => setValue(dom.value, false), 'keyup');
+        addAction((e) => setValue(e, dom.value, false), 'keyup');
     }
 
-    setValue(dynamic value, [bool silent = false]) {
+    setValue(KeyboardEvent e, dynamic value, [bool silent = false]) {
+        var sel_start = dom.selectionStart,
+            sel_end = dom.selectionEnd;
         if(type == INT) {
             dom.value = (value == null)? '' : value.toString();
             if(value is String && !value.isEmpty)
@@ -194,6 +196,8 @@ class InputField<E extends InputElementBase> extends FormElement<E> {
             dom.value = (value == null)? '' : value.toString();
             super.setValue(value, silent);
         }
+        dom.selectionStart = sel_start;
+        dom.selectionEnd = sel_end;
         return this;
     }
 

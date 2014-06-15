@@ -66,6 +66,33 @@ class Data {
 
 }
 
+class DataList extends Data {
+    List arr_data = new List();
+
+    setValue (List arr, [bool silent = false]) {
+        if (arr != null && arr.length > 0) {
+            var form = new Form();
+            arr.forEach((el) {
+                el.addHook(Data.hook_value, observer.getHook(Data.hook_value));
+                el.addHook(Data.hook_require, observer.getHook(Data.hook_require));
+                form.add(el);
+            });
+            arr_data.add(form);
+        }
+        else
+            arr_data = [];
+        if (!silent)
+            execHooks(Data.hook_value);
+        return this;
+    }
+
+    getValue  () {
+        var arr = [];
+        arr_data.forEach((form) => arr.add(form.toOBJ()));
+        return arr;
+    }
+}
+
 class DataElement<E> extends CJSElement<E> with Data {
 
     DataElement (dom) : super(dom);

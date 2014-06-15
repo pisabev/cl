@@ -113,40 +113,48 @@ class Tab extends CJSElement {
     }
 
     activeTab (id) {
-        var v = views;
-        if(v['hidden'] != null)
-            return this;
-		v.forEach((k, v) => unactiveTab(k));
+        views.forEach((k, v) => _unactiveTab(v));
         var view = getTab(id);
-        view['option'].addClass('active');
-        view['cont'].show();
+        _activeTab(view);
         view_cur = view;
         id_cur = id;
         return this;
     }
 
     unactiveTab (id) {
-        var view = getTab(id);
-        view['option'].removeClass('active');
-        view['cont'].hide();
+        _unactiveTab(getTab(id));
         return this;
     }
 
     hideTab (id) {
-        var v = getTab(id);
-        v['option'].hide();
-        v['cont'].hide();
+        _hideTab(getTab(id));
         return this;
     }
 
     showTab (id) {
-        var v = getTab(id);
-        if(v['hidden'])
-            return this;
-        v['option'].show();
-        if(v == view_cur)
-            v['cont'].show();
+        _showTab(getTab(id));
         return this;
+    }
+
+    _unactiveTab(tab) {
+        tab['option'].removeClass('active');
+        tab['cont'].hide();
+    }
+
+    _activeTab(tab) {
+        tab['option'].addClass('active');
+        tab['cont'].show();
+    }
+
+    _hideTab(tab) {
+        tab['option'].hide();
+        tab['cont'].hide();
+    }
+
+    _showTab(tab) {
+        tab['option'].show();
+        if(tab == view_cur)
+            tab['cont'].show();
     }
 
     fillParent () {

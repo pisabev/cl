@@ -5,6 +5,7 @@
 .i-tag-remove:before{background-image:url(../images/icons/remove.svg);}
 .change:before{background-image:url(../images/icons/refresh.svg);}
 .warning:before{background-image:url(../images/icons/warning.svg);}
+.exception:before{background-image:url(../images/icons/error.svg);}
 .error:before{background-image:url(../images/icons/error.svg);}
 .save-do:before{background-image:url(../images/icons/floppy.svg);}
 .camera:before{background-image:url(../images/icons/camera.svg);}
@@ -83,8 +84,9 @@
 .page-white-word:before {background-image:url(../images/icons/file-word.svg);}
 .page-white-zip:before {background-image:url(../images/icons/file-archive.svg);}
 .page-white-put:before {background-image:url(../images/icons/file-unknown.svg);}
-.add:before {content:'+';background:none;color:#CDCDCD;font-size:16px;}
-.controls-last:before{content:'››';background:none;color:#CDCDCD;font-size:24px;line-height:21px;}
-.controls-first:before{content:'‹‹';background:none;color:#CDCDCD;font-size:24px;line-height:21px;}
-.controls-previous:before{content:'‹';background:none;color:#CDCDCD;font-size:24px;line-height:21px;}
-.controls-next:before{content:'›';background:none;color:#CDCDCD;font-size:24px;line-height:21px;}
+.icon.add:before{content:'+';background:none;font-size:16px;color:#8BA9CA;line-height:21px;}
+.icon.minus:before{content:'-';background:none;font-size:16px;color:#8BA9CA;line-height:21px;}
+.icon.controls-last:before{content:'››';background:none;font-size:24px;color:#8BA9CA;line-height:21px;}
+.icon.controls-first:before{content:'‹‹';background:none;font-size:24px;color:#8BA9CA;line-height:21px;}
+.icon.controls-previous:before{content:'‹';background:none;font-size:24px;color:#8BA9CA;line-height:21px;}
+.icon.controls-next:before{content:'›';background:none;font-size:24px;color:#8BA9CA;line-height:21px;}

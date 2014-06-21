@@ -752,9 +752,6 @@ class InputLoader extends InputFunction {
             _hideList();
             _proceedLoad(field.getValue());
         }
-        //else {
-          //  setValue([null, field.getValue()]);
-       // }
     }
 
     _renderList (List o) {

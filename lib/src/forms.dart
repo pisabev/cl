@@ -744,11 +744,12 @@ class InputLoader extends InputFunction {
             }
             return true;
         }
+        setValue([null, field.getValue()]);
         return false;
     }
 
     _keyAction (e) {
-        setValue([null, field.getValue()]);
+        //setValue([null, field.getValue()]);
         if(!_navAction(e, true)) {
             _hideList();
             _proceedLoad(field.getValue());

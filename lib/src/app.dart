@@ -28,6 +28,8 @@ class Application {
 
 	var system;
 
+    Function server_call;
+
 	Application([Container cont]) {
 		container = (cont != null)? cont : document.body;
 		_createHtml();
@@ -116,6 +118,12 @@ class Application {
     }
 
     getData(String key) => data['client']['settings'][key];
+
+    Future serverCall(String contr, Map data, [dynamic loading = null]) {
+        Completer completer = new Completer();
+        server_call(contr, data, completer.complete, loading);
+        return completer.future;
+    }
 
 }
 

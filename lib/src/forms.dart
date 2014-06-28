@@ -1519,6 +1519,7 @@ class Tag extends DataElement {
 }*/
 
 class FileManager {
+    app.Application ap;
     app.WinApp wapi;
     Map html;
     var w = {'title':INTL.File_manager(), 'icon':'folder', 'width':1000, 'height':570, 'type':'bound'};
@@ -1532,7 +1533,7 @@ class FileManager {
     List list;
     int startZIndex = 0;
 
-    FileManager(ap, this.callback, [int this.startZIndex = 1000000]) {
+    FileManager(this.ap, this.callback, [int this.startZIndex = 1000000]) {
         wapi = new app.WinApp(ap);
         initInterface();
         initTree();
@@ -1595,10 +1596,8 @@ class FileManager {
             'icons': {'folder':'group'},
             'action': clickedFolder,
             'load': (renderer, item) {
-                serverCall('directory/list',
-                    {'dirname': item.id},
-                    (data) => renderer(item, data),
-                    html['left_inner']);
+                ap.serverCall('directory/list', {'dirname': item.id},  html['left_inner'])
+                .then((data) => renderer(item, data));
             }
         });
         html['left_inner'].append(tree);
@@ -1616,7 +1615,8 @@ class FileManager {
         current = folder;
         current_file = null;
         list = [];
-        serverCall('file/list', {'dirname':current.id}, (data){
+        ap.serverCall('file/list', {'dirname':current.id}, html['right_inner'])
+        .then((data) {
             html['right_inner'].removeChilds();
             data.forEach((k, v) {
                 var c = new CJSElement(new DivElement())
@@ -1632,7 +1632,7 @@ class FileManager {
                 .addAction((e) => callback('media/${o['file']}'), 'dblclick');
             });
             renderView();
-        }, html['right_inner']);
+        });
     }
 
     clickedFile (file) {
@@ -1674,9 +1674,10 @@ class FileManager {
                 if(called)
                     return;
                 called = true;
-                serverCall('directory/add', {'parent': parent.id, 'dirname': input.getValue()}, (data){
+                ap.serverCall('directory/add', {'parent': parent.id, 'dirname': input.getValue()}, html['left_inner'])
+                .then((data) {
                     parent.treeBuilder.refreshTree(parent);
-                }, html['left_inner']);
+                });
             }
         };
         input.setValue('New folder')
@@ -1688,9 +1689,10 @@ class FileManager {
     }
 
     folderDelete (e) {
-        serverCall('directory/delete', {'dirname':current.id}, (data){
+        ap.serverCall('directory/delete', {'dirname':current.id}, html['left_inner'])
+        .then((data) {
             current.treeBuilder.refreshTree(current.parent);
-        }, html['left_inner']);
+        });
     }
 
     folderEdit (e) {
@@ -1706,10 +1708,11 @@ class FileManager {
                 if(called)
                     return;
                 called = true;
-                serverCall('directory/edit', {'dirname': current.id, 'name': current.parent.id + '/' + input.getValue()}, (data){
+                ap.serverCall('directory/edit', {'dirname': current.id, 'name': current.parent.id + '/' + input.getValue()}, null)
+                .then((data){
                     current.treeBuilder.refreshTree(current.parent);
-                    menuTop.initButtons([menuTop['folderadd'],menuTop['folderedit'],menuTop['foldermove'],menuTop['folderdelete']]);
-                }, null);
+                    menuTop.initButtons(['folderadd', 'folderedit', 'foldermove', 'folderdelete']);
+                });
             }
         };
         input.addAction(addCatRefresh,'blur')
@@ -1727,10 +1730,11 @@ class FileManager {
         gui.TreeBuilder tree;
         var moveTo = (folder) {
             if((current.id != folder.id && current.parent.id != folder.id))
-                serverCall('directory/move', {'dirname': this.current.id, 'to':folder.id+'/'+current.value}, (data) {
+                ap.serverCall('directory/move', {'dirname': this.current.id, 'to':folder.id+'/'+current.value}, null)
+                .then((data) {
                     tree.refreshTree();
                     win.close();
-                }, null);
+                });
         };
         var o = {
             'value':'/ ' + main + ' /',
@@ -1741,7 +1745,8 @@ class FileManager {
             },
             'action': moveTo.bind(this),
             'load': (renderer,item) {
-                serverCall('directory/list', {'dirname': item.id}, (data){renderer(item,data);}, null);
+                ap.serverCall('directory/list', {'dirname': item.id}, null)
+                .then((data) => renderer(item,data));
             }
         };
         tree = new gui.TreeBuilder(o);
@@ -1759,9 +1764,10 @@ class FileManager {
     }
 
     fileDelete () {
-        serverCall('file/delete', {'file' : current_file['file']}, (data) {
+        ap.serverCall('file/delete', {'file' : current_file['file']}, html['right_inner'])
+        .then((data) {
             current_file['cont'].remove();
             current_file = null;
-        }, html['right_inner']);
+        });
     }
 }

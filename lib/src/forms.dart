@@ -1492,32 +1492,6 @@ class Tag extends DataElement {
     }
 }
 
-/*serverCall(contr, obj, func, load) {
-    print('server call - $contr [$obj]');
-    if(contr == 'Filemanager/directory/getDirs') {
-        func({
-            'data' : [{
-                    'd': {'id':2, 'type': 'folder', 'value':'electronics', 'loadchilds': false},
-                    'p': 'item',
-                    'r': 'ref1'
-                },
-                {
-                    'd': {'id':3, 'type': 'folder', 'value':'laptops', 'loadchilds': false},
-                    'p': 'item',
-                    'r': 'ref2'
-                },
-                {
-                    'd': {'id':4, 'type': 'folder', 'value':'laptopsinner', 'loadchilds': false},
-                    'p': 'ref2',
-                    'r': 'ref1'
-                }],
-            'meta':''
-        });
-    } else {
-        func({});
-    }
-}*/
-
 class FileManager {
     app.Application ap;
     app.WinApp wapi;
@@ -1615,7 +1589,7 @@ class FileManager {
         current = folder;
         current_file = null;
         list = [];
-        ap.serverCall('file/list', {'dirname':current.id}, html['right_inner'])
+        ap.serverCall('/file/list', {'dirname':current.id}, html['right_inner'])
         .then((data) {
             html['right_inner'].removeChilds();
             data.forEach((k, v) {
@@ -1674,7 +1648,7 @@ class FileManager {
                 if(called)
                     return;
                 called = true;
-                ap.serverCall('directory/add', {'parent': parent.id, 'dirname': input.getValue()}, html['left_inner'])
+                ap.serverCall('/directory/add', {'parent': parent.id, 'dirname': input.getValue()}, html['left_inner'])
                 .then((data) {
                     parent.treeBuilder.refreshTree(parent);
                 });
@@ -1689,7 +1663,7 @@ class FileManager {
     }
 
     folderDelete (e) {
-        ap.serverCall('directory/delete', {'dirname':current.id}, html['left_inner'])
+        ap.serverCall('/directory/delete', {'dirname':current.id}, html['left_inner'])
         .then((data) {
             current.treeBuilder.refreshTree(current.parent);
         });
@@ -1708,7 +1682,7 @@ class FileManager {
                 if(called)
                     return;
                 called = true;
-                ap.serverCall('directory/edit', {'dirname': current.id, 'name': current.parent.id + '/' + input.getValue()}, null)
+                ap.serverCall('/directory/edit', {'dirname': current.id, 'name': current.parent.id + '/' + input.getValue()}, null)
                 .then((data){
                     current.treeBuilder.refreshTree(current.parent);
                     menuTop.initButtons(['folderadd', 'folderedit', 'foldermove', 'folderdelete']);
@@ -1730,7 +1704,7 @@ class FileManager {
         gui.TreeBuilder tree;
         var moveTo = (folder) {
             if((current.id != folder.id && current.parent.id != folder.id))
-                ap.serverCall('directory/move', {'dirname': this.current.id, 'to':folder.id+'/'+current.value}, null)
+                ap.serverCall('/directory/move', {'dirname': this.current.id, 'to':folder.id+'/'+current.value}, null)
                 .then((data) {
                     tree.refreshTree();
                     win.close();
@@ -1745,7 +1719,7 @@ class FileManager {
             },
             'action': moveTo.bind(this),
             'load': (renderer,item) {
-                ap.serverCall('directory/list', {'dirname': item.id}, null)
+                ap.serverCall('/directory/list', {'dirname': item.id}, null)
                 .then((data) => renderer(item,data));
             }
         };
@@ -1756,7 +1730,7 @@ class FileManager {
     }
 
     fileAdd (action.FileUploader uploader) {
-        uploader.setUpload('base/load/upload/?path=' + Uri.encodeComponent('media/${current.id}'));
+        uploader.setUpload('/base/load/upload/?path=' + Uri.encodeComponent('media/${current.id}'));
         uploader.observer.addHook('hooks_loaded', () {
             clickedFolder(current);
             return true;
@@ -1764,7 +1738,7 @@ class FileManager {
     }
 
     fileDelete () {
-        ap.serverCall('file/delete', {'file' : current_file['file']}, html['right_inner'])
+        ap.serverCall('/file/delete', {'file' : current_file['file']}, html['right_inner'])
         .then((data) {
             current_file['cont'].remove();
             current_file = null;

@@ -1570,7 +1570,7 @@ class FileManager {
             'icons': {'folder':'group'},
             'action': clickedFolder,
             'load': (renderer, item) {
-                ap.serverCall('directory/list', {'dirname': item.id},  html['left_inner'])
+                ap.serverCall('/directory/list', {'dirname': item.id},  html['left_inner'])
                 .then((data) => renderer(item, data));
             }
         });

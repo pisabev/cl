@@ -1104,7 +1104,11 @@ class Paginator extends DataElement {
 
 }
 
+final NodeValidatorBuilder _htmlValidator = new NodeValidatorBuilder.common()
+    ..allowInlineStyles();
+
 class Editor extends DataElement {
+    app.Application ap;
 	CJSElement<DivElement> frame;
     TextArea field;
     CJSElement head, body, footer, path;
@@ -1121,7 +1125,7 @@ class Editor extends DataElement {
 	utils.Point _res_pos;
 	int _res;
 
-    Editor () : super(new DivElement()) {
+    Editor (this.ap) : super(new DivElement()) {
 		setClass('ui-editor');
         _createHTML();
         _initMenu();
@@ -1156,19 +1160,19 @@ class Editor extends DataElement {
                                     ],*/
             //'fontsize':             ['Font Size', 'fontsize', [['Font Size',''],[1],[2],[3],[4],[5],[6],[7]]],
             //'formatblock':          ['Format Block', 'formatblock', [['Style',''],['Paragraph','<p>'],['Header 1','<h1>'],['Header 2','<h2>'],['Header 3','<h3>'],['Header 4','<h4>'],['Header 5','<h5>'],['Header 6','<h6>']]],
-            'text-list-bullets':    ['Insert Ordered List', 'insertorderedlist'],
-            'text-list-numbers':    ['Insert Unordered List', 'insertunorderedlist'],
-            //'text-indent-remove':   ['Outdent', 'outdent'],
-            //'text-indent':          ['Indent', 'indent'],
+            'text-list-numbers':    ['Insert Ordered List', 'insertorderedlist'],
+            'text-list-bullets':    ['Insert Unordered List', 'insertunorderedlist'],
+            'text-indent-remove':   ['Outdent', 'outdent'],
+            'text-indent':          ['Indent', 'indent'],
             'text-align-left':      ['Left Align', 'justifyleft'],
             'text-align-center':    ['Center Align', 'justifycenter'],
             'text-align-right':     ['Right Align', 'justifyright'],
             'text-align-justify':   ['Block Justify', 'justifyfull'],
             //'text-horizontalrule':  ['Insert Horizontal Rule', 'inserthorizontalrule'],
-            'image':                ['Insert Image', () => insertImage('insertimage')],
-            'link-add':             ['Insert Hyperlink', () => insertUrl('createlink')],
+            'image':                ['Insert Image', (e) => insertImage(e, 'insertimage')],
+            'link-add':             ['Insert Hyperlink', (e) => insertUrl(e, 'createlink')],
             //'link-break':           ['Remove Hyperlink', 'unlink'],
-            //'style-delete':         ['Remove Formatting', 'removeformat'],
+            'clear':         ['Remove Formatting', 'removeformat'],
             'printer':              ['Print', 'print'],
             'fullscreen':           ['Fullscreen', fullScreen]
         };
@@ -1286,29 +1290,38 @@ class Editor extends DataElement {
         }
     }
 
-    insertImage (e) {
-        //new FileManager(this._execute.bind(this,cmd), 1000000);
+    insertImage (e, cmd) {
+        new FileManager(ap, () => _exec(cmd), 1000000);
     }
 
-    insertUrl (e) {/*
-        var data = new CJS.gui.ContainerData();
-        var option = new CJS.gui.ContainerOption();
-        var ok = new CJS.action.Button()
+    insertUrl (e, cmd) {
+        var sel = window.getSelection();
+        if(sel.baseOffset == 0)
+            return;
+        var range = window.getSelection().getRangeAt(0);
+        app.Win win = ap.winmanager.loadBoundWin({'title':'URL'});
+        var input = new Input().setStyle({'width':'100%'});
+        var data = new ContainerData().setStyle({'padding':'3px'});
+        var option = new ContainerOption();
+        var ok = new action.Button()
             .setTitle('ОК')
-            .setIcon('save')
-            .setPosition('right')
-            .addAction(function(){
+            .setStyle({'float':'right'})
+            .addAction((e){
                 win.close();
-                var v = input.getValue();
-                this._execute(cmd, v);
-            }.bind(this),'click');
-        new CJS.action.Menu(option).add(ok);
-        var input = new Input().setWidth('100%');
+                window.getSelection()
+                    ..removeAllRanges()
+                    ..addRange(range);
+                _exec(cmd, input.getValue());
+            },'click');
+        new action.Menu(option).add(ok);
+
         data.append(input);
-        var win = centryl.app.winmanager.loadBoundWin({width:250, height:0, title:'URL'});
-        win.addColumn([data, option]);
+
+        win.getContent()
+            ..addRow(data)
+            ..addRow(option);
+        win.render(350, 100);
         input.focus();
-        win.render();*/
     }
 
     /*getExecutableElement () {
@@ -1396,7 +1409,6 @@ class Editor extends DataElement {
             .replaceAllMapped(new RegExp(r'<(b|strong|em|i|u) style="font-weight: normal;?">(.*)<\/(b|strong|em|i|u)>', multiLine: true, caseSensitive: false), (m) => '${m[2]}')
 			.replaceAllMapped(new RegExp(r'<(b|strong|em|i|u) style="(.*)">(.*)<\/(bs|strong|em|i|u)>', multiLine: true, caseSensitive: false), (m) => '<span style="${m[2]}"><${m[4]}>${m[3]}</${m[4]}></span>')
 			.replaceAllMapped(new RegExp(r'<span style="font-weight: normal;?">(.*)<\/span>', multiLine: true, caseSensitive: false), (m) => '${m[1]}')
-			.replaceAllMapped(new RegExp(r'<span style="font-weight: bold;?">(.*)<\/span>', multiLine: true, caseSensitive: false), (m) => '<strong>${m[1]}</strong>')
 			.replaceAllMapped(new RegExp(r'<span style="font-style: italic;?">(.*)<\/span>', multiLine: true, caseSensitive: false), (m) => '<em>${m[1]}</em>')
 			.replaceAllMapped(new RegExp(r'<span style="font-weight: bold;?">(.*)<\/span>|<b\b[^>]*>(.*?)<\/b[^>]*>', multiLine: true, caseSensitive: false), (m) => '<strong>${m[1]}</strong>')
 			.replaceAllMapped(new RegExp(r'<font face="(.*)">(.*)<\/font>', multiLine: true, caseSensitive: false), (m) => '<span style="font-family:${m[1]}">${m[2]}</span>');
@@ -1405,7 +1417,8 @@ class Editor extends DataElement {
     _toggleSource (e) {
         if (frame.getStyle('display') == 'none') {
             frame.show();
-            frame.dom.innerHtml = field.hide().getValue();
+            frame.dom.setInnerHtml(field.hide().getValue(), validator:_htmlValidator);
+            //frame.dom.innerHtml = field.hide().getValue();
             path.show();
             menu.indexOfElements.forEach((b) => b.setState(true));
         } else {
@@ -1474,5 +1487,279 @@ class Tag extends DataElement {
         });
         forms = temp;
         tag.remove();
+    }
+}
+
+/*serverCall(contr, obj, func, load) {
+    print('server call - $contr [$obj]');
+    if(contr == 'Filemanager/directory/getDirs') {
+        func({
+            'data' : [{
+                    'd': {'id':2, 'type': 'folder', 'value':'electronics', 'loadchilds': false},
+                    'p': 'item',
+                    'r': 'ref1'
+                },
+                {
+                    'd': {'id':3, 'type': 'folder', 'value':'laptops', 'loadchilds': false},
+                    'p': 'item',
+                    'r': 'ref2'
+                },
+                {
+                    'd': {'id':4, 'type': 'folder', 'value':'laptopsinner', 'loadchilds': false},
+                    'p': 'ref2',
+                    'r': 'ref1'
+                }],
+            'meta':''
+        });
+    } else {
+        func({});
+    }
+}*/
+
+class FileManager {
+    app.WinApp wapi;
+    Map html;
+    var w = {'title':INTL.File_manager(), 'icon':'folder', 'width':1000, 'height':570, 'type':'bound'};
+    Function callback;
+    String main = 'upload';
+    gui.TreeBuilder tree;
+    var current;
+    var current_file;
+    action.Menu menuTop;
+    action.Menu menu;
+    List list;
+    int startZIndex = 0;
+
+    FileManager(ap, this.callback, [int this.startZIndex = 1000000]) {
+        wapi = new app.WinApp(ap);
+        initInterface();
+        initTree();
+        wapi.render();
+        initLeftMenuTop();
+        initRightMenuTop();
+        wapi.initLayout();
+    }
+
+    initInterface () {
+        html = {'left_options_top': new ContainerOption(),
+            'left_inner': new ContainerDataLight(),
+            'right_options_top' :new ContainerOption(),
+            'right_inner': new ContainerData().addAction(renderView,'scroll')};
+
+        var col1 = new Container().setWidth(150)
+            ..addRow(html['left_options_top'])
+            ..addRow(html['left_inner']);
+        var col2 = new Container()..auto = true
+            ..addRow(html['right_options_top'])
+            ..addRow(html['right_inner']);
+
+        wapi.load(w, this, startZIndex);
+
+        wapi.win.getContent()
+            ..addCol(col1)
+            ..addSlider()
+            ..addCol(col2);
+    }
+
+    renderView () {
+        if(list.length > 0) {
+            var dim = this.list[0].cont.getDimensions(),
+                box_width = dim.width + list[0].cont.getWidthPMB(),
+                box_height = dim.height + list[0].cont.getHeightPMB(),
+                view_dim = html['right_inner'].getDimensions(),
+                count_left = (view_dim.width/box_width).round(),
+                count_top = (view_dim.height/box_height).round(),
+                scroll_top = html['right_inner'].dom.scrollTop,
+                shift = ((scroll_top/dim.height)*count_left).round(),
+                start = 0 + shift,
+                stop = count_top*count_left + shift;
+            int i = 0;
+            list.forEach((thumb) {
+                if(!thumb.rendered && i>=start && i<stop) {
+                    var parts = thumb.file.split('/'),
+                        file = parts[parts.length - 1];
+                    thumb.cont.setStyle({'background-image':'url(media/image'+dim.width+'x'+dim.height + '/' + parts.join('/') + '/' + Uri.encodeComponent(file)+')'});
+                    thumb.rendered = true;
+                    i++;
+                }
+            });
+        }
+    }
+
+    initTree () {
+        tree = new gui.TreeBuilder({
+            'value':'[ '+INTL.Folders()+' ]',
+            'id':main,
+            'icons': {'folder':'group'},
+            'action': clickedFolder,
+            'load': (renderer, item) {
+                serverCall('directory/list',
+                    {'dirname': item.id},
+                    (data) => renderer(item, data),
+                    html['left_inner']);
+            }
+        });
+        html['left_inner'].append(tree);
+        tree.loadTree(tree.main);
+    }
+
+    clickedFolder (folder) {
+        if(folder.id != main) {
+            menuTop.initButtons(['folderadd','folderedit','foldermove','folderdelete']);
+            menu.initButtons(['fileadd']);
+        } else {
+            menuTop.initButtons(['folderadd']);
+            menu.initButtons(['fileadd']);
+        }
+        current = folder;
+        current_file = null;
+        list = [];
+        serverCall('file/list', {'dirname':current.id}, (data){
+            html['right_inner'].removeChilds();
+            data.forEach((k, v) {
+                var c = new CJSElement(new DivElement())
+                .addClass('ui-filemanager-image')
+                .appendTo(html['right_inner']);
+                var o = {
+                    'cont':c,
+                    'file':v,
+                    'rendered': false
+                };
+                list.add(o);
+                c.addAction((e) => clickedFile(o), 'click')
+                .addAction((e) => callback('media/${o['file']}'), 'dblclick');
+            });
+            renderView();
+        }, html['right_inner']);
+    }
+
+    clickedFile (file) {
+        if(current_file)
+            current_file['cont'].removeClass('ui-file-clicked');
+        current_file = file;
+        file['cont'].addClass('ui-file-clicked');
+        menu.initButtons(['fileadd','filedelete']);
+    }
+
+    initLeftMenuTop () {
+        menuTop = new action.Menu(html['left_options_top']);
+        menuTop.add(new action.Button().setName('folderadd').setState(false).setIcon('folder-add').addAction(folderAdd));
+        menuTop.add(new action.Button().setName('folderedit').setState(false).setIcon('folder-edit').addAction(folderEdit));
+        menuTop.add(new action.Button().setName('foldermove').setState(false).setIcon('folder-go').addAction(folderMove));
+        menuTop.add(new action.Button().setName('folderdelete').setState(false).setIcon('folder-delete').addAction(folderDelete));
+    }
+
+    initRightMenuTop () {
+        menu = new action.Menu(this.html['right_options_top']);
+        var uploader = new action.FileUploader().setName('fileadd').setTitle(INTL.Add_file()).setState(false).setIcon('add');
+        menu.add(uploader.addAction((e) => fileAdd(uploader)));
+        menu.add(new action.Button().setName('filedelete').setTitle(INTL.Delete_file()).setState(false).setIcon('delete').addAction(fileDelete));
+    }
+
+    folderAdd (e) {
+        menuTop.initButtons([]);
+        gui.Tree parent = current;
+        var newfolder = parent.add({'value':'','type':'directory'});
+        parent.initialize(parent.level, parent.isLast, parent.leftSide);
+        parent.isLoading = false;
+        parent.loadChilds = false;
+        parent.isOpen = false;
+        parent.operateNode();
+        var input = new Input();
+        var called = false;
+        var addCatRefresh = (KeyEvent e) {
+            if(e is FocusEvent || e.keyCode == 13 || e.keyCode == 27 || e.type=='blur') {
+                if(called)
+                    return;
+                called = true;
+                serverCall('directory/add', {'parent': parent.id, 'dirname': input.getValue()}, (data){
+                    parent.treeBuilder.refreshTree(parent);
+                }, html['left_inner']);
+            }
+        };
+        input.setValue('New folder')
+            .appendTo(newfolder.domValue)
+            .focus()
+            .addAction(addCatRefresh,'blur')
+            .addAction(addCatRefresh,'keydown');
+        called = false;
+    }
+
+    folderDelete (e) {
+        serverCall('directory/delete', {'dirname':current.id}, (data){
+            current.treeBuilder.refreshTree(current.parent);
+        }, html['left_inner']);
+    }
+
+    folderEdit (e) {
+        var field = current.domValue;
+        var input = new Input();
+        new CJSElement(field).setHtml('').removeClass('active').append(input);
+        input.setValue(current.value).focus();
+        var called = false;
+        var addCatRefresh = (KeyEvent e) {
+            if(e is FocusEvent || e.keyCode == 27) {
+                field.innerHtml = current.value;
+            } else if(e.keyCode == 13 || e.type == 'blur') {
+                if(called)
+                    return;
+                called = true;
+                serverCall('directory/edit', {'dirname': current.id, 'name': current.parent.id + '/' + input.getValue()}, (data){
+                    current.treeBuilder.refreshTree(current.parent);
+                    menuTop.initButtons([menuTop['folderadd'],menuTop['folderedit'],menuTop['foldermove'],menuTop['folderdelete']]);
+                }, null);
+            }
+        };
+        input.addAction(addCatRefresh,'blur')
+            .addAction(addCatRefresh,'keydown');
+        called = false;
+    }
+
+    folderMove (e) {
+        var html = {'inner': new ContainerDataLight()};
+        app.Win win = wapi.load({'title': INTL.Move_to(), 'icon': 'folder-go', 'type':'bound'}, this, startZIndex + 1);
+        win.getContent().addRow(html['inner']);
+        var container = new CJSElement(new DivElement()).setClass('ui-tree-cont');
+        html['inner'].dom.innerHtml = '';
+        html['inner'].append(container);
+        gui.TreeBuilder tree;
+        var moveTo = (folder) {
+            if((current.id != folder.id && current.parent.id != folder.id))
+                serverCall('directory/move', {'dirname': this.current.id, 'to':folder.id+'/'+current.value}, (data) {
+                    tree.refreshTree();
+                    win.close();
+                }, null);
+        };
+        var o = {
+            'value':'/ ' + main + ' /',
+            'type':'folder',
+            'id':main,
+            'icons': {
+                'folder':'folder'
+            },
+            'action': moveTo.bind(this),
+            'load': (renderer,item) {
+                serverCall('directory/list', {'dirname': item.id}, (data){renderer(item,data);}, null);
+            }
+        };
+        tree = new gui.TreeBuilder(o);
+        container.append(tree);
+        tree.main.openChilds();
+        win.render(300, 350);
+    }
+
+    fileAdd (action.FileUploader uploader) {
+        uploader.setUpload('base/load/upload/?path=' + Uri.encodeComponent('media/${current.id}'));
+        uploader.observer.addHook('hooks_loaded', () {
+            clickedFolder(current);
+            return true;
+        });
+    }
+
+    fileDelete () {
+        serverCall('file/delete', {'file' : current_file['file']}, (data) {
+            current_file['cont'].remove();
+            current_file = null;
+        }, html['right_inner']);
     }
 }

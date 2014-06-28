@@ -53,5 +53,15 @@ class INTL {
     static Maximum() => Intl.message('Maximum', name:'Maximum');
     static Minimum() => Intl.message('Minimum', name:'Minimum');
 
+    static File_manager() => Intl.message('File manager', name:'File_manager');
+    static Folders() => Intl.message('Folders', name:'Folders');
+    static Move_to() => Intl.message('Move to', name:'Move_to');
+    static Add_folder() => Intl.message('Add folder', name:'Add_folder');
+    static Edit_folder() => Intl.message('Edit folder', name:'Edit_folder');
+    static Move_folder() => Intl.message('Move folder', name:'Move_folder');
+    static Delete_folder() => Intl.message('Delete folder', name:'Delete_folder');
+    static Add_file() => Intl.message('Add file', name:'Add_file');
+    static Delete_file() => Intl.message('Delete file', name:'Delete_file');
+
     static pages(from, to, total) => Intl.message("current: $from - $to total: $total", name: 'pages', args:[from, to, total]);
 }

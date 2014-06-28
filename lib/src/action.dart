@@ -200,7 +200,7 @@ class Menu extends ElementCollection {
     initButtons ([List arr]) {
         indexOfElements.forEach((el) => el.setState(false));
         if(arr is List)
-            arr.forEach((el) => el.setState(true));
+            arr.forEach((name) => this[name].setState(true));
     }
 
     hide  () {

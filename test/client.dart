@@ -184,9 +184,10 @@ class DatePicker extends cl_app.Item {
 editor(cl_app.Application ap) {
 	cl_app.Win win = new cl_app.Win(ap.desktop);
 	win.setTitle('Editor');
-	win.render(500, 500, 200, 200);
+	win.render(700, 500, 200, 200);
+    win.setZIndex(500);
 
-	var editor = new cl_form.Editor();
+	var editor = new cl_form.Editor(ap);
 	win.getContent()
 		..append(editor)
 		..addHookLayout(editor);

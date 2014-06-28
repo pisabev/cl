@@ -919,9 +919,11 @@ class LangInput extends _Lang {
 
 class LangEditor extends _Lang {
 
-	LangEditor(List lang) : super(lang);
+    app.Application app;
 
-    _builder() => new Editor();
+    LangEditor(this.app, List lang) : super(lang);
+
+    _builder() => new Editor(app);
 
 }
 

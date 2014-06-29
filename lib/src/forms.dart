@@ -1554,9 +1554,10 @@ class FileManager {
             int i = 0;
             list.forEach((thumb) {
                 if(!thumb['rendered'] && i>=start && i<stop) {
-                    var parts = thumb['file'].split('/'),
-                        file = parts[parts.length - 1];
-                    thumb['cont'].setStyle({'background-image':'url(media/image${dim['width']}x${dim['height']}/${parts.join('/')}/${Uri.encodeComponent(file)})'});
+                    //var parts = thumb['file'].split('/'),
+                      //  file = parts[parts.length - 1];
+                    //thumb['cont'].setStyle({'background-image':'url(media/image${dim['width']}x${dim['height']}/${parts.join('/')}/${Uri.encodeComponent(file)})'});
+                    thumb['cont'].setStyle({'background-image':'url(media/image${dim['width']}x${dim['height']}/${Uri.encodeComponent(thumb['file'])})'});
                     thumb['rendered'] = true;
                     i++;
                 }

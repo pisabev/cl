@@ -1548,7 +1548,7 @@ class FileManager {
                 count_left = (view_dim['width']/box_width).round(),
                 count_top = (view_dim['height']/box_height).round(),
                 scroll_top = html['right_inner'].dom.scrollTop,
-                shift = ((scroll_top/dim.height)*count_left).round(),
+                shift = ((scroll_top/dim['height'])*count_left).round(),
                 start = 0 + shift,
                 stop = count_top*count_left + shift;
             int i = 0;

@@ -1293,9 +1293,6 @@ class Editor extends DataElement {
     }
 
     insertImage (e, cmd) {
-        var sel = window.getSelection();
-        if(sel.baseOffset == 0)
-            return;
         var range = window.getSelection().getRangeAt(0);
         new FileManager(ap, (path) {
             window.getSelection()

@@ -359,7 +359,10 @@ class Input extends _FieldBuilder<InputField> {
         return this;
     }
 
-	select() => field.dom.select();
+	select() {
+        field.dom.select();
+        return this;
+    }
 
 	disable() {
 		field.disable();

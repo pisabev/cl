@@ -533,7 +533,7 @@ html,body{
     overflow:hidden;
     position:relative;
 }
-.ui-desktop a.icon {
+.ui-desktop a.desktop-icon {
     position:absolute;
     display:block;
     margin:10px 0px 0px 10px;
@@ -551,12 +551,12 @@ html,body{
     -webkit-transition: background 0.3s ease-in-out;
     -o-transition: background 0.3s ease-in-out;
 }
-.ui-desktop a.icon:hover {
+.ui-desktop a.desktop-icon:hover {
     background:#48586E;
     opacity:0.8;
     filter: alpha(opacity=50);
 }
-.ui-desktop a.icon div {
+.ui-desktop a.desktop-icon div {
     height:80px;
     display:block;
     text-align:center;

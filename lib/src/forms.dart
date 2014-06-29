@@ -1659,7 +1659,6 @@ class FileManager {
             .focus()
             .addAction(addCatRefresh,'blur')
             .addAction(addCatRefresh,'keydown');
-        called = false;
     }
 
     folderDelete (e) {
@@ -1676,6 +1675,7 @@ class FileManager {
         input.setValue(current.value).focus();
         var called = false;
         var addCatRefresh = (KeyEvent e) {
+            print(e.type);
             if(e is FocusEvent || e.keyCode == 27) {
                 field.innerHtml = current.value;
             } else if(e.keyCode == 13 || e.type == 'blur') {
@@ -1691,7 +1691,6 @@ class FileManager {
         };
         input.addAction(addCatRefresh,'blur')
             .addAction(addCatRefresh,'keydown');
-        called = false;
     }
 
     folderMove (e) {

@@ -1505,7 +1505,7 @@ class FileManager {
     app.Application ap;
     app.WinApp wapi;
     Map html;
-    var w = {'title':INTL.File_manager(), 'icon':'folder', 'width':1000, 'height':570, 'type':'bound'};
+    var w = {'title':INTL.File_manager(), 'icon':'group', 'width':1000, 'height':570, 'type':'bound'};
     Function callback;
     String main = 'upload';
     gui.TreeBuilder tree;

@@ -1711,12 +1711,11 @@ class FileManager {
         var container = new CJSElement(new DivElement()).setClass('ui-tree-cont');
         html['inner'].dom.innerHtml = '';
         html['inner'].append(container);
-        gui.TreeBuilder tree;
         var moveTo = (folder) {
             if((current.id != folder.id && current.parent.id != folder.id))
                 ap.serverCall('/directory/move', {'dirname': this.current.id, 'to':'${folder.id}/${current.value}'}, null)
                 .then((data) {
-                    tree.refreshTree();
+                    current.treeBuilder.refreshTree(main);
                     wapi.win.close();
                 });
         };

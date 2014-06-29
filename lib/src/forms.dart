@@ -1593,13 +1593,13 @@ class FileManager {
         ap.serverCall('/file/list', {'dirname':current.id}, html['right_inner'])
         .then((data) {
             html['right_inner'].removeChilds();
-            data.forEach((k, v) {
+            data.forEach((f) {
                 var c = new CJSElement(new DivElement())
                 .addClass('ui-filemanager-image')
                 .appendTo(html['right_inner']);
                 var o = {
                     'cont':c,
-                    'file':v,
+                    'file':f,
                     'rendered': false
                 };
                 list.add(o);

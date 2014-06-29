@@ -1514,7 +1514,6 @@ class FileManager {
     action.Menu menuTop;
     action.Menu menu;
     List list;
-    int startZIndex = 0;
 
     FileManager(this.ap, this.callback) {
         wapi = new app.WinApp(ap);
@@ -1707,7 +1706,7 @@ class FileManager {
 
     folderMove (e) {
         var html = {'inner': new ContainerDataLight()};
-        wapi.load({'title': INTL.Move_to(), 'icon': 'group', 'type':'bound'}, this, startZIndex + 1);
+        wapi.load({'title': INTL.Move_to(), 'icon': 'group', 'type':'bound'}, this);
         wapi.win.getContent().addRow(html['inner']);
         var container = new CJSElement(new DivElement()).setClass('ui-tree-cont');
         html['inner'].dom.innerHtml = '';

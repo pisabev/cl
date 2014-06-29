@@ -1675,10 +1675,10 @@ class FileManager {
         input.setValue(current.value).focus();
         var called = false;
         var addCatRefresh = (KeyEvent e) {
-            print(e.type);
             if(e is FocusEvent || e.keyCode == 27) {
                 field.innerHtml = current.value;
             } else if(e.keyCode == 13 || e.type == 'blur') {
+                print('dsds');
                 if(called)
                     return;
                 called = true;

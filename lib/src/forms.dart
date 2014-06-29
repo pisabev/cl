@@ -1675,11 +1675,9 @@ class FileManager {
         input.setValue(current.value).focus();
         var called = false;
         var addCatRefresh = (KeyEvent e) {
-            if(e is KeyEvent)
-                print(e.keyCode);
-            if(e is KeyEvent && e.keyCode == 27) {
+            if(e is KeyboardEvent && e.keyCode == 27) {
                 field.innerHtml = current.value;
-            } if(e.type == 'blur' || (e is KeyEvent && e.keyCode == 13)) {
+            } if(e.type == 'blur' || (e is KeyboardEvent && e.keyCode == 13)) {
                 if(called)
                     return;
                 called = true;

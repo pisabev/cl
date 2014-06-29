@@ -182,6 +182,38 @@ class DatePicker extends cl_app.Item {
 }
 
 editor(cl_app.Application ap) {
+    ap.server_call = (contr, obj, func, load) {
+        print('server call - $contr [$obj]');
+        if (contr == '/directory/list') {
+            func({
+                'data' : [{
+                    'd': {
+                        'id':2, 'type': 'folder', 'value':'electronics', 'loadchilds': false
+                    },
+                    'p': 'item',
+                    'r': 'ref1'
+                },
+                {
+                    'd': {
+                        'id':3, 'type': 'folder', 'value':'laptops', 'loadchilds': false
+                    },
+                    'p': 'item',
+                    'r': 'ref2'
+                },
+                {
+                    'd': {
+                        'id':4, 'type': 'folder', 'value':'laptopsinner', 'loadchilds': false
+                    },
+                    'p': 'ref2',
+                    'r': 'ref1'
+                }],
+                'meta':''
+            });
+        } else {
+            func({
+            });
+        }
+    };
 	cl_app.Win win = new cl_app.Win(ap.desktop);
 	win.setTitle('Editor');
 	win.render(700, 500, 200, 200);

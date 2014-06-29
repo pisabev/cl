@@ -1540,23 +1540,24 @@ class FileManager {
 
     renderView () {
         if(list.length > 0) {
-            var dim = this.list[0].cont.getDimensions(),
-                box_width = dim.width + list[0].cont.getWidthPMB(),
-                box_height = dim.height + list[0].cont.getHeightPMB(),
+            var first = list.first;
+            var dim = first['cont'].getDimensions(),
+                box_width = dim['width'] + first['cont'].getWidthOuterShift(),
+                box_height = dim['height'] + first['cont'].getHeightOuterShift(),
                 view_dim = html['right_inner'].getDimensions(),
-                count_left = (view_dim.width/box_width).round(),
-                count_top = (view_dim.height/box_height).round(),
+                count_left = (view_dim['width']/box_width).round(),
+                count_top = (view_dim['height']/box_height).round(),
                 scroll_top = html['right_inner'].dom.scrollTop,
                 shift = ((scroll_top/dim.height)*count_left).round(),
                 start = 0 + shift,
                 stop = count_top*count_left + shift;
             int i = 0;
             list.forEach((thumb) {
-                if(!thumb.rendered && i>=start && i<stop) {
-                    var parts = thumb.file.split('/'),
+                if(!thumb['rendered'] && i>=start && i<stop) {
+                    var parts = thumb['file'].split('/'),
                         file = parts[parts.length - 1];
-                    thumb.cont.setStyle({'background-image':'url(media/image'+dim.width+'x'+dim.height + '/' + parts.join('/') + '/' + Uri.encodeComponent(file)+')'});
-                    thumb.rendered = true;
+                    thumb['cont'].setStyle({'background-image':'url(media/image${dim['width']}x${dim['height']}/${parts.join('/')}/${Uri.encodeComponent(file)})'});
+                    thumb['rendered'] = true;
                     i++;
                 }
             });
@@ -1657,6 +1658,7 @@ class FileManager {
         input.setValue('New folder')
             .appendTo(newfolder.domValue)
             .focus()
+            .select()
             .addAction(addCatRefresh,'blur')
             .addAction(addCatRefresh,'keydown');
     }
@@ -1672,7 +1674,7 @@ class FileManager {
         var field = current.domValue;
         var input = new Input();
         new CJSElement(field).setHtml('').removeClass('active').append(input);
-        input.setValue(current.value).focus();
+        input.setValue(current.value).focus().select();
         var called = false;
         var addCatRefresh = (KeyEvent e) {
             if(e is KeyboardEvent && e.keyCode == 27) {
@@ -1694,28 +1696,25 @@ class FileManager {
 
     folderMove (e) {
         var html = {'inner': new ContainerDataLight()};
-        app.Win win = wapi.load({'title': INTL.Move_to(), 'icon': 'folder-go', 'type':'bound'}, this, startZIndex + 1);
-        win.getContent().addRow(html['inner']);
+        wapi.load({'title': INTL.Move_to(), 'icon': 'group', 'type':'bound'}, this, startZIndex + 1);
+        wapi.win.getContent().addRow(html['inner']);
         var container = new CJSElement(new DivElement()).setClass('ui-tree-cont');
         html['inner'].dom.innerHtml = '';
         html['inner'].append(container);
         gui.TreeBuilder tree;
         var moveTo = (folder) {
             if((current.id != folder.id && current.parent.id != folder.id))
-                ap.serverCall('/directory/move', {'dirname': this.current.id, 'to':folder.id+'/'+current.value}, null)
+                ap.serverCall('/directory/move', {'dirname': this.current.id, 'to':'${folder.id}/${current.value}'}, null)
                 .then((data) {
                     tree.refreshTree();
-                    win.close();
+                    wapi.win.close();
                 });
         };
         var o = {
-            'value':'/ ' + main + ' /',
-            'type':'folder',
+            'value':'[ '+INTL.Folders()+' ]',
             'id':main,
-            'icons': {
-                'folder':'folder'
-            },
-            'action': moveTo.bind(this),
+            'icons': {'folder':'group'},
+            'action': moveTo,
             'load': (renderer,item) {
                 ap.serverCall('/directory/list', {'dirname': item.id}, null)
                 .then((data) => renderer(item,data));
@@ -1724,7 +1723,7 @@ class FileManager {
         tree = new gui.TreeBuilder(o);
         container.append(tree);
         tree.main.openChilds();
-        win.render(300, 350);
+        wapi.win.render(300, 350);
     }
 
     fileAdd (action.FileUploader uploader) {

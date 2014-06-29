@@ -1743,9 +1743,9 @@ div.search {
     float:left;
     width:150px;
     height:150px;
-    border:1px solid #535353;
+    border:1px solid #CDCDCD;
     margin:10px 0px 0px 10px;
-    background:#535353;
+    background:#FFFFFF;
     background-position:center;
     background-repeat: no-repeat;
 }

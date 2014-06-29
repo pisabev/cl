@@ -1293,14 +1293,13 @@ class Editor extends DataElement {
     }
 
     insertImage (e, cmd) {
-        print(window.getSelection());
         var range = window.getSelection().getRangeAt(0);
         new FileManager(ap, (path) {
             window.getSelection()
                 ..removeAllRanges()
                 ..addRange(range);
             _exec(cmd, path);
-        }, 1000000);
+        });
     }
 
     insertUrl (e, cmd) {
@@ -1514,7 +1513,7 @@ class FileManager {
     List list;
     int startZIndex = 0;
 
-    FileManager(this.ap, this.callback, [int this.startZIndex = 1000000]) {
+    FileManager(this.ap, this.callback) {
         wapi = new app.WinApp(ap);
         initInterface();
         initTree();
@@ -1537,7 +1536,7 @@ class FileManager {
             ..addRow(html['right_options_top'])
             ..addRow(html['right_inner']);
 
-        wapi.load(w, this, startZIndex);
+        wapi.load(w, this);
 
         wapi.win.getContent()
             ..addCol(col1)

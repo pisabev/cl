@@ -1629,7 +1629,7 @@ class FileManager {
     initRightMenuTop () {
         menu = new action.Menu(this.html['right_options_top']);
         var uploader = new action.FileUploader().setName('fileadd').setTitle(INTL.Add_file()).setState(false).setIcon('add');
-        uploader.observer.addHook(action.FileUploader.hook_loaded, () {
+        uploader.observer.addHook(action.FileUploader.hook_loaded, (files) {
             clickedFolder(current);
             return true;
         });

@@ -1715,7 +1715,7 @@ class FileManager {
             if((current.id != folder.id && current.parent.id != folder.id))
                 ap.serverCall('/directory/move', {'dirname': this.current.id, 'to':'${folder.id}/${current.value}'}, null)
                 .then((data) {
-                    current.treeBuilder.refreshTree(main);
+                    current.treeBuilder.refreshTree(current.treeBuilder.main);
                     wapi.win.close();
                 });
         };

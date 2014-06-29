@@ -1629,6 +1629,10 @@ class FileManager {
     initRightMenuTop () {
         menu = new action.Menu(this.html['right_options_top']);
         var uploader = new action.FileUploader().setName('fileadd').setTitle(INTL.Add_file()).setState(false).setIcon('add');
+        uploader.observer.addHook(action.FileUploader.hook_loaded, () {
+            clickedFolder(current);
+            return true;
+        });
         menu.add(uploader.addAction((e) => fileAdd(uploader)));
         menu.add(new action.Button().setName('filedelete').setTitle(INTL.Delete_file()).setState(false).setIcon('delete').addAction(fileDelete));
     }
@@ -1728,10 +1732,6 @@ class FileManager {
 
     fileAdd (action.FileUploader uploader) {
         uploader.setUpload('upload?path=' + Uri.encodeComponent('media/${current.id}'));
-        uploader.observer.addHook('hooks_loaded', () {
-            clickedFolder(current);
-            return true;
-        });
     }
 
     fileDelete () {

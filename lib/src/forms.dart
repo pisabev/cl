@@ -1741,7 +1741,7 @@ class FileManager {
         uploader.setUpload('upload?path=' + Uri.encodeComponent('media/${current.id}'));
     }
 
-    fileDelete () {
+    fileDelete (e) {
         ap.serverCall('/file/delete', {'file' : current_file['file']}, html['right_inner'])
         .then((data) {
             current_file['cont'].remove();

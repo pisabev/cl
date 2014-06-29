@@ -1293,6 +1293,7 @@ class Editor extends DataElement {
     }
 
     insertImage (e, cmd) {
+        print(window.getSelection());
         var range = window.getSelection().getRangeAt(0);
         new FileManager(ap, (path) {
             window.getSelection()

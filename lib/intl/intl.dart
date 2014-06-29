@@ -48,6 +48,11 @@ class INTL {
     static empty() => Intl.message('empty', name:'empty');
     static done() => Intl.message('done', name:'done');
 
+    static Yes() => Intl.message('Yes', name:'Yes');
+    static No() => Intl.message('No', name:'No');
+    static Warning() => Intl.message('Warning', name:'Warning');
+    static OK() => Intl.message('OK', name:'OK');
+
     static Total() => Intl.message('Total', name:'Total');
     static Avarage() => Intl.message('Avarage', name:'Avarage');
     static Maximum() => Intl.message('Maximum', name:'Maximum');

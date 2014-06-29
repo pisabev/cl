@@ -47,7 +47,6 @@ class Button extends CJSElement {
         if (title != null) {
             domAction.dom.text = title;
 			domAction.addClass('ui-button-title');
-            setDataTip(title);
         } else
             domAction.removeClass('ui-button-title');
         return this;

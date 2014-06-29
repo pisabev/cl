@@ -1018,6 +1018,108 @@ class UnactivePage extends CJSElement {
 
 }
 
+class Item {
+
+	Map w = {'title': 'Window'};
+	WinApp wapi;
+
+}
+
+class Hint extends CJSElement {
+    Function callBack;
+    int time = 300;
+    var timer_show, timer_close;
+    CJSElement hintDom;
+
+    Hint () : super(new AnchorElement()) {
+        setHtml('?');
+        addAction(_startShow, 'mouseover');
+        addAction(_stopShow, 'mouseout');
+        addAction(_startClose, 'mouseout');
+
+        hintDom = new CJSElement(new DivElement())
+        .setClass('ui-hint')
+        .addAction(_stopClose, 'mouseover')
+        .addAction(_startClose, 'mouseout');
+    }
+
+    setCallBack (Function callBack) {
+        this.callBack = callBack;
+        return this;
+    }
+
+    setData (data) {
+        hintDom.setHtml(data);
+        return this;
+    }
+
+    _startShow (e) {
+        callBack();
+        timer_show = new Timer(new Duration(milliseconds:time), () => showHint(e));
+    }
+
+    _stopShow  (e) => timer_show.cancel();
+
+    _startClose (e) => timer_close = new Timer(new Duration(milliseconds:time), () => _closeHint());
+
+    _stopClose (e) => timer_close.cancel();
+
+    showHint (MouseEvent e) {
+        var top = e.page.y - 10;
+        var left = e.page.x + 20;
+        if ((left + 220) > new CJSElement(document.body).getWidth())
+            left = e.page.x - 220;
+        hintDom
+        .setStyle({'top': '${top}px', 'left': '${left}px'})
+        .appendTo(document.body);
+    }
+
+    _closeHint () => hintDom.remove();
+
+}
+
+class HintManager {
+    Application ap;
+    dynamic route;
+    CJSElement hint;
+    String position;
+    Map data = new Map();
+
+    HintManager (this.ap, [String this.position]);
+
+    setRoute (route) {
+        this.route = route;
+        return this;
+    }
+
+    set (title, key) {
+        data[key] = new Map();
+        data[key]['hint'] = new Hint();
+        data[key]['data'] = null;
+        data[key]['hint'].setCallBack(() => initData(key));
+        var c = new CJSElement(new DivElement()).setClass('ui-hint-spot');
+        var t = new CJSElement(new SpanElement())
+        .setHtml(title)
+        .appendTo(c);
+        data[key]['hint'].appendTo(c);
+        if(position == 'right' || position == 'left')
+            c.setStyle({'float':position});
+        return c;
+    }
+
+    initData (key) {
+        if(data[key]['data'] != null)
+            data[key]['hint'].setData(data[key]['data']);
+        else {
+            ap.serverCall(route.reverse([key]), {}, null).then((response) {
+                if(response != null)
+                    data[key]['data'] = response;
+                data[key]['hint'].setData(data[key]['data']);
+            });
+        }
+    }
+}
+
 class Messager {
     Application ap;
     String _type, _title, _message;
@@ -1056,9 +1158,101 @@ class Messager {
     }
 }
 
-class Item {
+class Confirmer {
+    Application ap;
+    String message, title;
+    CJSElement mesDom, actDom, yesDom, noDom;
+    int width = 300;
 
-	Map w = {'title': 'Window'};
-	WinApp wapi;
+    Confirmer (this.ap);
 
+    _createHTML () {
+        yesDom = new action.Button().setTitle(INTL.Yes()).setStyle({'float':'right'});
+        noDom = new action.Button().setTitle(INTL.No()).setStyle({'float':'right'});
+        mesDom = new CJSElement(new DivElement()).setClass('ui-message');
+        mesDom.dom.text = message;
+    }
+
+    setMessage (String mes) {
+        message = mes;
+        return this;
+    }
+
+    confirm (Function callBack) {
+        _createHTML();
+        var html = new ContainerDataLight().append(mesDom);
+        var html2 = new ContainerOption();
+        new action.Menu(html2).add(noDom).add(yesDom);
+        Win win = ap.winmanager.loadBoundWin({'width': width, 'height': 0, 'title': INTL.Warning(), 'icon': 'warning'});
+        win.getContent()
+            ..addRow(html)
+            ..addRow(html2);
+        yesDom.addAction((e) {
+            win.close();
+            callBack();
+        }, 'click');
+        noDom.addAction((e) => win.close(), 'click');
+        win.render(400, null);
+    }
+
+}
+
+class WinAsk {
+    Application ap;
+    Map o;
+    Win w;
+    Container data, option;
+    action.Button ok;
+    Function on_error, on_render;
+
+    WinAsk (this.ap, this.o) {
+        createDom();
+    }
+    createDom () {
+        data = new ContainerDataLight('padded');
+        option = new ContainerOption();
+        ok = new action.Button()
+        .setTitle(INTL.OK())
+        .setIcon('save')
+        .setStyle({'float':'right'});
+        new action.Menu(option).add(ok);
+    }
+
+    appendHtml (html) {
+        data.append(html);
+        return this;
+    }
+
+    onClick ([Function func]) {
+        if(func == null)
+            func = () => true;
+        var f = (e) {
+            if (func())
+                w.close();
+            else if (on_error is Function)
+                on_error();
+        };
+        this.ok.addAction(f, 'click');
+        return this;
+    }
+
+    onError (Function func) {
+        on_error = func;
+        return this;
+    }
+
+    onRender(Function func) {
+        on_render = func;
+        return this;
+    }
+
+    render () {
+        w = ap.winmanager.loadBoundWin(o);
+        w.getContent()
+            ..addRow(data)
+            ..addRow(option);
+        w.render(o['width'], o['height']);
+        if(on_render is Function)
+            on_render();
+    }
 }

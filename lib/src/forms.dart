@@ -1727,7 +1727,7 @@ class FileManager {
     }
 
     fileAdd (action.FileUploader uploader) {
-        uploader.setUpload('upload/?path=' + Uri.encodeComponent('media/${current.id}'));
+        uploader.setUpload('upload?path=' + Uri.encodeComponent('media/${current.id}'));
         uploader.observer.addHook('hooks_loaded', () {
             clickedFolder(current);
             return true;

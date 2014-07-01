@@ -535,8 +535,10 @@ class GridData extends GridList {
 
     setValue (List arr, [bool silent = false]) {
         empty();
-        if (arr != null && arr.length > 0)
+        if (arr != null && arr.length > 0) {
             renderIt(arr);
+            show();
+        }
         return this;
     }
 

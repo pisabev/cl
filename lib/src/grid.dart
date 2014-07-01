@@ -564,7 +564,7 @@ class GridData extends GridList {
         tbody.dom.append(row);
         if (!silent)
             execHooks(Data.hook_value);
-        execHooks(GridList.hook_render);
+        //execHooks(GridList.hook_render);
         if(super.num)
             rowNumRerender();
         return row;
@@ -576,7 +576,7 @@ class GridData extends GridList {
         rowCreateBefore(r, row);
         if (!silent)
             execHooks(Data.hook_value);
-        execHooks(GridList.hook_render);
+        //execHooks(GridList.hook_render);
         if(super.num)
             rowNumRerender();
         return row;
@@ -587,7 +587,7 @@ class GridData extends GridList {
         rowCreateBefore(r, row);
         if(!silent)
             execHooks(Data.hook_value);
-        execHooks(GridList.hook_render);
+        //execHooks(GridList.hook_render);
         if(super.num)
             rowNumRerender();
         return row;
@@ -621,7 +621,7 @@ class GridData extends GridList {
             rows_send['delete'].add(row);
         }
         execHooks(Data.hook_value);
-        execHooks(GridList.hook_render);
+        //execHooks(GridList.hook_render);
         if(super.num)
             rowNumRerender();
         return this;

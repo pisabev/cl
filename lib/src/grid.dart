@@ -516,7 +516,7 @@ class GridData extends GridList {
 
     _initSendRows () => rows_send = {'insert': [],'update': [],'delete': []};
 
-    updateCell(row, k, obj) {
+    _setCell(row, k, obj) {
         dynamic rd = getRowMap(row)[k];
         if(rd is RowDataCell) {
             rd.object = obj;
@@ -524,21 +524,17 @@ class GridData extends GridList {
         } else {
             getRowMap(row)[k] = obj;
         }
-        rowChanged(row);
     }
 
-    _rowNew (TableRowElement row, [bool silent = false]) {
-        rows_send['insert'].add(row);
-        if (!silent)
-            execHooks(Data.hook_value);
+    updateCell(row, k, obj) {
+        _setCell(row, k, obj);
+        rowChanged(row);
     }
 
     setValue (List arr, [bool silent = false]) {
         empty();
-        if (arr != null && arr.length > 0) {
+        if (arr != null && arr.length > 0)
             renderIt(arr);
-            show();
-        }
         return this;
     }
 
@@ -564,8 +560,11 @@ class GridData extends GridList {
 
     rowAdd (Map obj, [bool silent = false]) {
         var row = rowCreate(obj);
-        _rowNew(row, silent);
+        rows_send['insert'].add(row);
         tbody.dom.append(row);
+        if (!silent)
+            execHooks(Data.hook_value);
+        execHooks(GridList.hook_render);
         if(super.num)
             rowNumRerender();
         return row;
@@ -573,18 +572,21 @@ class GridData extends GridList {
 
     rowAddBefore (TableRowElement r, Map obj, [bool silent = false]) {
         var row = rowCreate(obj);
-        _rowNew(row, silent);
+        rows_send['insert'].add(row);
         rowCreateBefore(r, row);
+        if (!silent)
+            execHooks(Data.hook_value);
         execHooks(GridList.hook_render);
         if(super.num)
             rowNumRerender();
         return row;
     }
 
-    rowSetBefore (TableRowElement r, Map obj) {
+    rowSetBefore (TableRowElement r, Map obj, [bool silent = false]) {
         var row = rowCreate(obj);
         rowCreateBefore(r, row);
-        execHooks(Data.hook_value);
+        if(!silent)
+            execHooks(Data.hook_value);
         execHooks(GridList.hook_render);
         if(super.num)
             rowNumRerender();
@@ -609,7 +611,6 @@ class GridData extends GridList {
                 rows_send['update'].add(row);
         }
         execHooks(Data.hook_value);
-        execHooks(GridList.hook_render);
     }
 
     rowRemove (TableRowElement row, [bool show = false]) {
@@ -636,7 +637,7 @@ class GridData extends GridList {
     rowNumRerender() {
         if(drag) {
             for (int i = 0, l = tbody.dom.childNodes.length; i < l; i++)
-                updateCell(tbody.dom.childNodes[i], 'position', i + 1);
+                _setCell(tbody.dom.childNodes[i], 'position', i + 1);
         } else
             super.rowNumRerender();
     }

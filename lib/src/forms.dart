@@ -735,8 +735,6 @@ class InputLoader extends InputFunction {
                 _moveIndex(-1);
             return true;
         } else if(k.isKeyEnter()) {
-            //if(getValue() != null)
-              //  e.stopImmediatePropagation();
             e.stopPropagation();
             e.preventDefault();
             if(list != null) {

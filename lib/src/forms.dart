@@ -735,15 +735,17 @@ class InputLoader extends InputFunction {
                 _moveIndex(-1);
             return true;
         } else if(k.isKeyEnter()) {
-            if(getValue() != null)
-                e.stopImmediatePropagation();
+            //if(getValue() != null)
+              //  e.stopImmediatePropagation();
             e.stopPropagation();
             e.preventDefault();
-            var cur_indx = (list.length == 1)? 0 : _getCurrent();
-            if(cur_indx >= 0) {
-                var cur = list[cur_indx];
-                setValue([cur[0]['k'], cur[0]['v']]);
-                _hideList();
+            if(list != null) {
+                var cur_indx = (list.length == 1) ? 0 : _getCurrent();
+                if (cur_indx >= 0) {
+                    var cur = list[cur_indx];
+                    setValue([cur[0]['k'], cur[0]['v']]);
+                    _hideList();
+                }
             }
             return true;
         }

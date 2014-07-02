@@ -24,6 +24,7 @@ main() {
       };
       ap.initStartMenu('Test');
       ap.setMenu([
+            {'title':'InputLoader', 'key':'8', 'ref':'main', 'icon': 'product', 'desktop':true, 'action': ()=>ap.load('ItemBuilder', ()=>new InputLoader(ap))},
             {'title':'ItemBuilder', 'key':'7', 'ref':'main', 'icon': 'product', 'desktop':true, 'action': ()=>ap.load('ItemBuilder', ()=>new Customer(ap))},
             {'title':'Editor', 'key':'1', 'ref':'main', 'icon': 'product', 'desktop':true, 'action': ()=>editor(ap)},
             {'title':'Tree', 'key':'2', 'ref':'main', 'action': ()=>tree(ap)},
@@ -271,7 +272,13 @@ tree(cl_app.Application ap) {
 	tree.appendTo(win.getContent());
 }
 
-class Customer extends ItemBuilder {
+class InputSupplier extends cl_form.InputLoader {
+    InputSupplier (ap) : super() {
+        execute = (el, string) => el.onLoad([{'k':1,'v':'first'},{'k':2,'v':'second'},{'k':3,'v':'third'}]);
+    }
+}
+
+class InputLoader extends ItemBuilder {
     var contr_get = '';
     var contr_save = '';
     var contr_del = '';
@@ -280,11 +287,9 @@ class Customer extends ItemBuilder {
         'icon': 'customer', 'width': 800, 'height': 500
     };
 
-    Customer(ap, [id = 0]) : super (ap, id);
+    InputLoader(ap, [id = 0]) : super (ap, id);
 
     setDefaults () {
-        form.getElement('active').setValue(1,true);
-        form.getElement('name').focus();
     }
 
     setUI () {
@@ -293,22 +298,10 @@ class Customer extends ItemBuilder {
         var t3 = createTab(3, 'Invoice');
         activeTab(1);
 
-        t1.addRow(['Active',new cl_form.Check().setName('active').setContext('customer')]);
-        t1.addRow(['Name',new cl_form.Input().setName('name').setRequired(true).setContext('customer_data')]);
-        t1.addRow(['Phone',new cl_form.Input().setName('phone').setContext('customer_data')]);
-        t1.addRow(['Email',new cl_form.Input().setName('mail').setContext('customer_data')]);
-        t1.addRow(['New_password',new cl_form.Input().setName('password').setContext('customer_data')]);
-
-        t2.addRow(['City',new cl_form.Input().setName('city').setContext('customer_data')]);
-        t2.addRow(['Post_code',new cl_form.Input().setName('post').setContext('customer_data')]);
-        t2.addRow(['Address',new cl_form.Input().setName('address').setContext('customer_data')]);
-
-        t3.addRow(['Company',new cl_form.Input('int').setName('invoice_firm').setContext('customer_data')]);
-        t3.addRow(['Address',new cl_form.Input('float').setName('invoice_address').setContext('customer_data')]);
-        t3.addRow(['VAT',new cl_form.Input(cl_form.InputField.INT).setName('invoice_uid').setContext('customer_data')]);
-        t3.addRow(['VAT2',new cl_form.Input().addValidation((e) {
-            return new Future.value(false);
-        }).setName('invoice_uid_vat').setContext('customer_data')]);
+        t1.addRow(['Input',new InputSupplier(ap).addAction((e) {
+            if(e.keyCode == 13)
+                print('enter');
+        }, 'keyup')]);
 
     }
 }

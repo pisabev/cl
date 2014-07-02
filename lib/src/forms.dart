@@ -180,13 +180,13 @@ class InputField<E extends InputElement> extends FormElement<E> {
     setValue(dynamic value, [bool silent = false]) {
         if(type == INT) {
             dom.value = (value == null)? '' : value.toString();
-            if(value is String && !value.isEmpty)
-                value = int.parse(value);
+            if(value is String)
+                value = (!value.isEmpty)? int.parse(value) : null;
             super.setValue(value, silent);
         } else if(type == FLOAT) {
             dom.value = (value == null)? '' : value.toString();
-            if(value is String && !value.isEmpty)
-                value = double.parse(value);
+            if(value is String)
+                value = (!value.isEmpty)? double.parse(value) : null;
             super.setValue(value, silent);
         } else if(type == DATE) {
             if(value is String)

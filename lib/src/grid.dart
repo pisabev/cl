@@ -109,8 +109,10 @@ class RowFormDataCell extends RowDataCell {
         } else {
             if (object is CJSElement) {
                 cell.append(object.dom);
-                if(object is Data && grid is GridData)
+                if(object is Data && grid is GridData) {
                     object.addHook(Data.hook_value, () => grid.rowChanged(row));
+                    object.addHook(Data.hook_require, grid.observer.getHook(Data.hook_require));
+                }
             } else if (object is Element)
                 cell.append(object);
             else

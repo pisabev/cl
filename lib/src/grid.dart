@@ -558,6 +558,15 @@ class GridData extends GridList {
         return data;
     }
 
+    getRequired () {
+        var a = [];
+        tbody.dom.childNodes.forEach((row) => getRowMap(row).forEach((k, dynamic dc) {
+            if(dc is RowDataCell && dc.object is Data && !dc.object.isReady())
+                a.add(dc.object);
+        }));
+        return a;
+    }
+
     rowAdd (Map obj, [bool silent = false]) {
         var row = rowCreate(obj);
         rows_send['insert'].add(row);

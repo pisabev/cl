@@ -1311,11 +1311,11 @@ class ChartGadget extends GadgetBase {
 
     ChartGadget (title) : super(title);
 
-    set (data) {
+    set (graph) {
         //print(new DateFormat('','bg_BG').dateSymbols.NARROWWEEKDAYS);
         var ch = new chart.Chart(domContent, 450, 300);
         List data = new List();
-        data.forEach((k, v) {
+        graph.forEach((k, v) {
             List d = new List();
             DateTime x = utils.Calendar.parse(k);
             d.add(new DateFormat('d MMM \nyyyy').format(x));

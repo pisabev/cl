@@ -1274,13 +1274,13 @@ class GadgetBase extends CJSElement {
     String title;
     CJSElement domContent;
 
-    GadgetBase(this.title) : super (createDom());
+    GadgetBase(this.title) : super (new CJSElement(new DivElement()).setClass('ui-gadget-outer')) {
+        createDom();
+    }
 
     createDom () {
-        var outer = new CJSElement(new DivElement()).setClass('ui-gadget-outer'),
-        title = new CJSElement(new HeadingElement.h2()).appendTo(outer)..dom.text = this.title,
-        domContent = new CJSElement(new DivElement()).appendTo(outer).setClass('ui-gadget-inner');
-        return outer;
+        new CJSElement(new HeadingElement.h2()).appendTo(this)..dom.text = this.title;
+        domContent = new CJSElement(new DivElement()).appendTo(this).setClass('ui-gadget-inner');
     }
 }
 

@@ -30,6 +30,8 @@ class Application {
 
     Function server_call;
 
+    StatsGadget stats_gadget;
+
 	Application([Container cont]) {
 		container = (cont != null)? cont : document.body;
 		_createHtml();
@@ -123,6 +125,16 @@ class Application {
         Completer completer = new Completer();
         server_call(contr, data, completer.complete, loading);
         return completer.future;
+    }
+
+    addChartGadget(title, data) {
+        new ChartGadget(title).set(data).appendTo(gadgets);
+    }
+
+    addStats(title, value) {
+        if(stats_gadget == null)
+            stats_gadget = new StatsGadget('Statistics').appendTo(gadgets);
+        stats_gadget.add(title, value);
     }
 
 }
@@ -1255,4 +1267,65 @@ class WinAsk {
         if(on_render is Function)
             on_render();
     }
+}
+
+
+class GadgetBase extends CJSElement {
+    String title;
+    CJSElement domContent;
+
+    GadgetBase(this.title) : super (createDom());
+
+    createDom () {
+        var outer = new CJSElement(new DivElement()).setClass('ui-gadget-outer'),
+        title = new CJSElement(new HeadingElement.h2()).appendTo(outer)..dom.text = this.title,
+        domContent = new CJSElement(new DivElement()).appendTo(outer).setClass('ui-gadget-inner');
+        return outer;
+    }
+}
+
+class StatsGadget extends GadgetBase {
+    forms.GridBase grid;
+
+    StatsGadget (title) : super(title) {
+        grid = new forms.GridBase();
+        grid.appendTo(domContent);
+        grid.thead.hide();
+        grid.tfoot.hide();
+    }
+
+    add (title, value) {
+        var row = grid.rowCreate();
+        var cell_left = grid.cellCreate(row);
+        cell_left.className = 'left';
+        var cell_right = grid.cellCreate(row);
+        cell_right.className = 'right';
+        cell_left.text = '$title';
+        cell_right.text = '$value';
+        return this;
+    }
+
+}
+
+class ChartGadget extends GadgetBase {
+
+    ChartGadget (title) : super(title);
+
+    set (data) {
+        //print(new DateFormat('','bg_BG').dateSymbols.NARROWWEEKDAYS);
+        var ch = new chart.Chart(domContent, 450, 300);
+        List data = new List();
+        data.forEach((k, v) {
+            List d = new List();
+            DateTime x = utils.Calendar.parse(k);
+            d.add(new DateFormat('d MMM \nyyyy').format(x));
+            d.add(v);
+            data.add(d);
+        });
+        ch.setData(data);
+        ch.initGraph();
+        ch.renderGrid();
+        ch.renderGraph();
+    }
+
 }

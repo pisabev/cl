@@ -1314,7 +1314,7 @@ class ChartGadget extends GadgetBase {
 
     set (graph) {
         //print(new DateFormat('','bg_BG').dateSymbols.NARROWWEEKDAYS);
-        var ch = new chart.Chart(domContent, 450, 300);
+        var ch = new chart.Chart(domContent, domContent.getWidthInner(), domContent.getHeightInner());
         List data = new List();
         graph.forEach((k, v) {
             List d = new List();

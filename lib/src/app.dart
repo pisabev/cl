@@ -1289,6 +1289,7 @@ class StatsGadget extends GadgetBase {
     forms.GridBase grid;
 
     StatsGadget (title) : super(title) {
+        domContent.addClass('text');
         grid = new forms.GridBase();
         grid.appendTo(domContent);
         grid.thead.hide();

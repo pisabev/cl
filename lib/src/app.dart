@@ -128,12 +128,12 @@ class Application {
     }
 
     addChartGadget(title, data) {
-        new ChartGadget(title).set(data).appendTo(gadgets);
+        new ChartGadget(title).set(data)..appendTo(gadgets);
     }
 
     addStats(title, value) {
         if(stats_gadget == null)
-            stats_gadget = new StatsGadget('Statistics').appendTo(gadgets);
+            stats_gadget = new StatsGadget('Statistics')..appendTo(gadgets);
         stats_gadget.add(title, value);
     }
 

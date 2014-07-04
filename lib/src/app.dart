@@ -128,7 +128,8 @@ class Application {
     }
 
     addChartGadget(title, data) {
-        new ChartGadget(title).set(data)..appendTo(gadgets);
+        var ch = new ChartGadget(title)..appendTo(gadgets);
+        ch.set(data);
     }
 
     addStats(title, value) {

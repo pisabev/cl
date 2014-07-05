@@ -930,9 +930,8 @@ class LangEditor extends _Lang {
     _builder() => new Editor(app);
 
     fillParent() {
-        fillParent();
+        super.fillParent();
         domInner.fillParent();
-        print('sdsd');
         getFields().forEach((editor) => editor.fillParent());
     }
 

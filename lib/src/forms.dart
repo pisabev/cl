@@ -928,6 +928,8 @@ class LangEditor extends _Lang {
 
     _builder() => new Editor(app);
 
+    fillParent() => getFields().forEach((editor) => editor.fillParent());
+
 }
 
 class LangArea extends _Lang {

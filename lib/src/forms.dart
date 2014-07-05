@@ -818,6 +818,7 @@ class InputLoader extends InputFunction {
 
 abstract class _Lang extends DataElement<DivElement> {
 
+    CJSElement domInner;
     CJSElement<ImageElement> flag;
 	List langs = new List();
     Map flags = new Map();
@@ -829,7 +830,7 @@ abstract class _Lang extends DataElement<DivElement> {
     _Lang (List lang) : super (new DivElement()){
         _static['objects'].add(this);
 		setStyle({'position':'relative'});
-        var inner = new CJSElement(new DivElement()).setStyle({'overflow':'hidden'}).appendTo(this);
+        domInner = new CJSElement(new DivElement()).setStyle({'overflow':'hidden'}).appendTo(this);
         flag = new CJSElement(new ImageElement())
             .setStyle({'position':'absolute', 'top':'4px', 'right':'4px', 'opacity':'0.5', 'cursor':'pointer'})
             .appendTo(this);
@@ -840,7 +841,7 @@ abstract class _Lang extends DataElement<DivElement> {
         var i = 0;
 		lang.forEach((l) {
 			var language_id = l['language_id'];
-	    	langs.add(_builder().setName(language_id.toString()).setValue('').appendTo(inner));
+	    	langs.add(_builder().setName(language_id.toString()).setValue('').appendTo(domInner));
 	    	flags[i.toString()] = l['code'];
 			i++;
 		});
@@ -928,7 +929,11 @@ class LangEditor extends _Lang {
 
     _builder() => new Editor(app);
 
-    fillParent() => getFields().forEach((editor) => editor.fillParent());
+    fillParent() {
+        fillParent();
+        domInner.fillParent();
+        getFields().forEach((editor) => editor.fillParent());
+    }
 
 }
 

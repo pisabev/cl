@@ -25,7 +25,6 @@ main() {
       ap.initStartMenu('Test');
       ap.setMenu([
             {'title':'InputLoader', 'key':'8', 'ref':'main', 'icon': 'product', 'desktop':true, 'action': ()=>ap.load('ItemBuilder', ()=>new InputLoader(ap))},
-            {'title':'ItemBuilder', 'key':'7', 'ref':'main', 'icon': 'product', 'desktop':true, 'action': ()=>ap.load('ItemBuilder', ()=>new Customer(ap))},
             {'title':'Editor', 'key':'1', 'ref':'main', 'icon': 'product', 'desktop':true, 'action': ()=>editor(ap)},
             {'title':'Tree', 'key':'2', 'ref':'main', 'action': ()=>tree(ap)},
             {'title':'DatePicker', 'key':'3', 'ref':'main', 'action': ()=>datePicker(ap)},

@@ -57,7 +57,7 @@ class CJSElement<E extends Element> {
         if(event_space.isNotEmpty) {
             List ev = event_space.split('.');
             if(_events[ev[0]] != null) {
-                if(ev.length == 2) {
+                if(ev.length == 2 && _events[ev[0]][ev[1]] != null) {
                     _events[ev[0]][ev[1]].forEach((func) => dom.removeEventListener(ev[0], func));
                     _events[ev[0]].remove(ev[1]);
                     if (_events[ev[0]].isEmpty)
@@ -111,6 +111,12 @@ class CJSElement<E extends Element> {
         'width': getWidthInner(),
         'height': getHeightInnerShift()
     };
+
+    math.Rectangle getRectangle() {
+        Map pos = getPosition();
+        Map dim = getDimensions();
+        return new math.Rectangle(pos['left'], pos['top'], dim['width'], dim['height']);
+    }
 
     int _calcStyle (List style) {
         int l = 0;

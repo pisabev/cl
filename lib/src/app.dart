@@ -147,7 +147,7 @@ class WinApp {
 
     WinApp (this.app);
 
-    load (Map data, Item obj, [int startZIndex]) {
+    load (Map data, Object obj, [int startZIndex]) {
 		w = data;
         if(w['type'] == 'bound') {
 			startZIndex = (startZIndex != null)? startZIndex : WinManager.zIndexBound;

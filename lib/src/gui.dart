@@ -241,14 +241,14 @@ class DatePicker extends CJSElement {
 	    var row = thead.dom.insertRow(-1);
 	    for (var day = 0; day < 7; day++) {
 	        var cell = row.insertCell(-1);
-	        cell.className = (day!=0 && (day%5==0 || day%6==0))? 'weekend' : '';
-	        cell.innerHtml = Calendar.day(day);
+	        cell.className = Calendar.isWeekend(day)? 'weekend' : '';
+	        cell.innerHtml = Calendar.day(day).substring(0,1);
 	    }
 	    for (var cell = 0; cell < 42; cell++) {
 	        row = (cell%7==0)? tbody.dom.insertRow(-1) : row;
 	        var c = row.insertCell(-1);
 	        var mod = cell%7;
-	        c.className = (mod!=0 && (mod%5==0 || mod%6==0))? 'weekend' : '';
+	        c.className = Calendar.isWeekend(mod)? 'weekend' : '';
 	        c.append(new SpanElement());
 	    }
 
@@ -298,8 +298,8 @@ class DatePicker extends CJSElement {
 	    };
 	    click(this);
 	    for (var i = 0; i < 42; i++) {
-	        var diff = i - (firstDay-1),
-	        	x = (diff >= 0 && diff < month_days[ch_m - 1])? diff+1 : '',
+	        var diff = i - (firstDay - Calendar.offset()),
+	        	x = (diff > 0 && diff <= month_days[ch_m - 1])? diff : '',
 	        	mod = i%7;
 	        if (i!=0 && mod==0)
 	            k++;

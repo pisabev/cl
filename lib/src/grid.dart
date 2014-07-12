@@ -290,7 +290,7 @@ class GridList extends GridBase {
     static const String hook_row_after = 'hook_row_after';
     static const String hook_render = 'hook_render';
 
-    Expando exp = new Expando();
+    Expando _exp = new Expando();
 
     TableRowElement row;
     bool num, drag;
@@ -303,9 +303,9 @@ class GridList extends GridBase {
         setClass('ui-table-list');
     }
 
-    Map getRowMap(TableRowElement row) => exp[row];
+    Map getRowMap(TableRowElement row) => _exp[row];
 
-    setRowMap(TableRowElement row, Map o) => exp[row] = o;
+    setRowMap(TableRowElement row, Map o) => _exp[row] = o;
 
     addRowHook (Function func) => addHook(hook_row, func);
 

@@ -49,6 +49,38 @@ class Observer {
 	}
 }
 
+class Drag {
+    CJSElement object;
+    String _namespace;
+
+    Function _start, _on, _end = (_) {};
+
+    bool enable = true;
+
+    Drag(this.object, [String this._namespace = 'drag']) {
+        object.addAction(drag, 'mousedown' + '.' + _namespace);
+    }
+
+    start(start) => _start = start;
+
+    on(Function on) => _on = on;
+
+    end(Function stop) => _end = stop;
+
+    drag (MouseEvent e) {
+        if(!enable)
+            return;
+        _start(e);
+        var document_move = document.onMouseMove.listen(_on);
+        var document_up = null;
+        document_up = document.onMouseUp.listen((e) {
+            document_move.cancel();
+            document_up.cancel();
+            _end(e);
+        });
+    }
+}
+
 class Draggable {
 	CJSElement object;
 	String namespace;
@@ -238,8 +270,10 @@ class EventValidator {
 
 class Calendar {
 
-    static List label_months =   [
-		INTL.January(),
+    static bool firstDayMonday = true;
+
+    static List label_months = new DateFormat().dateSymbols.MONTHS;
+		/*INTL.January(),
 		INTL.February(),
 		INTL.March(),
 		INTL.April(),
@@ -251,16 +285,16 @@ class Calendar {
 		INTL.October(),
 		INTL.November(),
 		INTL.December()
-	];
-    static List label_days = [
-		INTL.Monday(),
+	];*/
+    static List label_days = new DateFormat().dateSymbols.WEEKDAYS;
+		/*INTL.Monday(),
 		INTL.Tuesday(),
 		INTL.Wednesday(),
 		INTL.Thursday(),
 		INTL.Friday(),
 		INTL.Saturday(),
 		INTL.Sunday()
-    ];
+    ];*/
     static List ranges = [
         {'title': INTL.Today(), 'method': getTodayRange},
         {'title': INTL.Yesterday(), 'method': getYesterdayRange},
@@ -276,8 +310,36 @@ class Calendar {
         {'title': INTL.All(), 'method': getAllRange}
 	];
 
+    static max(DateTime d1, DateTime d2) {
+        int diff = d1.compareTo(d2);
+        return (diff > 0)? d1 : d2;
+    }
+
+    static min(DateTime d1, DateTime d2) {
+        int diff = d1.compareTo(d2);
+        return (diff < 0)? d1 : d2;
+    }
+
+    static offset() => firstDayMonday? 2 : 1;
+
     static day(int num) {
-        return label_days[num].substring(0, 1);
+        if(firstDayMonday) {
+            num += 1;
+            if(num > 6)
+                num = 0;
+        }
+        return label_days[num];
+    }
+
+    static isWeekend(int num) {
+        if(firstDayMonday) {
+            if(num == 5 || num == 6)
+                return true;
+        } else {
+            if(num == 0 || num == 6)
+                return true;
+        }
+        return false;
     }
 
     static month(int num) {

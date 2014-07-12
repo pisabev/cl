@@ -93,7 +93,7 @@ class DataList extends Data {
     }
 }
 
-class DataElement<E> extends CJSElement<E> with Data {
+class DataElement<E extends Element> extends CJSElement<E> with Data {
 
     DataElement (dom) : super(dom);
 

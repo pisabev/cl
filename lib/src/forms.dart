@@ -236,7 +236,7 @@ class InputField<E extends InputElement> extends FormElement<E> {
 
 }
 
-class TextAreaField extends InputField<TextAreaElement> {
+class TextAreaField extends InputField {
 
     TextAreaField () : super (new TextAreaElement());
 
@@ -254,7 +254,7 @@ class Text extends DataElement {
 	}
 }
 
-class SelectField extends FormElement<SelectElement> {
+class SelectField extends FormElement {
 
 	SelectField () : super (new SelectElement()) {
 		addAction((e) => setValue(dom.value, false), 'change');

@@ -1,6 +1,6 @@
 part of chart;
 
-testSVG(dom) {
+/*testSVG(dom) {
     var d = new CJSElement(new DivElement()).appendTo(dom).setClass('ui-gadget-outer');
     var h2 = new CJSElement(new HeadingElement.h2()).appendTo(d);
     var i = new CJSElement(new DivElement()).appendTo(d).setClass('ui-gadget-inner');
@@ -66,7 +66,7 @@ testSvg2(dom) {
     chart2.initGraph();
     chart2.renderGrid();
     chart2.renderGraph();*/
-}
+}*/
 
 class Chart {
 	CJSElement container;

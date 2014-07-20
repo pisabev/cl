@@ -108,14 +108,14 @@ class ButtonOption extends CJSElement {
             domList.show();
             _showed = true;
             addClass('ui-open');
-            var pos = domList.getPosition(),
+            var pos = domList.getRectangle(),
                 width = getWidth(),
                 height = domAction.getHeight();
             domList.appendTo(document.body)
             .setStyle({
                 'position':'absolute',
-                'top':'${pos['top']+height}px',
-                'left':'${pos['left']}px',
+                'top':'${pos.top + height}px',
+                'left':'${pos.left}px',
                 'width': '${width}px'});
         } else {
             domList.hide();
@@ -154,6 +154,34 @@ class ButtonOption extends CJSElement {
         domAction.addAction(func, event);
         return this;
     }
+}
+
+class ButtonGroup extends CJSElement {
+    Button current;
+    CJSElement domList;
+    List sub = new List();
+
+    ButtonGroup () : super (new SpanElement()) {
+        setClass('ui-button-group');
+        domList = new CJSElement(new UListElement()).addClass('ui-button-ul').appendTo(this);
+    }
+
+    addSub (button) {
+        sub.add(button);
+        int num = sub.length - 1;
+        button.addAction((e) => setCurrent(num), 'click');
+        new CJSElement(new LIElement()).append(button).appendTo(domList);
+        return this;
+    }
+
+    setCurrent([int num]) {
+        sub.forEach((b) => b.removeClass('current'));
+        if(num != null) {
+            sub[num].addClass('current');
+            current = sub[num];
+        }
+    }
+
 }
 
 class Link extends CJSElement {

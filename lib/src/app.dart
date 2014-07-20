@@ -239,9 +239,9 @@ class Win {
 	CJSElement win_max;
 	CJSElement win_min;
 
-	utils.Box body;
-	utils.Box box;
-	utils.Box box_h;
+	Rectangle body;
+    Rectangle box;
+    Rectangle box_h;
 
 	bool _maximized 	= false;
 	int _zIndex 		= 0;
@@ -250,13 +250,13 @@ class Win {
 	int _min_height		= 50;
 
 	CJSElement _resize_cont;
-	Map _resize_pointer;
+	Rectangle _resize_rect;
 	Map _resize_contr;
 
-	utils.Point _win_res_pos;
-	utils.Point _win_diff;
-	utils.Point _win_bound_low;
-	utils.Point _win_bound_up;
+	math.Point _win_res_pos;
+    math.Point _win_diff;
+    math.Point _win_bound_low;
+    math.Point _win_bound_up;
 
 	utils.Observer observer;
 
@@ -288,7 +288,7 @@ class Win {
 					..addAction((MouseEvent e) => e.stopPropagation(), 'mousedown')
 					..addAction((MouseEvent e) => minimize(), 'click');
 
-		win.dom.onTransitionEnd.listen((e) => initLayout());
+		//win.dom.onTransitionEnd.listen((e) => initLayout());
 
 		win_top
 			..append(win_title)
@@ -323,132 +323,130 @@ class Win {
 	}
 
 	_setWinActions() {
-		new utils.Draggable(win_top, 'stop')
-			..observer.addHook('start', (list) {
-				MouseEvent e = list[0];
+		new utils.Drag(win_top, 'stop')
+			..start((MouseEvent e) {
+                body = container.getMutableRectangle();
+                _initSize();
 				win.addClass('transform');
-				utils.Point page = new utils.Point(e.page.x, e.page.y);
-				_win_diff = page - box.p;
+                Point page = new Point(e.page.x, e.page.y);
+				//utils.Point page = new utils.Point(e.page.x, e.page.y);
+                _win_diff = page - box.topLeft;
+				//_win_diff = page - box.p;
 			})
-			..observer.addHook('on', (list) {
-				MouseEvent e = list[0];
+			..on((MouseEvent e) {
                 e.stopPropagation();
-				utils.Point pos = new utils.Point(e.page.x, e.page.y);
-				pos = (pos - _win_diff).bound(_win_bound_low, _win_bound_up);
+                Point pos = new Point(e.page.x, e.page.y) - _win_diff;
+                pos = utils.boundPoint(pos, _win_bound_low, _win_bound_up);
+				//utils.Point pos = new utils.Point(e.page.x, e.page.y);
+				//pos = (pos - _win_diff).bound(_win_bound_low, _win_bound_up);
 				setPosition(pos.x, pos.y);
 			})
-			..observer.addHook('stop', (list) => win.removeClass('transform'));
+			..end((e) => win.removeClass('transform'));
 
-		new utils.Draggable(_resize_contr['t_c'], 'stop')
-			..observer.addHook('start', (list) => _winResizeBefore(list[0]))
-			..observer.addHook('on', (list) => _winResizeOn('N', list[0]))
-			..observer.addHook('stop', _winResizeAfter);
-		new utils.Draggable(_resize_contr['r_c'], 'stop')
-			..observer.addHook('start', (list) => _winResizeBefore(list[0]))
-			..observer.addHook('on', (list) => _winResizeOn('E', list[0]))
-			..observer.addHook('stop', _winResizeAfter);
-		new utils.Draggable(_resize_contr['b_c'], 'stop')
-			..observer.addHook('start', (list) => _winResizeBefore(list[0]))
-			..observer.addHook('on', (list) => _winResizeOn('S', list[0]))
-			..observer.addHook('stop', _winResizeAfter);
-		new utils.Draggable(_resize_contr['l_c'], 'stop')
-			..observer.addHook('start', (list) => _winResizeBefore(list[0]))
-			..observer.addHook('on', (list) => _winResizeOn('W', list[0]))
-			..observer.addHook('stop', _winResizeAfter);
-		new utils.Draggable(_resize_contr['t_l_c'], 'stop')
-			..observer.addHook('start', (list) => _winResizeBefore(list[0]))
-			..observer.addHook('on', (list) => _winResizeOn('NW', list[0]))
-			..observer.addHook('stop', _winResizeAfter);
-		new utils.Draggable(_resize_contr['t_r_c'], 'stop')
-			..observer.addHook('start', (list) => _winResizeBefore(list[0]))
-			..observer.addHook('on', (list) => _winResizeOn('NE', list[0]))
-			..observer.addHook('stop', _winResizeAfter);
-		new utils.Draggable(_resize_contr['b_l_c'], 'stop')
-			..observer.addHook('start', (list) => _winResizeBefore(list[0]))
-			..observer.addHook('on', (list) => _winResizeOn('SW', list[0]))
-			..observer.addHook('stop', _winResizeAfter);
-		new utils.Draggable(_resize_contr['b_r_c'], 'stop')
-			..observer.addHook('start', (list) => _winResizeBefore(list[0]))
-			..observer.addHook('on', (list) => _winResizeOn('SE', list[0]))
-			..observer.addHook('stop', _winResizeAfter);
+		var N = new utils.Drag(_resize_contr['t_c'], 'stop')
+			..start((e) => _winResizeBefore(e))
+			..on((e) => _winResizeOn('N', e))
+			..end(_winResizeAfter);
+        var E = new utils.Drag(_resize_contr['r_c'], 'stop')
+			..start((e) => _winResizeBefore(e))
+			..on((e) => _winResizeOn('E', e))
+			..end(_winResizeAfter);
+		var S = new utils.Drag(_resize_contr['b_c'], 'stop')
+			..start((e) => _winResizeBefore(e))
+			..on((e) => _winResizeOn('S', e))
+			..end(_winResizeAfter);
+		var W = new utils.Drag(_resize_contr['l_c'], 'stop')
+			..start((e) => _winResizeBefore(e))
+			..on((e) => _winResizeOn('W', e))
+			..end(_winResizeAfter);
+		var NW = new utils.Drag(_resize_contr['t_l_c'], 'stop')
+			..start((e) => _winResizeBefore(e))
+			..on((e) => _winResizeOn('NW', e))
+			..end(_winResizeAfter);
+		var NE = new utils.Drag(_resize_contr['t_r_c'], 'stop')
+			..start((e) => _winResizeBefore(e))
+			..on((e) => _winResizeOn('NE', e))
+			..end(_winResizeAfter);
+		var SW = new utils.Drag(_resize_contr['b_l_c'], 'stop')
+			..start((e) => _winResizeBefore(e))
+			..on((e) => _winResizeOn('SW', e))
+			..end(_winResizeAfter);
+		var SE = new utils.Drag(_resize_contr['b_r_c'], 'stop')
+			..start((e) => _winResizeBefore(e))
+			..on((e) => _winResizeOn('SE', e))
+			..end(_winResizeAfter);
 	}
 
 	_winResizeBefore(MouseEvent e) {
 		e.stopPropagation();
-		_win_res_pos = new utils.Point(e.page.x, e.page.y);
+		_win_res_pos = new math.Point(e.page.x, e.page.y);
 		win.addClass('transform');
 		container.append(_resize_cont);
 	}
 
 	_winResizeOn(String destination, MouseEvent e) {
 		e.stopPropagation();
-		utils.Point pos = new utils.Point(e.page.x, e.page.y);
-		pos = pos.bound(new utils.Point(body.p.x, body.p.y), new utils.Point(body.p.x + body.w - 10, body.p.y + body.h - 10));
-		utils.Point diff_pos = _win_res_pos - pos;
+		math.Point pos = new math.Point(e.page.x, e.page.y);
+		//pos = pos.bound(new utils.Point(body.p.x, body.p.y), new utils.Point(body.p.x + body.w - 10, body.p.y + body.h - 10));
+		math.Point diff_pos = _win_res_pos - pos;
 
 		Function calc = (int dim, [String type = 'width']) {
-			return (type == 'width')? Math.max(dim, _min_width) : Math.max(dim, _min_height);
+			return (type == 'width')? math.max(dim, _min_width) : math.max(dim, _min_height);
 		};
 
-		var p = {
-			'left': box.p.x,
-			'top': box.p.y,
-			'width': box.w,
-			'height': box.h
-		};
+        Rectangle p = new math.MutableRectangle(box.left, box.top, box.width, box.height);
 
 		switch(destination) {
 			case 'N':
-				p['height'] = calc(p['height'] + diff_pos.y, 'height');
-				p['top'] = p['top'] + (box.h - p['height']);
+				p.height = calc(p.height + diff_pos.y, 'height');
+				p.top = p.top + (box.height - p.height);
 				break;
 			case 'E':
-				p['width'] = calc(p['width'] - diff_pos.x);
+				p.width = calc(p.width - diff_pos.x);
 				break;
 			case 'S':
-				p['height'] = calc(p['height'] - diff_pos.y, 'height');
+				p.height = calc(p.height - diff_pos.y, 'height');
 				break;
 			case 'W':
-				p['width'] = calc(p['width'] + diff_pos.x);
-				p['left'] = p['left'] + (box.w - p['width']);
+				p.width = calc(p.width + diff_pos.x);
+				p.left = p.left + (box.width - p.width);
 				break;
 			case 'SE':
-				p['width'] = calc(p['width'] - diff_pos.x);
-				p['height'] = calc(p['height'] - diff_pos.y, 'height');
+				p.width = calc(p.width - diff_pos.x);
+				p.height = calc(p.height - diff_pos.y, 'height');
 				break;
 			case 'SW':
-				p['width'] = calc(p['width'] + diff_pos.x);
-				p['height'] = calc(p['height'] - diff_pos.y, 'height');
-				p['left'] = p['left'] + (box.w - p['width']);
+				p.width = calc(p.width + diff_pos.x);
+				p.height = calc(p.height - diff_pos.y, 'height');
+				p.left = p.left + (box.width - p.width);
 				break;
 			case 'NW':
-				p['width'] = calc(p['width'] + diff_pos.x);
-				p['height'] = calc(p['height'] + diff_pos.y, 'height');
-				p['left'] = p['left'] + (box.w - p['width']);
-				p['top'] = p['top'] + (box.h - p['height']);
+				p.width = calc(p.width + diff_pos.x);
+				p.height = calc(p.height + diff_pos.y, 'height');
+				p.left = p.left + (box.width - p.width);
+				p.top = p.top + (box.height - p.height);
 				break;
 			case 'NE':
-				p['width'] = calc(p['width'] - diff_pos.x);
-				p['height'] = calc(p['height'] + diff_pos.y, 'height');
-				p['top'] = p['top'] + (box.h - p['height']);
+				p.width = calc(p.width - diff_pos.x);
+				p.height = calc(p.height + diff_pos.y, 'height');
+				p.top = p.top + (box.height - p.height);
 				break;
 		}
 
 		_resize_cont
-			..setWidth(p['width'])
-			..setHeight(p['height'])
-			..setStyle({'left': p['left'].toString() + 'px', 'top': p['top'].toString() + 'px'});
-		_resize_pointer = p;
+			..setWidth(p.width)
+			..setHeight(p.height)
+			..setStyle({'left': '${p.left}px', 'top': '${p.top}px'});
+		_resize_rect = p;
 	}
 
-	_winResizeAfter(list) {
+	_winResizeAfter(e) {
 		_resize_cont.remove();
-		if(_resize_pointer != null && !_resize_pointer.isEmpty) {
-			var p = _resize_pointer;
-			setSize(p['width'], p['height']);
-			setPosition(p['left'], p['top']);
+		if(_resize_rect != null) {
+			setSize(_resize_rect.width, _resize_rect.height);
+			setPosition(_resize_rect.left, _resize_rect.top);
 			initLayout();
-			_resize_pointer = new Map();
+            _resize_rect = null;
 		}
 		win.removeClass('transform');
 	}
@@ -475,28 +473,29 @@ class Win {
 	}
 
 	maximize() {
+        body = container.getMutableRectangle();
 		if(_maximized == true) {
 			win.addClass('ui-win-shadowed');
 			win_top.state = true;
-            if(box_h.w == 0 && box_h.h == 0) {
-                box_h.w = box.w - 100;
-                box_h.h = box.h - 100;
-                box_h.p.x = 50;
-                box_h.p.y = 50;
+            if(box_h.width == 0 && box_h.height == 0) {
+                box_h.width = box.width - 100;
+                box_h.height = box.height - 100;
+                box_h.left = 50;
+                box_h.top = 50;
             }
-			setSize(box_h.w, box_h.h);
-			setPosition(box_h.p.x, box_h.p.y);
+			setSize(box_h.width, box_h.height);
+			setPosition(box_h.left, box_h.top);
 			_maximized = false;
 			_resize_contr.forEach((k, v) => v.show());
 			initLayout();
 		} else {
 			win.removeClass('ui-win-shadowed');
-			box_h = new utils.Box(box.p.x, box.p.y, box.w, box.h);
-			setSize(body.w, body.h);
+			box_h = new Rectangle(box.left, box.top, box.width, box.height);
+			setSize(body.width, body.height);
 			_maximized = true;
 			win_top.state = false;
 			_resize_contr.forEach((k, v) => v.hide());
-			initPosition(body.p.x, body.p.y);
+			initPosition(body.left, body.top);
 			initLayout();
 		}
 		return this;
@@ -509,17 +508,14 @@ class Win {
 	}
 
 	render([int width = 0, int height = 0, int x = 0, int y = 0]) {
-		Map pos = container.getPosition();
-		body = new utils.Box(pos['left'], pos['top'],
-			container.getWidthInner(),
-			container.getHeightInner());
-		box = new utils.Box(0, 0, 0, 0);
+        body = container.getMutableRectangle();
+        box = new math.MutableRectangle(0, 0, 0, 0);
 		win.appendTo(container);
 		if((width == null || width == 0) && (height == null || height == 0)) {
 			maximize();
 		} else {
-            _setWidth(Math.max(width,_min_width));
-            _setHeight(height != null? Math.max(height, _min_height) : Math.min(win.getHeight(), container.getHeightInner()));
+            _setWidth(math.max(width,_min_width));
+            _setHeight(height != null? math.max(height, _min_height) : math.min(win.getHeight(), container.getHeightInner()));
             _initSize();
             x = x != null? x : 0;
             y = y != null? y : 0;
@@ -531,8 +527,8 @@ class Win {
 	}
 
 	setPosition(int left, int top) {
-		box.p.y = top;
-        box.p.x = left;
+        box.top = top;
+        box.left = left;
         win.setStyle({'top': '${top}px', 'left': '${left}px'});
 		_resize_cont.setStyle({'top': '${top}px', 'left': '${left}px'});
 		return this;
@@ -546,7 +542,7 @@ class Win {
 	}
 
     _setWidth(int width) {
-        box.w = width;
+        box.width = width;
         int w = width - win.getWidthInnerShift();
         win.setWidth(w);
         _resize_contr['t_c'].setWidth(w);
@@ -555,7 +551,7 @@ class Win {
     }
 
     _setHeight(int height) {
-        box.h = height;
+        box.height = height;
         int h = height - win.getHeightInnerShift();
         win.setHeight(h);
         _resize_contr['l_c'].setHeight(h);
@@ -564,20 +560,18 @@ class Win {
     }
 
     _initSize() {
-        _win_bound_low = new utils.Point(body.p.x, body.p.y);
-        _win_bound_up = new utils.Point(body.w - box.w, body.h  - box.h);
+        _win_bound_low = body.topLeft;
+        _win_bound_up = new math.Point(body.width - box.width, body.height - box.height);
     }
 
 	initPosition([int x, int y]) {
 		if(!_maximized) {
-			box = box.center(body);
-			if (x != 0 && y != 0) {
-				box = new utils.Box(x, y, box.w, box.h);
-				box = box.bound(body);
-			}
-			setPosition(box.p.x, box.p.y);
+			box = utils.centerRect(box, body);
+			if (x != 0 && y != 0)
+				box = utils.boundRect(new Rectangle(x, y, box.width, box.height), body);
+			setPosition(box.left, box.top);
 		} else {
-			setPosition(body.p.x, body.p.y);
+			setPosition(body.left, body.top);
 		}
 		return this;
 	}
@@ -842,12 +836,12 @@ class StartMenu extends CJSElement {
     }
 
     renderMenu () {
-        var pos = button.getPosition();
+        var pos = button.getRectangle();
         document.body.append(this.dom);
         var count = menu.childs.length;
         var height = menu.childs[0].getHeight();
         cont_body.setHeight(count*height + 50);
-        setStyle({'top':(pos['top'] - getHeight()).toString() + 'px', 'left':pos['left'].toString() + 'px'});
+        setStyle({'top':'${pos.top - getHeight()}px', 'left':'${pos.left}px'});
         var doc = new CJSElement(document);
 		doc.addAction((e) {
             removeMenu();
@@ -982,24 +976,24 @@ class StartMenuElement extends CJSElement {
                 height += h;
                 cont.append(child);
             });
-            var pos = getPosition();
+            var pos = getRectangle();
             cont.setStyle({'position':'absolute',
-						'top': pos['top'].toString() + 'px',
-						'left': (pos['left'] + 200).toString() + 'px',
-						'height': height.toString() + 'px'});
+						'top': '${pos.top}px',
+						'left': '${pos.left + 200}px',
+						'height': '${height}px'});
         }
         document.body.append(cont.dom);
         _fixHeight();
     }
 
     _fixHeight() {
-        var pos = getPosition();
+        var pos = getRectangle();
         var reach = pos['top'] + cont.getHeight();
         var diff = reach - new CJSElement(document.body).getHeight();
-        var top = pos['top'];
+        var top = pos.top;
         if (diff > 0)
             top -= diff;
-        cont.setStyle({'position':'absolute', 'top': top.toString() + 'px'});
+        cont.setStyle({'position':'absolute', 'top': '${top}px'});
     }
 
     closeSub () {

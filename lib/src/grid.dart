@@ -856,11 +856,11 @@ class Selector {
         label.appendTo(gc.grid);
         var el = new CJSElement(last),
             offset = el.getHeight(),
-            pos_tbody = gc.grid.getPosition(),
-            pos_cell = el.getPosition(),
+            pos_tbody = gc.grid.getRectangle(),
+            pos_cell = el.getRectangle(),
             pos = {
-                'top': pos_cell['top'] - pos_tbody['top'],
-                'left': pos_cell['left'] - pos_tbody['left'],
+                'top': pos_cell.top - pos_tbody.top,
+                'left': pos_cell.left - pos_tbody.left,
             };
         label.setStyle({
             'display': 'block',

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>dart</title>
+<link type="text/css" rel="stylesheet" href="css/main.css">
+<link type="text/css" rel="stylesheet" href="css/main-icons.css">
+<style>
+
+/* UI Scheduler
+-----------------------------------------------------------------------------------------------------*/
+.ui-event-calendar {
+    background: #FFFFFF;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+}
+.ui-event-calendar .cal-navigation {
+    overflow: hidden;
+    border-bottom: 1px solid #EBEBEB;
+}
+.ui-event-calendar .cal-body {
+    overflow:hidden;
+    position:relative;
+}
+.ui-event-calendar .cal-body .closing {
+    border-top:1px solid #EBEBEB;
+    margin-top:-1px;
+}
+.ui-event-calendar .cal-nav-left p {
+    float: left;
+    line-height: 26px;
+    margin-left: 5px;
+}
+.ui-event-calendar .cal-nav-right {
+    float:right;
+}
+.ui-event-calendar .ui-column {
+    width:160px;
+    padding-right:10px;
+}
+
+/********************************* Calendar Row *******************************************/
+.ui-event-calendar .cal-row {
+    position: relative;
+    height: 40px;
+    margin-top: -1px;
+}
+.ui-event-calendar .cal-row.week {
+    height: auto;
+}
+
+/********************************* Calendar Table *******************************************/
+.ui-event-calendar .cal-head {
+    width: 100%;
+    table-layout: fixed;
+    border-spacing: 1px;
+}
+.ui-event-calendar .cal-head th {
+    background: #FFFFFF;
+    padding: 5px;
+    text-align: left;
+    font-weight: normal;
+}
+.ui-event-calendar .cal-back {
+    position: absolute;
+    background: #EBEBEB;
+    border-spacing: 1px;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    table-layout: fixed;
+}
+.ui-event-calendar .cal-back.week {
+    position: relative;
+    height: auto;
+}
+.ui-event-calendar .cal-back td {
+    background: #FFFFFF;
+    vertical-align: top;
+    padding: 5px;
+}
+.ui-event-calendar .cal-back td.now, .ui-event-calendar table.week-scroll td.now {
+    background:#F9F9F9;
+}
+.ui-event-calendar .cal-grid {
+    position: absolute;
+    border-spacing: 1px;
+    top: 0;
+    left: 0;
+    width: 100%;
+    table-layout: fixed;
+}
+.ui-event-calendar .cal-grid td {
+    vertical-align: top;
+    padding: 5px;
+}
+.ui-event-calendar .cal-grid td.event {
+    padding: 0px 1px;
+}
+.ui-event-calendar .cal-grid td.blur {
+    color: #CDCDCD;
+}
+.ui-event-calendar .week-cont {
+    border-top: 1px solid #EBEBEB;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    margin-top: 10px;
+}
+.ui-event-calendar table.week-head {
+    width: 100%;
+    table-layout: fixed;
+    border-spacing: 0px;
+}
+.ui-event-calendar table.week-head th {
+    background: #FFFFFF;
+    padding: 5px;
+    text-align: center;
+    font-weight: normal;
+}
+.ui-event-calendar table.week-head th.first {
+    width: 61px;
+    padding: 0px;
+    vertical-align: bottom;
+}
+.ui-event-calendar table.week-scroll {
+    width: 100%;
+    border-spacing: 1px;
+    background: #EBEBEB;
+    margin-top: -2px;
+    table-layout: fixed;
+}
+.ui-event-calendar table.week-scroll td.first_scroll {
+    width: 60px;
+    height:0px;
+}
+.ui-event-calendar table.week-scroll td.first_scroll2 {
+    position:relative;
+    height:0px;
+}
+.ui-event-calendar table.week-scroll td {
+    background: #FFFFFF;
+    vertical-align: top;
+}
+.ui-event-calendar table.week-scroll td.first {
+    padding:0px;
+    position:relative;
+}
+.ui-event-calendar table.week-scroll .day {
+    position: absolute;
+    width: 100%;
+}
+
+/********************************* Event containers *******************************************/
+.ui-event-calendar .event-cont, .event-cont-drag {
+    background: #81A5C7;
+    border: 1px solid #5C758E;
+    color: #FFFFFF;
+    padding: 2px;
+    position: relative;
+}
+.ui-event-calendar .event-cont.day {
+    background:none;
+    border:none;
+    color:#81A5C7;
+}
+.ui-event-calendar .event-cont-drag {
+    position: absolute;
+    width: 100px;
+    z-index: -1;
+}
+.ui-event-calendar .event-cont.margin-left {
+    margin-left: 4px;
+}
+.ui-event-calendar .event-cont.margin-right {
+    margin-right: 4px;
+}
+.ui-event-calendar .event-cont.light {
+    background: #A2BEC7;
+    border-color: #90A9B1;
+}
+.ui-event-calendar .event-cont.light.day {
+    background:none;
+    border:none;
+    color:#A2BEC7;
+}
+.ui-event-calendar .arrow-left1 {
+    border: 0 solid #CCCCCC;
+    border-color: transparent #5C758E;
+    border-width: 10px 6px 10px 0;
+    position: absolute;
+    top: -1px;
+    left: -17px;
+    width: 16px;
+}
+.ui-event-calendar .arrow-left2 {
+    border: 0 solid #CCCCCC;
+    border-color: transparent #81A5C7;
+    border-width: 9px 6px 9px 0;
+    position: absolute;
+    top: 0;
+    left: -16px;
+    width: 16px;
+}
+.ui-event-calendar .arrow-right1 {
+    border: 0 solid #CCCCCC;
+    border-color: transparent #5C758E;
+    border-width: 10px 0 10px 6px;
+    position: absolute;
+    top: -1px;
+    right: -17px;
+    width: 16px;
+}
+.ui-event-calendar .arrow-right2 {
+    border: 0 solid #CCCCCC;
+    border-color: transparent #81A5C7;
+    border-width: 9px 0 9px 6px;
+    position: absolute;
+    top: 0;
+    right: -16px;
+    width: 16px;
+}
+.ui-event-calendar .event-cont.light .arrow-left1 {
+    border-color: transparent #90A9B1;
+}
+.ui-event-calendar .event-cont.light .arrow-left2 {
+    border-color: transparent #A2BEC7;
+}
+.ui-event-calendar .event-cont.light .arrow-right1 {
+    border-color: transparent #90A9B1;
+}
+.ui-event-calendar .event-cont.light .arrow-right2 {
+    border-color: transparent #A2BEC7;
+}
+.ui-event-calendar .event-cont-hour {
+    width:100%;
+    background:#A2BEC7;
+    position:absolute;
+    z-index:1;
+    left:0px;
+    border-bottom:2px solid #FFFFFF;
+    border-left:2px solid #FFFFFF;
+    border-top:2px solid #FFFFFF;
+    margin:-2px 0px 0px -2px;
+}
+.ui-event-calendar .event-cont-hour.drag {
+    z-index:2;
+}
+.ui-event-calendar .event-cont-hour div.inner {
+    border:1px solid #5C758E;
+    height:100%;
+}
+.ui-event-calendar .event-cont-hour .resize {
+    position: absolute;
+    height: 14px;
+    width: 100%;
+    bottom: 0;
+    font-size:12px;
+    text-align: center;
+    cursor: ns-resize;
+}
+.ui-event-calendar .hour {
+    border-bottom: 1px solid #EBEBEB;
+    text-align: right;
+    padding:3px;
+    height: 42px;
+}
+.ui-event-calendar .hour:last-child {
+    border-bottom: none;
+}
+.ui-event-calendar .hour-grid {
+    height: 21px;
+    border-top: 1px solid #EBEBEB;
+}
+.ui-event-calendar .hour-grid:nth-child(2n) {
+    border-top: 1px dotted #EBEBEB;
+}
+.ui-event-calendar .drag_cont {
+    position: absolute;
+    top: 0px;
+    width:0px;
+    height:0px;
+}
+.ui-event-calendar .grid {
+    position: absolute;
+    background: #425774;
+    opacity: 0.2;
+}
+.ui-event-calendar .day-event {
+    position: absolute;
+    background: #81A5C7;
+    border:1px solid #5C758E;
+    z-index:3;
+}
+.ui-event-calendar .day-container {
+    position:relative;
+    height:1008px;
+}
+.ui-event-calendar .day-inner {
+    position:relative;
+    margin-right:10px;
+}
+.ui-event-calendar .day-container-drag {
+    height:0px;
+    position:relative;
+}
+.ui-event-calendar .day-container-drag div {
+    opacity:0.8;
+}
+.ui-event-calendar .hour-mark {
+    border: 0 solid #FF4040;
+    border-color: transparent #FF4040;
+    border-width: 4px 0 4px 4px;
+    position: absolute;
+    left: 0px;
+}
+.ui-event-calendar .day-container .hour-mark {
+    background:#FF4040;
+    border:none;
+    position: absolute;
+    width:100%;
+    height:1px;
+    z-index:2;
+    left: 0px;
+}
+/********************************* Calendar Helper *******************************************/
+.ui-event-calendar .cal-nav {
+    overflow:hidden;
+    border-bottom:1px solid #EBEBEB;
+}
+.ui-event-calendar .cal-nav p {
+    float: left;
+    line-height: 26px;
+    margin-left: 5px;
+}
+.ui-calendar-helper table {
+    width:100%;
+    border-spacing: 0px;
+}
+.ui-calendar-helper table td {
+    height:18px;
+    text-align:center;
+}
+.ui-calendar-helper table td.events {
+    font-weight:bold;
+}
+.ui-calendar-helper table span.other {
+    color:#CDCDCD;
+}
+.ui-calendar-helper tbody span {
+    height:18px;
+    width:100%;
+    line-height:18px;
+    display:block;
+    text-align:center;
+    cursor: pointer;
+    border:1px solid transparent;
+}
+.ui-calendar-helper tbody span.today {
+    border-color:#CDCDCD !important;
+}
+.ui-calendar-helper tbody span.selected {
+    background:#F8F8F8;
+    border-color:#F8F8F8;
+}
+
+
+</style>
+</head>
+<body>
+<script type="application/dart" src="calendar.dart"></script>
+<!--<script src="client.dart.js"></script>-->
+</body>
+</html>

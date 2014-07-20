@@ -2,7 +2,7 @@ part of base;
 
 class INTL {
 
-    static January() => Intl.message('January', name:'January');
+    /*static January() => Intl.message('January', name:'January');
     static February() => Intl.message('February', name:'February');
     static March() => Intl.message('March', name:'March');
     static April() => Intl.message('April', name:'April');
@@ -21,7 +21,7 @@ class INTL {
     static Thursday() => Intl.message('Thursday', name:'Thursday');
     static Friday() => Intl.message('Friday', name:'Friday');
     static Saturday() => Intl.message('Saturday', name:'Saturday');
-    static Sunday() => Intl.message('Sunday', name:'Sunday');
+    static Sunday() => Intl.message('Sunday', name:'Sunday');*/
 
     static Today() => Intl.message('Today', name:'Today');
     static Yesterday() => Intl.message('Yesterday', name:'Yesterday');

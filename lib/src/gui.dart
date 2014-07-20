@@ -3,47 +3,45 @@ part of gui;
 class Pop extends CJSElement {
 	CJSElement doc;
     int width, height = 0;
-    Map view;
+    Rectangle view;
 
     Pop (CJSElement content, e) : super(new DivElement()) {
 		setClass('ui-popUp');
 		doc = new CJSElement(document.body);
-	    view = doc.getDimensions();
+	    view = doc.getRectangle();
 		doc.addAction(clickPosition, 'mousedown.pop');
 		set(content, e);
 	}
 
 	set (content, e) {
 	    append(content).appendTo(doc);
-	    var dim = getDimensions();
-	    width = dim['width'];
-	    height = dim['height'];
-	    var pos = getFixedPosition(e);
-	    setStyle({'top': pos['top'].toString() + 'px', 'left':pos['left'].toString() + 'px'});
+	    width = getWidth();
+	    height = getHeight();
+	    Rectangle pos = getFixedPosition(e);
+	    setStyle({'top': '${pos.top}px', 'left':'${pos.left}px'});
 	    addClass('ui-popUp-active');
 	    return this;
 	}
 
-	getFixedPosition (MouseEvent e) {
-	    var pos = {};
-	    pos['left'] = e.page.x;
-	    pos['top'] = e.page.y;
-	    var left_strech = pos['left']  + width,
-	    	top_strech = pos['top']  + height,
-	    	diff_hor = left_strech - view['width'],
-	    	diff_ver = top_strech - view['height'];
-		pos['left'] -= (diff_hor > 0)? diff_hor : 0;
-		pos['top'] -= (diff_ver > 0)? diff_ver : 0;
+	Rectangle getFixedPosition (MouseEvent e) {
+	    Rectangle pos = new math.MutableRectangle(0, 0, 0, 0);
+	    pos.left = e.page.x;
+	    pos.top = e.page.y;
+	    var left_strech = pos.left + width,
+	    	top_strech = pos.top + height,
+	    	diff_hor = left_strech - view.width,
+	    	diff_ver = top_strech - view.height;
+		pos.left -= (diff_hor > 0)? diff_hor : 0;
+		pos.top -= (diff_ver > 0)? diff_ver : 0;
 	    return pos;
 	}
 
 	clickPosition (MouseEvent e) {
-	    var pos = getPosition();
-	    var dim = getDimensions();
-	    if (((pos['top'] < e.page.y)
-	            && (e.page.y < (pos['top'] + dim['height'])))
-	                && ((pos['left'] < e.page.x)
-	                    && (e.page.x < (pos['left'] + dim['width'])))) {
+        Rectangle rect = getRectangle();
+	    if (((rect.top < e.page.y)
+	            && (e.page.y < (rect.top + rect.height)))
+	                && ((rect.left < e.page.x)
+	                    && (e.page.x < (rect.left + rect.width)))) {
 	        return true;
 	    }
 	    return close();

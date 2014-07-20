@@ -55,6 +55,10 @@ class Drag {
 
     Function _start, _on, _end = (_) {};
 
+    MouseEvent _init_e;
+
+    int dx, dy = 0;
+
     bool enable = true;
 
     Drag(this.object, [String this._namespace = 'drag']) {
@@ -70,8 +74,13 @@ class Drag {
     drag (MouseEvent e) {
         if(!enable)
             return;
+        _init_e = e;
         _start(e);
-        var document_move = document.onMouseMove.listen(_on);
+        var document_move = document.onMouseMove.listen((e) {
+            dx = e.client.x - _init_e.client.x;
+            dy = e.client.y - _init_e.client.y;
+            _on(e);
+        });
         var document_up = null;
         document_up = document.onMouseUp.listen((e) {
             document_move.cancel();
@@ -111,7 +120,25 @@ class Draggable {
 	}
 }
 
-class Point {
+math.Point boundPoint(math.Point p, math.Point ref1, math.Point ref2) {
+    var max = (math.Point p, math.Point ref) => new math.Point(math.max(p.x, ref.x), math.max(p.y, ref.y));
+    var min = (math.Point p, math.Point ref) => new math.Point(math.min(p.x, ref.x), math.min(p.y, ref.y));
+    return min(max(p, ref1), ref2);
+}
+
+Rectangle boundRect(Rectangle rect, Rectangle ref) {
+    math.Point point = boundPoint(rect.bottomRight, ref.topLeft, ref.bottomRight);
+    return new math.MutableRectangle(point.x - rect.width, point.y - rect.height, rect.width, rect.height);
+}
+
+Rectangle centerRect(Rectangle rect, Rectangle ref) {
+    Rectangle box = new math.MutableRectangle.fromPoints(rect.topLeft, rect.bottomRight);
+    box.left = ref.left + ref.width ~/2 - box.width ~/2;
+    box.top = ref.top + ref.height ~/2 - box.height ~/2;
+    return box;
+}
+
+/*class Point {
 	int x = 0;
 	int y = 0;
 
@@ -180,7 +207,7 @@ class Box {
         'h': h,
         'p': p
     }.toString();
-}
+}*/
 
 class EventValidator {
     KeyboardEvent event;
@@ -310,6 +337,19 @@ class Calendar {
         {'title': INTL.All(), 'method': getAllRange}
 	];
 
+    static UTCDifference(DateTime date1, DateTime date2) =>
+        new DateTime.utc(date1.year, date1.month, date1.day)
+        .difference(new DateTime.utc(date2.year, date2.month, date2.day));
+
+    static UTCAdd(DateTime date, Duration dur) {
+        DateTime utc = new DateTime.utc(date.year, date.month, date.day).add(dur);
+        return new DateTime(utc.year, utc.month, utc.day);
+    }
+
+    static weekDayFirst() => firstDayMonday? 1 : 7;
+
+    static weekDayLast() => firstDayMonday? 7 : 1;
+
     static max(DateTime d1, DateTime d2) {
         int diff = d1.compareTo(d2);
         return (diff > 0)? d1 : d2;
@@ -318,6 +358,14 @@ class Calendar {
     static min(DateTime d1, DateTime d2) {
         int diff = d1.compareTo(d2);
         return (diff < 0)? d1 : d2;
+    }
+
+    static bool dateBetween(DateTime date, DateTime end1, DateTime end2) {
+        DateTime start = min(end1, end2);
+        DateTime end = max(end1, end2);
+        if(date.isAfter(start) && date.isBefore(end) || date.compareTo(start) == 0 || date.compareTo(end) == 0)
+            return true;
+        return false;
     }
 
     static offset() => firstDayMonday? 2 : 1;
@@ -331,6 +379,12 @@ class Calendar {
         return label_days[num];
     }
 
+    static dayFromDate(int weekday) {
+        if(weekday == 7)
+            weekday = 0;
+        return label_days[weekday];
+    }
+
     static isWeekend(int num) {
         if(firstDayMonday) {
             if(num == 5 || num == 6)
@@ -339,6 +393,12 @@ class Calendar {
             if(num == 0 || num == 6)
                 return true;
         }
+        return false;
+    }
+
+    static isWeekendFromDate(int weekday) {
+        if(weekday == 6 || weekday == 7)
+            return true;
         return false;
     }
 

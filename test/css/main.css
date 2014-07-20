@@ -437,7 +437,7 @@ ul.ui-list li:hover, ul.ui-list li.current, ul.ui-list li:hover *, ul.ui-list li
     -webkit-border-radius:0px;
     border-radius:0px;
 }
-.ui-button-ul li:last-child .ui-button-inner {
+.ui-button-option .ui-button-ul li:last-child .ui-button-inner {
     -moz-border-bottom-left-radius:3px;
     -webkit-border-bottom-left-radius:3px;
     border-bottom-left-radius:3px;
@@ -462,12 +462,43 @@ ul.ui-list li:hover, ul.ui-list li.current, ul.ui-list li:hover *, ul.ui-list li
     background-repeat: no-repeat;
     background-position:50% 50%;
 }
-.ui-button-ul {
+.ui-button-option .ui-button-ul {
     z-index:99999;
 }
-.ui-button-ul * {
+.ui-button-option .ui-button-ul * {
     width:100%;
     overflow:hidden;
+}
+.ui-button-group {
+    display:block;
+}
+.ui-button-group .ui-button-ul {
+    overflow:hidden;
+}
+.ui-button-group .ui-button-ul li {
+    float: left;
+    list-style: none;
+}
+.ui-button-group .ui-button-ul li:last-child .ui-button-inner {
+    -moz-border-top-right-radius:3px;
+    -webkit-border-top-right-radius:3px;
+    border-top-right-radius:3px;
+    -moz-border-bottom-right-radius:3px;
+    -webkit-border-bottom-right-radius:3px;
+    border-bottom-right-radius:3px;
+}
+.ui-button-group .ui-button-ul li:first-child .ui-button-inner {
+    -moz-border-top-left-radius:3px;
+    -webkit-border-top-left-radius:3px;
+    border-top-left-radius:3px;
+    -moz-border-bottom-left-radius:3px;
+    -webkit-border-bottom-left-radius:3px;
+    border-bottom-left-radius:3px;
+}
+.ui-button-group .ui-button.current .ui-button-inner {
+    background:#CDCDCD;
+    box-shadow: inherit;
+    border-color: #BCBCBC;
 }
 .ui-button-inner.ui-button-title.icon {
     padding-left:24px;

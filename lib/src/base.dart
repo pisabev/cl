@@ -102,20 +102,21 @@ class CJSElement<E extends Element> {
 
     getWidthOuterShift() => _calcStyle(['margin-left','margin-right']);
 
-    Map getDimensions() => {
-        'width': getWidth(),
-        'height': getHeight()
-    };
+    Rectangle getRectangle() => dom.getBoundingClientRect();
 
-    Map getDimensionsInner() => {
-        'width': getWidthInner(),
-        'height': getHeightInnerShift()
-    };
+    Rectangle getMutableRectangle() {
+        Rectangle rect = dom.getBoundingClientRect();
+        return new math.MutableRectangle(rect.left, rect.top, rect.width, rect.height);
+    }
 
-    math.Rectangle getRectangle() {
-        Map pos = getPosition();
-        Map dim = getDimensions();
-        return new math.Rectangle(pos['left'], pos['top'], dim['width'], dim['height']);
+    setRectangle(Rectangle rect) {
+        setStyle({
+            'top': '${rect.top}px',
+            'left': '${rect.left}px',
+            'width': '${rect.width}px',
+            'height': '${rect.height}px'
+        });
+        return this;
     }
 
     int _calcStyle (List style) {
@@ -224,256 +225,25 @@ class CJSElement<E extends Element> {
         return this;
     }
 
-    Map getPosition() {
+/*Map getDimensions() => {
+        'width': getWidth(),
+        'height': getHeight()
+    };
+
+    Map getDimensionsInner() => {
+        'width': getWidthInner(),
+        'height': getHeightInnerShift()
+    };*/
+
+    /*Map getPosition() {
         var pos = dom.getBoundingClientRect();
         return {
-            'left': pos.left.toInt() + document.body.scrollLeft,
-            'top': pos.top.toInt() + document.body.scrollTop
+            'left': pos.left.toInt(),
+            'top': pos.top.toInt()
         };
-    }
+    }*/
 
 }
-
-/*class CJSElement__<E extends Element> {
-
-	E dom;
-	Map _events 	= new Map<String, Map>();
-	Map _subscr 	= new Map<String, StreamSubscription>();
-	bool _state 	= true;
-
-	CJSElement(d) {
-		dom = (d is CJSElement)? d.dom : d;
-	}
-
-	_execute(String type, Event event) {
-		if(!_state)
-  			return false;
-		List toExecute = new List();
-		_events[type].forEach((k, v) => v.forEach(toExecute.add));
-		toExecute.forEach((f) => f(event));
-	}
-
-    set state(state) => _state = state;
-
-    setState(bool state) {
-        _state = state;
-        return this;
-    }
-
-	addAction(Function func, [String event_space = 'click']) {
-		List ev = event_space.split('.');
-		if(_events[ev[0]] == null) {
-			_events[ev[0]] = new Map<String, List>();
-			_subscr[ev[0]] = dom.on[ev[0]].listen((e) => _execute(ev[0], e));
-		}
-		if (ev.length < 2) {
-			var namespace = 0;
-			while(_events[ev[0]]['space' + namespace.toString()] is List)
-				namespace++;
-			ev.add('space' + namespace.toString());
-		}
-		if(_events[ev[0]][ev[1]] == null)
-			_events[ev[0]][ev[1]] = new List<Function>();
-		_events[ev[0]][ev[1]].add(func);
-
-		return this;
-	}
-
-	removeAction([String event_space = '']) {
-		if(event_space.isNotEmpty) {
-			List ev = event_space.split('.');
-			if(_events[ev[0]] != null) {
-				if(ev.length == 2) {
-					_events[ev[0]].remove(ev[1]);
-					if(_events[ev[0]].isEmpty) {
-						_events.remove([ev[0]]);
-					}
-				} else {
-					_events.remove([ev[0]]);
-				}
-				if(_events[ev[0]] == null) {
-					_subscr[ev[0]].cancel();
-					_subscr.remove([ev[0]]);
-				}
-			}
-		} else {
-			removeActionsAll();
-		}
-		return this;
-	}
-
-    removeActionsAll() {
-		_subscr.forEach((k, v) => v.cancel());
-		_events	= new Map<String, Map>();
-		_subscr = new Map<String, StreamSubscription>();
-		return this;
-	}
-
-	int getHeight() {
-		return dom.offsetHeight;
-	}
-
-	int getHeightInnerShift() {
-		return _calcStyle([
-			'padding-top',
-			'padding-bottom',
-			'border-top-width',
-			'border-bottom-width']);
-	}
-
-	int getHeightOuterShift() {
-		return _calcStyle([
-			'margin-top',
-			'margin-bottom']);
-	}
-
-	int getWidth() {
-		return dom.offsetWidth;
-	}
-
-	int getWidthInnerShift() {
-		return _calcStyle([
-			'padding-left',
-			'padding-right',
-			'border-left-width',
-			'border-right-width']);
-	}
-
-	int getWidthOuterShift() {
-		return _calcStyle([
-			'margin-left',
-			'margin-right']);
-	}
-
-	Map getDimensions() {
-		return {
-			'width': getWidth(),
-			'height': getHeight()
-		};
-	}
-
-	Map getDimensionsInner() {
-		return {
-			'width': getWidth() - getHeightInnerShift(),
-			'height': getHeight() - getHeightInnerShift()
-		};
-	}
-
-	int _calcStyle (List style) {
-		int l = 0;
-		style.forEach((st) {
-			var style = dom.getComputedStyle().getPropertyValue(st).replaceAll('px', '');
-			if(style != '')
-				l += double.parse(style).ceil();
-		});
-		return l;
-	}
-
-	getStyle(String style) {
-		return dom.getComputedStyle().getPropertyValue(style);
-	}
-
-	fillParent() {
-		CJSElement p = new CJSElement(dom.parentNode);
-		setHeight(p.getHeight() - getHeightOuterShift() - getHeightInnerShift());
-		return this;
-	}
-
-	setHeight(int height) {
-		dom.style.height = height.toString() + 'px';
-		return this;
-	}
-
-	setWidth(int width) {
-		dom.style.width = width.toString() + 'px';
-		return this;
-	}
-
-	setStyle(Map styleMap) {
-		styleMap.forEach((s,i) => dom.style.setProperty(s, styleMap[s]));
-		return this;
-	}
-
-	setClass (String clas) {
-		dom.classes.clear();
-		dom.classes.add(clas);
-		return this;
-	}
-
-	removeClass (String clas) {
-		dom.classes.remove(clas);
-		return this;
-	}
-
-	addClass (String clas) {
-		dom.classes.add(clas);
-		return this;
-	}
-
-    existClass(String clas) {
-        return dom.classes.contains(clas);
-    }
-
-	hide() {
-		dom.style.display = 'none';
-		return this;
-	}
-
-	show() {
-		dom.style.display = 'block';
-		return this;
-	}
-
-	remove() {
-		dom.remove();
-		return this;
-	}
-
-	removeChilds() {
-		dom.childNodes.toList().forEach((c) => c.remove());
-		return this;
-	}
-
-	removeChild(el) {
-		el.remove();
-		return this;
-	}
-
-	append (child) {
-		if(child is CJSElement)
-			dom.append(child.dom);
-		else
-			dom.append(child);
-		return this;
-	}
-
-	appendTo(parent) {
-		if(parent is CJSElement)
-			parent.dom.append(dom);
-		else
-			parent.append(dom);
-		return this;
-	}
-
-    setHtml(String html) {
-        dom.innerHtml = html;
-        return this;
-    }
-
-    setText(String text) {
-        dom.text = text;
-        return this;
-    }
-
-	Map getPosition() {
-		var pos = dom.getBoundingClientRect();
-		return {
-			'left': pos.left.toInt() + document.body.scrollLeft,
-			'top': pos.top.toInt() + document.body.scrollTop
-		};
-	}
-
-}*/
 
 class Container extends CJSElement<DivElement> {
 
@@ -534,14 +304,7 @@ class Container extends CJSElement<DivElement> {
                 prev_width = prev.getWidth();
                 next_width = next.getWidth();
                 res = new CJSElement(new DivElement()).setClass('ui-slider-shadow');
-                var d = col.getDimensions();
-                var p = col.getPosition();
-                box =  new Box(p['left'], p['top'], d['width'], d['height']);
-                res.setStyle({
-                    'top': '${box.p.y}px',
-                    'left': '${box.p.x}px',
-                    'width': '${box.w}px',
-                    'height': '${box.h}px'});
+                res.setRectangle(col.getRectangle());
                 document.body.append(res.dom);
                 diff_x = 0;
                 _e = e;

@@ -774,14 +774,14 @@ class InputLoader extends InputFunction {
     _showList() {
         var width = getWidth(),
             shift = getHeightInnerShift() / 2,
-            left = getPosition();
+            left = getRectangle();
         domList.show();
-        var pos = domList.getPosition();
+        var pos = domList.getRectangle();
         domList.appendTo(document.body)
         .setStyle({
             'position':'absolute',
-            'top':'${pos['top'] + shift}px',
-            'left':'${left['left']}px',
+            'top':'${pos.top + shift}px',
+            'left':'${left.left}px',
             'width': '${width}px'});
     }
 
@@ -1085,7 +1085,7 @@ class Paginator extends DataElement {
         page = (page == null)? _page : page;
         var limit = contr_c.getValue();
         var pages = (limit != null)? (_total/limit).ceil() : 1;
-        page = Math.max(Math.min(page, pages), 1);
+        page = math.max(math.min(page, pages), 1);
         contr_i.setValue(page);
         var right_state = (limit != null)? ((page*limit < _total) ? true : false) : false;
         contr_l.setState(right_state);
@@ -1134,7 +1134,7 @@ class Editor extends DataElement {
     bool _fullscreen = false;
 
 	CJSElement _fixover;
-	utils.Point _res_pos;
+	math.Point _res_pos;
 	int _res;
 
     Editor (this.ap) : super(new DivElement()) {
@@ -1248,13 +1248,13 @@ class Editor extends DataElement {
                 'top':'0px',
                 'left':'0px'
             }).appendTo(body);
-        _res_pos = new utils.Point(e.page.x, e.page.y);
+        _res_pos = new math.Point(e.page.x, e.page.y);
         _res = body.getHeight();
     }
 
     _resizeOn (e) {
         e.stopPropagation();
-        var pos = new utils.Point(e.page.x, e.page.y);
+        var pos = new math.Point(e.page.x, e.page.y);
         var diff_pos = pos - _res_pos;
         body.setStyle({'height':(_res + diff_pos.y).toString() + 'px'});
     }

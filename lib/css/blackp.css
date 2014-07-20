@@ -1027,7 +1027,7 @@ html,body{
     background:#535353 url(../images/ui/knob_horizontal.png) no-repeat;
     background-position: 50% 50%;
     cursor: ew-resize;
-    border:1px solid #393939;
+    border:1px solid transparent;
     border-bottom:none;
     border-top:none;
 }
@@ -1049,7 +1049,8 @@ html,body{
     height:100%;
 }
 .ui-tab-options {
-    float:left;
+    width:100%;
+    background:#393939;
 }
 .ui-tab-options-inner {
     position:relative;

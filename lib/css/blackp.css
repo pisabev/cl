@@ -2231,6 +2231,9 @@ div.search {
 .custom-edit-operation table {
     width:100%;
 }
+.custom-edit-operation table td {
+    padding:3px;
+}
 .custom-table-grid td {
     height:25px;
     padding:3px;

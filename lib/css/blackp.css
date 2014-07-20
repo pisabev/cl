@@ -1011,6 +1011,7 @@ html,body{
 .ui-inner,.ui-inner-light,.ui-inner-light,.ui-inner-dark {
     background:#393939;
     overflow:auto;
+    margin:1px;
 }
 .ui-inner-light {
     background:#393939;
@@ -1053,21 +1054,21 @@ html,body{
 .ui-tab-options-inner {
     position:relative;
     overflow:hidden;
-    border-right:1px solid #2D2D2D;
-    top:1px;
+    border-right:1px solid transparent;
+    left: -1px;
 }
 .ui-tab-choice-inner {
     height:100%;
 }
 .ui-tab-options-inner a.ui-tab-link {
     display:block;
-    float:right;
+    float:left;
     height:25px;
     line-height:25px;
     padding:0px 3px 0px 3px;
     text-decoration:none;
     background:none;
-    border:1px solid #2D2D2D;
+    border:1px solid transparent;
     border-right:none;
 }
 .ui-tab-options-inner a span {

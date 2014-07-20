@@ -4,3 +4,5 @@ author: Petar Sabev
 description: UI Framework
 dependencies:
   intl: any
+transformers:
+- svgspriter

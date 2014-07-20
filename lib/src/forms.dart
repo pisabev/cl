@@ -868,7 +868,7 @@ abstract class _Lang extends DataElement<DivElement> {
     showSingleValue (key) {
         hideAll();
         langs[key].show();
-		flag.dom.src = 'packages/cl_base/images/ui/flags/'+flags[key.toString()]+'.png';
+		flag.dom.src = 'packages/cjs/images/ui/flags/'+flags[key.toString()]+'.png';
         return this;
     }
 

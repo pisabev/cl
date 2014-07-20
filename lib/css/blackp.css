@@ -1844,6 +1844,7 @@ div.search {
 .ui-event-calendar .cal-body .closing {
     border-top:1px solid #484848;
     margin-top:-1px;
+    position:relative;
 }
 .ui-event-calendar .cal-nav-left p {
     float: left;

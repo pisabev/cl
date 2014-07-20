@@ -691,6 +691,12 @@ class EventCalendar {
         day_cont = new CJSElement(new DivElement()).setClass('day');
         first_scroll2.append(day_cont.dom);
 
+        var mark = new CJSElement(new DivElement()).setClass('hour-mark');
+        var nh = new DateTime.now();
+        hour.append(mark.dom);
+        row_scroll.append(hour);
+        mark.setStyle({'top':'${(nh.hour*60 + nh.minute)/1.43 - mark.getHeight()/2}px'});
+
         var hour_rows = new List();
         for(int i = 0; i < 24; i++) {
             var h = (i<10)? '0$i' : '$i';
@@ -702,11 +708,6 @@ class EventCalendar {
                 hour_rows.add(hr);
             }
         }
-        var mark = new CJSElement(new DivElement()).setClass('hour-mark');
-        var nh = new DateTime.now();
-        hour.append(mark.dom);
-        row_scroll.append(hour);
-        mark.setStyle({'top':'${(nh.hour*60 + nh.minute)/1.43 - mark.getHeight()/2}px'});
 
         TableRowElement row_top_events = head.dom.insertRow(-1);
         var cell_top_events = new Element.td();

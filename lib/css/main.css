@@ -1120,6 +1120,7 @@ html,body{
     text-decoration:none;
     border:1px solid transparent;
     color:#4C4C4C;
+    margin-left: -1px;
 }
 .ui-tab-options-inner a span {
     margin:0px 2px 0px 2px;

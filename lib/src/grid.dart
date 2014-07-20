@@ -485,7 +485,7 @@ class GridList extends GridBase {
         else
             tbody.dom.insertBefore(_numRow(s_rownum), _numRow(t_rownum).nextElementSibling);
         rowNumRerender();
-        return Math.min(s_rownum, t_rownum);
+        return math.min(s_rownum, t_rownum);
     }
 
     getRowIndex (row) {
@@ -656,7 +656,7 @@ class GridData extends GridList {
     _rowSwap(int n1, int n2) {
         if(n1 == n2)
             return;
-        int n = Math.max(super._rowSwap(n1, n2), 0);
+        int n = math.max(super._rowSwap(n1, n2), 0);
         for (var i = n, l = tbody.dom.childNodes.length; i < l; i++)
             rowChanged(tbody.dom.childNodes[i]);
     }
@@ -741,11 +741,11 @@ class Selector {
     }
 
     getSelectionRect () {
-        return new Math.Rectangle(
-            Math.min(selection[SELECTION_START]['col'], selection[SELECTION_END]['col']),
-            Math.min(selection[SELECTION_START]['row'], selection[SELECTION_END]['row']),
-            Math.max(selection[SELECTION_START]['col'], selection[SELECTION_END]['col']) + 1,
-            Math.max(selection[SELECTION_START]['row'], selection[SELECTION_END]['row']) + 1
+        return new math.Rectangle(
+            math.min(selection[SELECTION_START]['col'], selection[SELECTION_END]['col']),
+            math.min(selection[SELECTION_START]['row'], selection[SELECTION_END]['row']),
+            math.max(selection[SELECTION_START]['col'], selection[SELECTION_END]['col']) + 1,
+            math.max(selection[SELECTION_START]['row'], selection[SELECTION_END]['row']) + 1
         );
     }
 
@@ -813,7 +813,7 @@ class Selector {
         return s;
     }
 
-    getCells ([Math.Rectangle selectionRect = null]) {
+    getCells ([math.Rectangle selectionRect = null]) {
         List arr = new List();
         if(selectionRect != null) {
             for(var i=0; i < gc.grid.tbody.dom.childNodes.length; i++) {

@@ -1177,7 +1177,6 @@ class CalendarHelper extends CJSElement {
                 cell.addClass('other');
             if(checkDateForEvents(cell.date))
                 c.className = 'events';
-            print(calendar.now);
             if(cell.date.isAtSameMomentAs(calendar.now))
                 cell.addClass('today');
             cell.setText('${cell.date.day}');

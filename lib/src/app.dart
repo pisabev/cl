@@ -988,7 +988,7 @@ class StartMenuElement extends CJSElement {
 
     _fixHeight() {
         var pos = getRectangle();
-        var reach = pos['top'] + cont.getHeight();
+        var reach = pos.top + cont.getHeight();
         var diff = reach - new CJSElement(document.body).getHeight();
         var top = pos.top;
         if (diff > 0)

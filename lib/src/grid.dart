@@ -320,7 +320,7 @@ class GridList extends GridBase {
         TableRowElement rowh = thead.dom.insertRow(-1);
 
         if(this.num) {
-            if(data.any((h) => h.key != 'position')) {
+            if(data.every((h) => h.key != 'position')) {
                 List temp = new List();
                 temp.add(new GridColumn('position')
                     ..title = ''

@@ -85,7 +85,7 @@ class ButtonOption extends CJSElement {
             if(sub.any((but) => but.domAction.dom != e.target))
                 _showList(e);
         },'mousedown.button_option'),'click');
-        domList = new CJSElement(new UListElement()).addClass('ui-button-ul').appendTo(this).hide();
+        domList = new CJSElement(new UListElement()).addClass('ui-button-option-ul').appendTo(this).hide();
         setState(true);
     }
 

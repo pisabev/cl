@@ -432,12 +432,12 @@ ul.ui-list li:hover, ul.ui-list li.current, ul.ui-list li:hover *, ul.ui-list li
     -webkit-border-bottom-left-radius:0px;
     border-bottom-left-radius:0px;
 }
-.ui-button-ul .ui-button-inner {
+.ui-button-option-ul .ui-button-inner {
     -moz-border-radius:0px;
     -webkit-border-radius:0px;
     border-radius:0px;
 }
-.ui-button-option .ui-button-ul li:last-child .ui-button-inner {
+.ui-button-option-ul li:last-child .ui-button-inner {
     -moz-border-bottom-left-radius:3px;
     -webkit-border-bottom-left-radius:3px;
     border-bottom-left-radius:3px;
@@ -462,10 +462,10 @@ ul.ui-list li:hover, ul.ui-list li.current, ul.ui-list li:hover *, ul.ui-list li
     background-repeat: no-repeat;
     background-position:50% 50%;
 }
-.ui-button-option .ui-button-ul {
+.ui-button-option-ul {
     z-index:99999;
 }
-.ui-button-option .ui-button-ul * {
+.ui-button-option-ul * {
     width:100%;
     overflow:hidden;
 }

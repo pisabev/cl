@@ -569,10 +569,10 @@ html,body{
     margin-bottom:5px;
 }
 .ui-gadgets {
-    width:450px;
     height:100%;
     overflow:auto;
     position:absolute;
+    width:500px;
     top:0px;
     right:0px;
 }
@@ -582,6 +582,13 @@ html,body{
 .ui-gadgets .ui-gadget-inner {
     overflow:hidden;
     color:#666666;
+}
+.ui-gadgets .ui-gadget-inner.chart {
+    width:400px;
+    height:300px;
+}
+.ui-gadgets .ui-gadget-inner.text {
+    width:400px;
 }
 .ui-gadgets .ui-gadget-content {
     padding:10px;

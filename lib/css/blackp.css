@@ -423,7 +423,7 @@ ul.ui-list li:hover, ul.ui-list li.current, ul.ui-list li:hover *, ul.ui-list li
     -webkit-border-bottom-left-radius:0px;
     border-bottom-left-radius:0px;
 }
-.ui-button-option-ul .ui-button-inner {
+.ui-button-option-ul .ui-button-inner, .ui-button-ul .ui-button-inner {
     -moz-border-radius:0px;
     -webkit-border-radius:0px;
     border-radius:0px;
@@ -1917,7 +1917,7 @@ div.search {
     padding: 0px 1px;
 }
 .ui-event-calendar .cal-grid td.blur {
-    color: #CDCDCD;
+    color: #797979;
 }
 .ui-event-calendar .week-cont {
     border-top: 1px solid #484848;
@@ -2163,7 +2163,7 @@ div.search {
     font-weight:bold;
 }
 .ui-calendar-helper table span.other {
-    color:#CDCDCD;
+    color:#797979;
 }
 .ui-calendar-helper tbody span {
     height:18px;

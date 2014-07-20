@@ -432,7 +432,7 @@ ul.ui-list li:hover, ul.ui-list li.current, ul.ui-list li:hover *, ul.ui-list li
     -webkit-border-bottom-left-radius:0px;
     border-bottom-left-radius:0px;
 }
-.ui-button-option-ul .ui-button-inner {
+.ui-button-option-ul .ui-button-inner, .ui-button-ul .ui-button-inner {
     -moz-border-radius:0px;
     -webkit-border-radius:0px;
     border-radius:0px;

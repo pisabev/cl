@@ -295,22 +295,21 @@ class Container extends CJSElement<DivElement> {
             return c;
         };
 
-        var drag = new Draggable(col, 'slider')
-            ..observer.addHook('start', (list) {
-                var e = list[0];
+        var drag = new Drag(col, 'slider')
+            ..start((MouseEvent e) {
                 e.stopPropagation();
                 prev = getPrevCol(col);
                 next = getNextCol(col);
                 prev_width = prev.getWidth();
                 next_width = next.getWidth();
                 res = new CJSElement(new DivElement()).setClass('ui-slider-shadow');
-                res.setRectangle(col.getRectangle());
+                box = col.getRectangle();
+                res.setRectangle(box);
                 document.body.append(res.dom);
                 diff_x = 0;
                 _e = e;
             })
-            ..observer.addHook('on', (list) {
-                MouseEvent e = list[0];
+            ..on((MouseEvent e) {
                 diff_x = e.page.x - _e.page.x;
                 var min_p = prev_width + diff_x - 150;
                 if(min_p < 0)
@@ -318,9 +317,9 @@ class Container extends CJSElement<DivElement> {
                 var min_n = next_width - diff_x - 150;
                 if(min_n < 0)
                     diff_x += min_n;
-                res.setStyle({'left': '${box.p.x + diff_x}px'});
+                res.setStyle({'left': '${box.left + diff_x}px'});
             })
-            ..observer.addHook('stop', (list) {
+            ..end((MouseEvent e) {
                 res.remove();
                 prev.setWidth(prev_width + diff_x);
                 next.setWidth(next_width - diff_x);

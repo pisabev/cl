@@ -490,7 +490,7 @@ class Win {
 			initLayout();
 		} else {
 			win.removeClass('ui-win-shadowed');
-			box_h = new Rectangle(box.left, box.top, box.width, box.height);
+			box_h = new math.MutableRectangle(box.left, box.top, box.width, box.height);
 			setSize(body.width, body.height);
 			_maximized = true;
 			win_top.state = false;

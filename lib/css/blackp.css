@@ -602,9 +602,10 @@ html,body{
 .ui-gadgets .ui-gadget-content {
     padding:10px;
 }
-.ui-gadgets h1 {
+.ui-gadgets h2 {
     padding:10px;
-    border-bottom:3px solid #535353;
+    color:#FFFFFF;
+    background:#556F95;
 }
 .ui-gadgets table {
     width:100%;

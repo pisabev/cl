@@ -24,7 +24,7 @@ class Pop extends CJSElement {
 	}
 
 	Rectangle getFixedPosition (MouseEvent e) {
-	    Rectangle pos = new math.MutableRectangle(0, 0, 0, 0);
+		math.MutableRectangle pos = new math.MutableRectangle(0, 0, 0, 0);
 	    pos.left = e.page.x;
 	    pos.top = e.page.y;
 	    var left_strech = pos.left + width,

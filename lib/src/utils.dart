@@ -126,13 +126,13 @@ math.Point boundPoint(math.Point p, math.Point ref1, math.Point ref2) {
     return min(max(p, ref1), ref2);
 }
 
-Rectangle boundRect(Rectangle rect, Rectangle ref) {
+math.MutableRectangle boundRect(Rectangle rect, Rectangle ref) {
     math.Point point = boundPoint(rect.bottomRight, ref.topLeft, ref.bottomRight);
     return new math.MutableRectangle(point.x - rect.width, point.y - rect.height, rect.width, rect.height);
 }
 
-Rectangle centerRect(Rectangle rect, Rectangle ref) {
-    Rectangle box = new math.MutableRectangle.fromPoints(rect.topLeft, rect.bottomRight);
+math.MutableRectangle centerRect(Rectangle rect, Rectangle ref) {
+    math.MutableRectangle box = new math.MutableRectangle.fromPoints(rect.topLeft, rect.bottomRight);
     box.left = ref.left + ref.width ~/2 - box.width ~/2;
     box.top = ref.top + ref.height ~/2 - box.height ~/2;
     return box;

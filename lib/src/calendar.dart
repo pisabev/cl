@@ -1073,7 +1073,7 @@ class DragDayContainer {
         return hour_rows.firstWhere((HourRow row) => row.hour == date.hour && row.minutes == minute, orElse: () => null);
     }
 
-    HourRow getDayColByDate(DateTime date) => day_cols.firstWhere((DayCol day) => day.date.day == date.day, orElse: () => null);
+    DayCol getDayColByDate(DateTime date) => day_cols.firstWhere((DayCol day) => day.date.day == date.day, orElse: () => null);
 
     DateTime getDateByCoords(int x, int y) {
         HourRow row = getHourByCoords(x, y);

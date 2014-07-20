@@ -239,9 +239,9 @@ class Win {
 	CJSElement win_max;
 	CJSElement win_min;
 
-	Rectangle body;
-    Rectangle box;
-    Rectangle box_h;
+	math.MutableRectangle body;
+	math.MutableRectangle box;
+	math.MutableRectangle box_h;
 
 	bool _maximized 	= false;
 	int _zIndex 		= 0;
@@ -394,7 +394,7 @@ class Win {
 			return (type == 'width')? math.max(dim, _min_width) : math.max(dim, _min_height);
 		};
 
-        Rectangle p = new math.MutableRectangle(box.left, box.top, box.width, box.height);
+		math.MutableRectangle p = new math.MutableRectangle(box.left, box.top, box.width, box.height);
 
 		switch(destination) {
 			case 'N':

@@ -4,7 +4,7 @@ author: Petar Sabev
 description: UI Framework
 dependencies:
   intl: any
-svgspriter:
-  git: /home/user/Work/repositories/transformer.git
+  svgspriter:
+    git: /home/user/Work/repositories/transformer.git
 transformers:
 - svgspriter

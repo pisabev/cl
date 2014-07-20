@@ -1,0 +1,117 @@
+* {margin:0px; padding:0px; outline:0px;font-size:11px;font-family:tahoma,verdana,arial;}
+a:hover{cursor: pointer}
+img {border:0px;}
+.page {
+    width:630px;
+    padding:15px;
+    margin-left:auto;
+    margin-right:auto;
+}
+.header {
+    color:#CDCDCD;
+    height:30px;
+    line-height:30px;
+    font-size:22px;
+    font-weight:bold;
+    text-transform: uppercase;
+    text-align:center;
+    padding:10px;
+}
+.top {
+    overflow:hidden;
+    padding-top:20px;
+    margin-bottom:20px;
+}
+.top_left {
+    width:200px;
+    padding-right:10px;
+    float:left;
+}
+.top_right {
+    width:408px;
+    border-left:2px solid #CDCDCD;
+    padding-left:10px;
+    float:left;
+}
+h2 {
+    text-align:center;
+    font-weight:bold;
+    font-size:20px;
+    color:#CDCDCD;
+    line-height:100px;
+}
+h3 {
+    text-align:center;
+    font-size:16px;
+}
+h4 {
+    text-align:center;
+    font-weight:normal;
+    font-size:12px;
+}
+h5 {
+    border-bottom:1px solid #818181;
+    color:#818181;
+    padding-bottom:3px;
+    margin-bottom:10px;
+}
+.customer {
+    width:50%;
+    float:left;
+}
+.customer div {
+    margin:10px;
+}
+.customer .part {
+    font-size:14px;
+    color:#CDCDCD;
+    margin-bottom:10px;
+    text-transform: uppercase;
+}
+.customer .address {
+    margin-bottom:5px;
+    min-height:40px;
+}
+table.prods {
+    width:100%;
+    border-spacing:0px;
+    border-right:1px solid #CDCDCD;
+}
+table.prods thead td {
+    border-top:1px solid #CDCDCD;
+    font-weight:bold;
+}
+table.prods td {
+    background:#FFFFFF;
+    border-bottom:1px solid #CDCDCD;
+    white-space: nowrap;
+    border-left:1px solid #CDCDCD;
+    padding:5px;
+}
+table.prods tbody td {
+    text-align:right;
+}
+table.prods tbody td.label {
+    text-align:left;
+}
+.bottom {
+    margin-top:20px;
+    overflow:hidden;
+    margin-bottom:20px;
+}
+.left {
+    float:left;
+}
+.right {
+    float:right;
+}
+table.total td {
+    padding:0px 3px 3px 3px;
+}
+table.total td {
+    text-align:right;
+}
+.footer {
+    font-size:10px;
+    text-align:right;
+}

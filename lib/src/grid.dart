@@ -319,7 +319,7 @@ class GridList extends GridBase {
         row = new TableRowElement();
         TableRowElement rowh = thead.dom.insertRow(-1);
 
-        if(num) {
+        if(this.num) {
             if(data.any((h) => h.key != 'position')) {
                 List temp = new List();
                 temp.add(new GridColumn('position')
@@ -410,7 +410,7 @@ class GridList extends GridBase {
     }
 
     rowNumRerender() {
-        if(num) {
+        if(this.num) {
             for (int i = 0, l = tbody.dom.childNodes.length; i < l; i++)
                 tbody.dom.childNodes[i].cells[0].text = (i + 1).toString();
         }
@@ -423,7 +423,7 @@ class GridList extends GridBase {
                 obj[k] = gc.visible? (gc.type(this, row, row.cells[gc.cell_index], v)..render()) : v;
             }
         });
-        if(num && !obj.containsKey('position')) {
+        if(this.num && !obj.containsKey('position')) {
             if(map['position'].visible) {
                 row.cells[map['position'].cell_index].className = 'num';
                 obj['position'] = map['position'].type(this, row, row.cells[map['position'].cell_index], 0);

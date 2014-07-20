@@ -819,6 +819,7 @@ class StartMenu extends CJSElement {
     createButton () {
         button = new CJSElement(new AnchorElement())
             .setClass('ui-start-menu-button')
+            .setStyle({'background-image': 'url(${icon})'})
             .addAction(_onClick,'click');
         button.dom.text = title;
     }

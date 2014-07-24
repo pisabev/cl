@@ -372,23 +372,28 @@ class MonthRow extends CJSElement with EventCollection {
                 }
 
                 div.append(new Text(event.title));
-                div.dom.draggable = true;
-                div.addAction((MouseEvent e) {
-                    var drg = new DivElement()..className = 'event-cont-drag'..text = event.title;
-                    div.append(drg);
-                    e.dataTransfer.effectAllowed = 'move';
-                    e.dataTransfer.setDragImage(drg, 50, 50);
-                    calendar.dragm.rows.forEach((MonthRow row) {
-                        var doc = new CJSElement(document);
-                        doc.addAction((MouseEvent e) => calendar.dragm.onDragEvent(e, event),'dragover');
-                        doc.addAction((MouseEvent e) {
-                            drg.remove();
-                            calendar.dragm.onDropEvent(e, event);
-                            doc.removeAction('dragover');
-                            doc.removeAction('dragend');
-                        },'dragend');
+
+                var drg, rect;
+                setDragPos(drg, rect, e) =>
+                    drg.setStyle({'top':'${e.page.y - rect.top - 10}px', 'left':'${e.page.x - rect.left - 50}px'});
+                new utils.Drag(div)
+                    ..start((e) {
+                        drg = new CJSElement(new DivElement())
+                            .setClass('event-cont-drag')
+                            .setText(event.title)
+                            .appendTo(div);
+                        rect = div.getRectangle();
+                        setDragPos(drg, rect, e);
+                        calendar.dragm.onDragEvent(e, event);
+                    })
+                    ..on((e) {
+                        setDragPos(drg, rect, e);
+                        calendar.dragm.onDragEvent(e, event);
+                    })
+                    ..end((e) {
+                        drg.remove();
+                        calendar.dragm.onDropEvent(e, event);
                     });
-                },'dragstart');
                 cell.append(div);
                 int i = 0;
                 while(i < r - 1) {

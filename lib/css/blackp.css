@@ -1985,7 +1985,7 @@ div.search {
 .ui-event-calendar .event-cont-drag {
     position: absolute;
     width: 100px;
-    z-index: -1;
+    z-index:2;
 }
 .ui-event-calendar .event-cont.margin-left {
     margin-left: 4px;

@@ -699,6 +699,7 @@ class TreeBuilder<E extends Tree> extends CJSElement {
         load = o['load'];
         icons = (o['icons'] is Map)? o['icons']: {};
         checkObj = o['checkObj'];
+        checkSingle = (o['checkSingle'] is bool)? o['checkSingle'] : false;
         var init = {'value':o['value'], 'id':(o['id'] != null)? o['id'] : 0, 'type':o['type'], 'loadchilds': true};
         var folder = (checkObj != null)? ((checkObj is List && !checkSingle)? new TreeCheck(init) : new TreeChoice(init)) : new Tree(init);
 		folder.treeBuilder = this;

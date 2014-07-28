@@ -107,14 +107,16 @@ class RowFormDataCell extends RowDataCell {
                 .appendTo(cell);
             object.forEach((f) => _render(f, cont));
         } else {
-            if (object is CJSElement) {
+            if(object is Data && grid is GridData) {
+                object.addHook(Data.hook_value, () => grid.rowChanged(row));
+                object.addHook(Data.hook_require, grid.observer.getHook(Data.hook_require));
+            }
+            if (object is CJSElement)
                 cell.append(object.dom);
-                if(object is Data && grid is GridData) {
-                    object.addHook(Data.hook_value, () => grid.rowChanged(row));
-                    object.addHook(Data.hook_require, grid.observer.getHook(Data.hook_require));
-                }
-            } else if (object is Element)
+            else if (object is Element)
                 cell.append(object);
+            else if (object is Data)
+                return;
             else
                 cell.text = object.toString();
         }

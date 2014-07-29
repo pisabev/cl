@@ -665,14 +665,14 @@ class TreeChoice extends TreeCheck {
     clickedFolder () {}
 
     checkOperate () {
-        if (!checked) {
+        //if (!checked) {
             treeBuilder.main.removeCheck();
             checked = true;
             domInput.checked = true;
             treeBuilder.actionCheck(this);
             return true;
-        }
-        return false;
+        //}
+        //return false;
     }
 
     add (o) {

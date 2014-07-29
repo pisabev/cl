@@ -664,15 +664,25 @@ class TreeChoice extends TreeCheck {
 
     clickedFolder () {}
 
-    checkOperate () {
-        //if (!checked) {
-            treeBuilder.main.removeCheck();
+    initChecked (container) {
+        var input = new InputElement();
+        input.type = 'checkbox';
+        var checkObj = treeBuilder.checkObj;
+        if (checkObj.contains(_ref)) {
+            input.checked = true;
             checked = true;
-            domInput.checked = true;
-            treeBuilder.actionCheck(this);
-            return true;
-        //}
-        //return false;
+        }
+        input.onClick.listen((e) => checkOperate());
+        container.append(input);
+        return input;
+    }
+
+    checkOperate () {
+        treeBuilder.main.removeCheck();
+        checked = true;
+        domInput.checked = true;
+        treeBuilder.actionCheck(this);
+        return true;
     }
 
     add (o) {

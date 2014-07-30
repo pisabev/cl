@@ -1131,76 +1131,53 @@ class HintManager {
 class Messager {
     Application ap;
     String _type, _title, _message;
-    CJSElement mesDom;
+    CJSElement _mesDom;
 
-    Messager (this.ap, [Map o]) {
-        mesDom = new ContainerData();
-        mesDom.setStyle({'padding':'10px'});
-        if(o is Map) {
-            setTitle(o['title']);
-            setMessage(o['message']);
-            setType(o['type']);
-        }
+    Messager (this.ap) {
+        _mesDom = new ContainerData()..setStyle({'padding':'10px'});
     }
 
-    setType ([String type]) {
-        _type = (type != null)? type : 'attention';
-        return this;
-    }
+    set title(String title) => _type = title;
 
-    setTitle ([String title]) {
-        _title = (title != null)? title : '';
-        return this;
-    }
+    set type(String type) => _type = type;
 
-    setMessage ([String message]) {
-        _message = (message != null)? message : '';
-        return this;
-    }
+    set message(String message) => _message = message;
 
-    show ({int width: 500, int height: null}) {
-        Win win = ap.winmanager.loadBoundWin({'title': _title, 'icon': _type});
-        mesDom.dom.innerHtml = _message;
-        win.getContent().addRow(mesDom);
+    render ({int width: 500, int height: null}) {
+        Win win = ap.winmanager.loadBoundWin({'title': _title, 'icon': (_type != null)? _type : 'attention'});
+        _mesDom.dom.innerHtml = _message;
+        win.getContent().addRow(_mesDom);
         win.render(width, height);
     }
 }
 
-class Confirmer {
-    Application ap;
-    String message, title;
-    CJSElement mesDom, actDom, yesDom, noDom;
+class Confirmer extends Messager {
+    CJSElement _actDom, _yesDom, _noDom;
+    Function _callback = (){};
     int width = 300;
 
-    Confirmer (this.ap);
-
-    _createHTML () {
-        yesDom = new action.Button().setTitle(INTL.Yes()).setStyle({'float':'right'});
-        noDom = new action.Button().setTitle(INTL.No()).setStyle({'float':'right'});
-        mesDom = new CJSElement(new DivElement()).setClass('ui-message');
-        mesDom.dom.text = message;
+    Confirmer (ap) : super(ap) {
+        _yesDom = new action.Button().setTitle(INTL.Yes()).setStyle({'float':'right'});
+        _noDom = new action.Button().setTitle(INTL.No()).setStyle({'float':'right'});
     }
 
-    setMessage (String mes) {
-        message = mes;
-        return this;
-    }
+    set onOk(Function callback) => _callback = callback;
 
-    confirm (Function callBack) {
-        _createHTML();
-        var html = new ContainerDataLight().append(mesDom);
+    render ({int width: 400, int height: null}) {
+        _mesDom.dom.text = _message;
+        var html = new ContainerDataLight().append(_mesDom);
         var html2 = new ContainerOption();
-        new action.Menu(html2).add(noDom).add(yesDom);
-        Win win = ap.winmanager.loadBoundWin({'width': width, 'height': 0, 'title': INTL.Warning(), 'icon': 'warning'});
+        new action.Menu(html2).add(_noDom).add(_yesDom);
+        Win win = ap.winmanager.loadBoundWin({'width': width, 'height': 0, 'title': INTL.Warning(), 'icon': (_type != null)? _type : 'warning'});
         win.getContent()
             ..addRow(html)
             ..addRow(html2);
-        yesDom.addAction((e) {
+        _yesDom.addAction((e) {
             win.close();
-            callBack();
+            _callback();
         }, 'click');
-        noDom.addAction((e) => win.close(), 'click');
-        win.render(400, null);
+        _noDom.addAction((e) => win.close(), 'click');
+        win.render(width, height);
     }
 
 }

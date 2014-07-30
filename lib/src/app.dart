@@ -1162,7 +1162,7 @@ class Messager {
 
 class Questioner extends Messager {
     CJSElement _yesDom, _noDom;
-    Function _callback_yes = (){}, _callback_no = (){};
+    Function _callback_yes = () => true, _callback_no = () => true;
 
     Questioner (ap) : super(ap) {
         _yesDom = new action.Button().setTitle(INTL.Yes()).setStyle({'float':'right'});
@@ -1196,7 +1196,7 @@ class Questioner extends Messager {
 
 class Confirmer extends Messager {
     CJSElement _okDom;
-    Function _callback = (){};
+    Function _callback = () => true;
 
     Confirmer (ap) : super(ap) {
         _okDom = new action.Button().setTitle(INTL.OK()).setStyle({'float':'right'});

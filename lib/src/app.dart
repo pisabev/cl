@@ -1145,7 +1145,7 @@ class Messager {
 
     get container => _mesDom;
 
-    set title(String title) => _type = title;
+    set title(String title) => _title = title;
 
     set type(String type) => _type = type;
 

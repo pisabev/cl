@@ -1147,6 +1147,9 @@ html,body{
 .ui-table-custom tbody td {
     background:#797979;
 }
+.ui-table-custom tbody tr.blur td {
+    color:#B2B2B2;
+}
 .ui-table-custom tfoot {
     display:none;
 }

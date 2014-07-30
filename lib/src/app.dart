@@ -1138,8 +1138,12 @@ class Messager {
     CJSElement _mesDom;
 
     Messager (this.ap) {
-        _mesDom = new ContainerData()..setStyle({'padding':'10px'});
+        createDom();
     }
+
+    createDom() => _mesDom = new ContainerDataLight().addClass('ui-message');
+
+    get container => _mesDom;
 
     set title(String title) => _type = title;
 
@@ -1149,21 +1153,20 @@ class Messager {
 
     render ({int width: 500, int height: null}) {
         Win win = ap.winmanager.loadBoundWin({'title': _title, 'icon': (_type != null)? _type : 'attention'});
-        _mesDom.dom.innerHtml = _message;
+        if(_message != null)
+            _mesDom.dom.text = _message;
         win.getContent().addRow(_mesDom);
         win.render(width, height);
     }
 }
 
-class Confirmer extends Messager {
-    CJSElement _actDom, _yesDom, _noDom;
+class Questioner extends Messager {
+    CJSElement _yesDom, _noDom;
     Function _callback_yes = (){}, _callback_no = (){};
-    int width = 300;
 
-    Confirmer (ap) : super(ap) {
+    Questioner (ap) : super(ap) {
         _yesDom = new action.Button().setTitle(INTL.Yes()).setStyle({'float':'right'});
         _noDom = new action.Button().setTitle(INTL.No()).setStyle({'float':'right'});
-        _mesDom.setClass('ui-message');
     }
 
     set onYes(Function callback_yes) => _callback_yes = callback_yes;
@@ -1171,25 +1174,51 @@ class Confirmer extends Messager {
     set onNo(Function callback_no) => _callback_no = callback_no;
 
     render ({int width: 400, int height: null}) {
-        _mesDom.dom.text = _message;
-        var html = new ContainerDataLight().append(_mesDom);
-        var html2 = new ContainerOption();
-        new action.Menu(html2).add(_noDom).add(_yesDom);
+        if(_message != null)
+            _mesDom.dom.text = _message;
+        var html = new ContainerOption();
+        new action.Menu(html).add(_noDom).add(_yesDom);
         Win win = ap.winmanager.loadBoundWin({'width': width, 'height': 0, 'title': INTL.Warning(), 'icon': (_type != null)? _type : 'warning'});
         win.getContent()
-            ..addRow(html)
-            ..addRow(html2);
+            ..addRow(_mesDom)
+            ..addRow(html);
         _yesDom.addAction((e) {
-            win.close();
-            _callback_yes();
+            if(_callback_yes())
+                win.close();
         }, 'click');
         _noDom.addAction((e) {
-            win.close();
-            _callback_no();
+            if(_callback_no())
+                win.close();
         }, 'click');
         win.render(width, height);
     }
+}
 
+class Confirmer extends Messager {
+    CJSElement _okDom;
+    Function _callback = (){};
+
+    Confirmer (ap) : super(ap) {
+        _okDom = new action.Button().setTitle(INTL.OK()).setStyle({'float':'right'});
+    }
+
+    set onOk(Function callback) => _callback = callback;
+
+    render ({int width: 400, int height: null}) {
+        if(_message != null)
+            _mesDom.dom.text = _message;
+        var html = new ContainerOption();
+        new action.Menu(html).add(_okDom);
+        Win win = ap.winmanager.loadBoundWin({'width': width, 'height': 0, 'title': INTL.Warning(), 'icon': (_type != null)? _type : 'warning'});
+        win.getContent()
+            ..addRow(_mesDom)
+            ..addRow(html);
+        _okDom.addAction((e) {
+            if(_callback())
+                win.close();
+        }, 'click');
+        win.render(width, height);
+    }
 }
 
 class WinAsk {

@@ -1153,7 +1153,7 @@ class Messager {
 
 class Confirmer extends Messager {
     CJSElement _actDom, _yesDom, _noDom;
-    Function _callback = (){};
+    Function _callback_yes = (){}, _callback_no = (){};
     int width = 300;
 
     Confirmer (ap) : super(ap) {
@@ -1161,7 +1161,9 @@ class Confirmer extends Messager {
         _noDom = new action.Button().setTitle(INTL.No()).setStyle({'float':'right'});
     }
 
-    set onOk(Function callback) => _callback = callback;
+    set onYes(Function callback_yes) => _callback_yes = callback_yes;
+
+    set onNo(Function callback_no) => _callback_no = callback_no;
 
     render ({int width: 400, int height: null}) {
         _mesDom.dom.text = _message;
@@ -1174,9 +1176,12 @@ class Confirmer extends Messager {
             ..addRow(html2);
         _yesDom.addAction((e) {
             win.close();
-            _callback();
+            _callback_yes();
         }, 'click');
-        _noDom.addAction((e) => win.close(), 'click');
+        _noDom.addAction((e) {
+            win.close();
+            _callback_no();
+        }, 'click');
         win.render(width, height);
     }
 

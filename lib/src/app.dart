@@ -1152,7 +1152,9 @@ class Messager {
     set message(String message) => _message = message;
 
     render ({int width: 500, int height: null}) {
-        Win win = ap.winmanager.loadBoundWin({'title': _title, 'icon': (_type != null)? _type : 'attention'});
+        Win win = ap.winmanager.loadBoundWin({
+            'title': _title,
+            'icon': (_type != null)? _type : 'attention'});
         if(_message != null)
             _mesDom.dom.text = _message;
         win.getContent().addRow(_mesDom);
@@ -1178,7 +1180,9 @@ class Questioner extends Messager {
             _mesDom.dom.text = _message;
         var html = new ContainerOption();
         new action.Menu(html).add(_noDom).add(_yesDom);
-        Win win = ap.winmanager.loadBoundWin({'width': width, 'height': 0, 'title': INTL.Warning(), 'icon': (_type != null)? _type : 'warning'});
+        Win win = ap.winmanager.loadBoundWin({
+            'title': (_title != null)? _title : INTL.Warning(),
+            'icon': (_type != null)? _type : 'warning'});
         win.getContent()
             ..addRow(_mesDom)
             ..addRow(html);
@@ -1209,7 +1213,9 @@ class Confirmer extends Messager {
             _mesDom.dom.text = _message;
         var html = new ContainerOption();
         new action.Menu(html).add(_okDom);
-        Win win = ap.winmanager.loadBoundWin({'width': width, 'height': 0, 'title': INTL.Warning(), 'icon': (_type != null)? _type : 'warning'});
+        Win win = ap.winmanager.loadBoundWin({
+            'title': (_title != null)? _title : INTL.Warning(),
+            'icon': (_type != null)? _type : 'warning'});
         win.getContent()
             ..addRow(_mesDom)
             ..addRow(html);
@@ -1220,67 +1226,6 @@ class Confirmer extends Messager {
         win.render(width, height);
     }
 }
-
-class WinAsk {
-    Application ap;
-    Map o;
-    Win w;
-    Container data, option;
-    action.Button ok;
-    Function on_error, on_render;
-
-    WinAsk (this.ap, this.o) {
-        createDom();
-    }
-    createDom () {
-        data = new ContainerDataLight('padded');
-        option = new ContainerOption();
-        ok = new action.Button()
-        .setTitle(INTL.OK())
-        .setIcon('save')
-        .setStyle({'float':'right'});
-        new action.Menu(option).add(ok);
-    }
-
-    appendHtml (html) {
-        data.append(html);
-        return this;
-    }
-
-    onClick ([Function func]) {
-        if(func == null)
-            func = () => true;
-        var f = (e) {
-            if (func())
-                w.close();
-            else if (on_error is Function)
-                on_error();
-        };
-        this.ok.addAction(f, 'click');
-        return this;
-    }
-
-    onError (Function func) {
-        on_error = func;
-        return this;
-    }
-
-    onRender(Function func) {
-        on_render = func;
-        return this;
-    }
-
-    render () {
-        w = ap.winmanager.loadBoundWin(o);
-        w.getContent()
-            ..addRow(data)
-            ..addRow(option);
-        w.render(o['width'], o['height']);
-        if(on_render is Function)
-            on_render();
-    }
-}
-
 
 class GadgetBase extends CJSElement {
     String title;

@@ -1163,6 +1163,7 @@ class Confirmer extends Messager {
     Confirmer (ap) : super(ap) {
         _yesDom = new action.Button().setTitle(INTL.Yes()).setStyle({'float':'right'});
         _noDom = new action.Button().setTitle(INTL.No()).setStyle({'float':'right'});
+        _mesDom.setClass('ui-message');
     }
 
     set onYes(Function callback_yes) => _callback_yes = callback_yes;

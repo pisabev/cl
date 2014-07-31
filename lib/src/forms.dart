@@ -1523,7 +1523,7 @@ class FileManager {
     action.Menu menu;
     List list;
 
-    FileManager(this.ap, this.callback) {
+    FileManager(this.ap, this.callback) {print('sds');
         wapi = new app.WinApp(ap);
         initInterface();
         initTree();
@@ -1557,20 +1557,20 @@ class FileManager {
     renderView () {
         if(list.length > 0) {
             var first = list.first;
-            var dim = first['cont'].getDimensions(),
-                box_width = dim['width'] + first['cont'].getWidthOuterShift(),
-                box_height = dim['height'] + first['cont'].getHeightOuterShift(),
-                view_dim = html['right_inner'].getDimensions(),
-                count_left = (view_dim['width']/box_width).round(),
-                count_top = (view_dim['height']/box_height).round(),
+            var dim = first['cont'].getRectangle(),
+                box_width = dim.width+ first['cont'].getWidthOuterShift(),
+                box_height = dim.height + first['cont'].getHeightOuterShift(),
+                view_dim = html['right_inner'].getRectangle(),
+                count_left = (view_dim.width/box_width).round(),
+                count_top = (view_dim.height/box_height).round(),
                 scroll_top = html['right_inner'].dom.scrollTop,
-                shift = ((scroll_top/dim['height'])*count_left).round(),
+                shift = ((scroll_top/dim.height)*count_left).round(),
                 start = 0 + shift,
                 stop = count_top*count_left + shift;
             int i = 0;
             list.forEach((thumb) {
                 if(!thumb['rendered'] && i>=start && i<stop) {
-                    thumb['cont'].setStyle({'background-image':'url(media/image${dim['width']}x${dim['height']}/${Uri.encodeComponent(thumb['file'])})'});
+                    thumb['cont'].setStyle({'background-image':'url(media/image${dim.width}x${dim.height}/${Uri.encodeComponent(thumb['file'])})'});
                     thumb['rendered'] = true;
                     i++;
                 }

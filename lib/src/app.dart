@@ -143,9 +143,7 @@ class Application {
     }
 
     _onError(ErrorEvent e) {
-    	print(e.message);
-        print(e.filename);
-        print(e.colno);
+    	//e.message;
         new CJSElement(new SpanElement()).appendTo(system).dom.text = '!';
     }
 

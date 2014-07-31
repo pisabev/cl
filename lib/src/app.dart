@@ -143,7 +143,7 @@ class Application {
     }
 
     _onError(ErrorEvent e) {
-        print('error to string::: ${e.error.toString()}');
+        print(e.error);
         new CJSElement(new SpanElement()).appendTo(system).dom.text = '!';
     }
 

@@ -43,7 +43,8 @@
 .text-align-right:before{background-image:url(../images/icons/text-align-right.svg);}
 .text-bold:before{background-image:url(../images/icons/text-bold.svg);}
 .text-horizontalrule:before{background-image:url(../images/icons/text-horizontalrule.svg);}
-.text-indent:before{background-image:url(../images/icons/text-indent.svg);}
+.text-indent-right:before{background-image:url(../images/icons/text-indent-right.svg);}
+.text-indent-left:before{background-image:url(../images/icons/text-indent-left.svg);}
 .text-italic:before{background-image:url(../images/icons/text-italic.svg);}
 .text-list-bullets:before{background-image:url(../images/icons/text-list-bullets.svg);}
 .text-list-numbers:before{background-image:url(../images/icons/text-list-numbers.svg);}

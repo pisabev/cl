@@ -142,8 +142,10 @@ class Application {
         stats_gadget.add(title, value);
     }
 
-    _onError(e) {
-        print(e);
+    _onError(ErrorEvent e) {
+        print(e.clipboardData);
+        print(e.colno);
+        print('error to string::: ${e.error.toString()}');
         new CJSElement(new SpanElement()).appendTo(system).dom.text = '!';
     }
 

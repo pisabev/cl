@@ -7,4 +7,4 @@ dependencies:
   barback: any
   path: any
 transformers:
-- lib/transformer/svgspriter.dart
+- cjs/transformer/svgspriter.dart

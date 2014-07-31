@@ -1523,7 +1523,7 @@ class FileManager {
     action.Menu menu;
     List list;
 
-    FileManager(this.ap, this.callback) {print('sds');
+    FileManager(this.ap, this.callback) {
         wapi = new app.WinApp(ap);
         initInterface();
         initTree();
@@ -1640,10 +1640,10 @@ class FileManager {
 
     initLeftMenuTop () {
         menuTop = new action.Menu(html['left_options_top']);
-        menuTop.add(new action.Button().setName('folderadd').setState(false).setIcon('folder-add').addAction(folderAdd));
-        menuTop.add(new action.Button().setName('folderedit').setState(false).setIcon('folder-edit').addAction(folderEdit));
-        menuTop.add(new action.Button().setName('foldermove').setState(false).setIcon('folder-go').addAction(folderMove));
-        menuTop.add(new action.Button().setName('folderdelete').setState(false).setIcon('folder-delete').addAction(folderDelete));
+        menuTop.add(new action.Button().setName('folderadd').setState(false).setIcon('add').addAction(folderAdd));
+        menuTop.add(new action.Button().setName('folderedit').setState(false).setIcon('row-edit').addAction(folderEdit));
+        menuTop.add(new action.Button().setName('foldermove').setState(false).setIcon('change').addAction(folderMove));
+        menuTop.add(new action.Button().setName('folderdelete').setState(false).setIcon('delete').addAction(folderDelete));
     }
 
     initRightMenuTop () {

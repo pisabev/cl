@@ -1640,7 +1640,7 @@ class FileManager {
 
     initLeftMenuTop () {
         menuTop = new action.Menu(html['left_options_top']);
-        menuTop.add(new action.Button().setName('folderadd').setState(false).setIcon('add').addAction(folderAdd));
+        menuTop.add(new action.Button().setName('folderadd').setState(false).setIcon('group').addAction(folderAdd));
         menuTop.add(new action.Button().setName('folderedit').setState(false).setIcon('row-edit').addAction(folderEdit));
         menuTop.add(new action.Button().setName('foldermove').setState(false).setIcon('change').addAction(folderMove));
         menuTop.add(new action.Button().setName('folderdelete').setState(false).setIcon('delete').addAction(folderDelete));

@@ -144,6 +144,8 @@ class Application {
 
     _onError(ErrorEvent e) {
     	print(e.message);
+        print(e.filename);
+        print(e.lineno);
         new CJSElement(new SpanElement()).appendTo(system).dom.text = '!';
     }
 

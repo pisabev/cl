@@ -1128,7 +1128,7 @@ class HintManager {
         if(data[key]['data'] != null)
             data[key]['hint'].setData(data[key]['data']);
         else {
-            ap.serverCall(route.reverse([key]), {}, null).then((response) {
+            ap.serverCall(route.reverse([key]), {'locale': Intl.locale}, null).then((response) {
                 if(response != null)
                     data[key]['data'] = response;
                 data[key]['hint'].setData(data[key]['data']);

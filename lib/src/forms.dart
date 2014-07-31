@@ -1570,7 +1570,7 @@ class FileManager {
             int i = 0;
             list.forEach((thumb) {
                 if(!thumb['rendered'] && i>=start && i<stop) {
-                    thumb['cont'].setStyle({'background-image':'url(media/image${dim.width}x${dim.height}/${Uri.encodeComponent(thumb['file'])})'});
+                    thumb['cont'].setStyle({'background-image':'url(media/image${dim.width.floor()}x${dim.height.floor()}/${Uri.encodeComponent(thumb['file'])})'});
                     thumb['rendered'] = true;
                     i++;
                 }

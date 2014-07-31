@@ -40,7 +40,7 @@ class Application {
     	resourcemanager = new ResourceManager();
         iconmanager = new IconManager(desktop);
 		window.onResize.listen((e) => initLayout());
-        window.onError.listen((e) => new CJSElement(new SpanElement()).appendTo(system).dom.text = '!');
+        window.onError.listen(_onError);
         //document.body.onContextMenu.listen((e) => e.preventDefault());
         initLayout();
 	}
@@ -140,6 +140,11 @@ class Application {
         if(stats_gadget == null)
             stats_gadget = new StatsGadget('Statistics')..appendTo(gadgets);
         stats_gadget.add(title, value);
+    }
+
+    _onError(e) {
+        print(e);
+        new CJSElement(new SpanElement()).appendTo(system).dom.text = '!';
     }
 
 }

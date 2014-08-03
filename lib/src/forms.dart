@@ -1304,6 +1304,7 @@ class Editor extends DataElement {
 
     insertImage (e, cmd) {
         var range = window.getSelection().getRangeAt(0);
+        print(range);
         new FileManager(ap, (path) {
             window.getSelection()
                 ..removeAllRanges()

@@ -1208,8 +1208,6 @@ class Editor extends DataElement {
 				.addAction(_onBlur, 'keyup');
 		frame.dom.contentEditable = 'true';
         _exec("styleWithCSS",'true');
-        _exec("enableObjectResizing", "true");
-        _exec("enableInlineTableEditing", "true");
     }
 
     _createMenu () {

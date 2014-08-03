@@ -1672,41 +1672,48 @@ div.search {
     padding:initial;
     color:initial;
 }
-.ui-editor .ui-editor-header .ui-field-inner {
-    margin:2px 0px 0px 2px;
+.ui-editor .ui-editor-header .ui-field-inner, .ui-editor .ui-editor-header .ui-field-select {
+    margin:0px;
     background: transparent;
+}
+.ui-editor .ui-editor-header .ui-field-select {
+    margin:2px;
+    height:20px;
+    padding:1px;
+}
+.ui-editor .ui-editor-header .ui-field-select span {
+    color:#ACACAC;
 }
 .ui-editor .ui-editor-body .ui-field-area {
     height:100%;
 }
 .ui-editor-header, .ui-editor-footer {
     overflow:hidden;
-    padding:0px 2px 2px 0px;
     background:#F9F9F9;
 }
 .ui-editor-footer-resize {
     cursor: ns-resize;
 }
 .ui-editor-header {
-    border:1px solid #CDCDCD;
+    border:1px solid #EBEBEB;
 }
 .ui-editor-body {
     height:200px;
-    border-left:1px solid #CDCDCD;
-    border-right:1px solid #CDCDCD;
+    border-left:1px solid #EBEBEB;
+    border-right:1px solid #EBEBEB;
     position:relative;
 }
 .ui-editor-header .ui-button-inner {
-    border-color:#dcdcdc;
-    background-color:#FFFFFF;
+    border:none;
+    border-radius: 0px;
 }
 .ui-editor-footer {
     color:#666666;
-    border:1px solid #CDCDCD;
+    border:1px solid #EBEBEB;
     text-transform: lowercase;
 }
 .ui-editor-header .ui-button, .ui-editor-footer .ui-button {
-    margin:2px 0px 0px 2px;
+    margin:0px;
 }
 
 /* UI Color Picker

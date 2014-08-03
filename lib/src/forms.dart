@@ -1157,7 +1157,7 @@ class Editor extends DataElement {
             'text-strikethrough':   ['Strikethrough', 'strikethrough'],
             'text-subscript':       ['Subscript', 'subscript'],
             'text-superscript':     ['Superscript', 'superscript'],
-           /* 'font':                 ['Font', 'fontname', [
+            'font':                 ['Font', 'fontname', [
                                             ['Font',''],
                                             ['Arial','arial,helvetica,sans-serif'],
                                             ['Verdana','verdana,helvetica,sans-serif'],
@@ -1169,13 +1169,13 @@ class Editor extends DataElement {
                                             ['Comic Sans MS','comic sans ms,cursive'],
                                             ['Georgia','georgia,serif']
                                         ]
-                                    ],*/
-            //'fontsize':             ['Font Size', 'fontsize', [['Font Size',''],[1],[2],[3],[4],[5],[6],[7]]],
-            //'formatblock':          ['Format Block', 'formatblock', [['Style',''],['Paragraph','<p>'],['Header 1','<h1>'],['Header 2','<h2>'],['Header 3','<h3>'],['Header 4','<h4>'],['Header 5','<h5>'],['Header 6','<h6>']]],
+                                    ],
+            'fontsize':             ['Font Size', 'fontsize', [['Size',''],[1],[2],[3],[4],[5],[6],[7]]],
+            'formatblock':          ['Format Block', 'formatblock', [['Style',''],['Paragraph','<p>'],['Header 1','<h1>'],['Header 2','<h2>'],['Header 3','<h3>'],['Header 4','<h4>'],['Header 5','<h5>'],['Header 6','<h6>']]],
             'text-list-numbers':    ['Insert Ordered List', 'insertorderedlist'],
             'text-list-bullets':    ['Insert Unordered List', 'insertunorderedlist'],
-            'text-indent-right':   ['Outdent', 'outdent'],
-            'text-indent-left':          ['Indent', 'indent'],
+            'text-indent-left':   ['Outdent', 'outdent'],
+            'text-indent-right':          ['Indent', 'indent'],
             'text-align-left':      ['Left Align', 'justifyleft'],
             'text-align-center':    ['Center Align', 'justifycenter'],
             'text-align-right':     ['Right Align', 'justifyright'],
@@ -1201,12 +1201,15 @@ class Editor extends DataElement {
         	..observer.addHook('stop', (list) => _resizeAfter(list[0]));
 
         field = new TextArea().hide().setStyle({'width':'100%'}).appendTo(body);
-        path = new CJSElement(new SpanElement()).setStyle({'float':'left','white-space':'nowrap','padding':'8px 0px 0px 8px'}).appendTo(footer);
+        path = new CJSElement(new SpanElement()).setStyle({'float':'left','white-space':'nowrap','line-height':'26px','padding-left':'3px'}).appendTo(footer);
         frame = new CJSElement(new DivElement())
 				.setClass('iframe')
 				.addAction(_getPath, 'mousedown').appendTo(body)
 				.addAction(_onBlur, 'keyup');
 		frame.dom.contentEditable = 'true';
+        _exec("styleWithCSS",'true');
+        _exec("enableObjectResizing", "true");
+        _exec("enableInlineTableEditing", "true");
     }
 
     _createMenu () {
@@ -1219,10 +1222,10 @@ class Editor extends DataElement {
 				a.addAction(func, 'click');
 				a.domAction.dom.setAttribute('unselectable', 'on');
 			} else {
-				a = new Select();
+				a = new Select('string');
 		      	cur[2].forEach((o) {
 		      		var t = o[0];
-		      		var v = o[1]? o[1] : o[0];
+		      		var v = (o.length == 2)? o[1] : o[0];
 		      		a.addOption(v,t);
 		      	});
 		      	a.addAction((e) => _exec(cur[1], a.getValue()), 'change');
@@ -1303,8 +1306,8 @@ class Editor extends DataElement {
     }
 
     insertImage (e, cmd) {
+        frame.dom.focus();
         var range = window.getSelection().getRangeAt(0);
-        print(range);
         new FileManager(ap, (path) {
             window.getSelection()
                 ..removeAllRanges()
@@ -1314,9 +1317,7 @@ class Editor extends DataElement {
     }
 
     insertUrl (e, cmd) {
-        var sel = window.getSelection();
-        if(sel.baseOffset == 0)
-            return;
+        frame.dom.focus();
         var range = window.getSelection().getRangeAt(0);
         app.Win win = ap.winmanager.loadBoundWin({'title':'URL'});
         var input = new Input().setStyle({'width':'100%'});

@@ -127,6 +127,8 @@ class RowFormDataCell extends RowDataCell {
             return object.getValue();
         else if(object is List)
             return object.map((o) => _getValue(o)).toList();
+        else if(object is CJSElement)
+            return null;
         else
             return object;
     }

@@ -1645,8 +1645,8 @@ div.search {
     margin:0px;
     color:#000000;
 }
-.ui-editor .ui-editor-header .ui-field-inner select {
-    background: transparent;
+.ui-editor .ui-editor-header .ui-field-select {
+    margin-top:1px;
 }
 .ui-editor-header, .ui-editor-footer {
     overflow:hidden;
@@ -1658,6 +1658,7 @@ div.search {
 }
 .ui-editor-header {
     border:1px solid #444444;
+    padding-right:22px;
 }
 .ui-editor-body {
     height:200px;

@@ -1696,6 +1696,7 @@ div.search {
 }
 .ui-editor-header {
     border:1px solid #EBEBEB;
+    padding-right:22px;
 }
 .ui-editor-body {
     height:200px;

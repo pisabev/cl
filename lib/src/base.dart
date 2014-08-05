@@ -310,6 +310,7 @@ class Container extends CJSElement<DivElement> {
                 _e = e;
             })
             ..on((MouseEvent e) {
+                e.stopPropagation();
                 diff_x = e.page.x - _e.page.x;
                 var min_p = prev_width + diff_x - 150;
                 if(min_p < 0)

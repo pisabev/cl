@@ -298,7 +298,6 @@ class Container extends CJSElement<DivElement> {
         var drag = new Drag(col, 'slider')
             ..start((MouseEvent e) {
                 e.stopPropagation();
-                e.preventDefault();
                 prev = getPrevCol(col);
                 next = getNextCol(col);
                 prev_width = prev.getWidth();
@@ -311,8 +310,6 @@ class Container extends CJSElement<DivElement> {
                 _e = e;
             })
             ..on((MouseEvent e) {
-                e.stopPropagation();
-                e.preventDefault();
                 diff_x = e.page.x - _e.page.x;
                 var min_p = prev_width + diff_x - 150;
                 if(min_p < 0)

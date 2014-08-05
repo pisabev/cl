@@ -174,6 +174,11 @@ class CJSElement<E extends Element> {
         return dom.classes.contains(clas);
     }
 
+    set(String attr, String value) {
+        dom.setAttribute(attr, value);
+        return this;
+    }
+
     hide() {
         dom.style.display = 'none';
         return this;

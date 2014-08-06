@@ -362,6 +362,75 @@ class FileUploader_ extends Button {
 
 }
 
+class FileUploader extends Button {
+    app.Application ap;
+
+    static const String hook_before = 'hook_before';
+    static const String hook_loading = 'hook_loading';
+    static const String hook_loaded = 'hook_loaded';
+
+    CJSElement input;
+    dynamic id;
+    utils.Observer observer;
+
+    String upload;
+
+    FileUploader ([this.ap]) : super () {
+        observer = new utils.Observer();
+        createForm();
+        setStyle({'position':'relative','overflow':'hidden'}).append(input);
+    }
+
+    setUpload (String upload) {
+        this.upload = upload;
+        return this;
+    }
+
+    setState (bool state) {
+        super.setState(state);
+        if(input == null)
+            return this;
+        if(!state)
+            input.hide();
+        else
+            input.show();
+        return this;
+    }
+
+    createForm () {
+        input = new CJSElement(new InputElement());
+        input.dom
+            ..type = 'file'
+            ..name = 'filename[]'
+            ..multiple = true;
+        input.setStyle({
+            'opacity':'0',
+            'position':'absolute',
+            'top':'-100px',
+            'right':'0px',
+            'font-size':'200px',
+            'cursor':'pointer',
+            'text-align':'right'
+        })
+        .addAction((e) {
+            if(input.dom.files.length > 0) {
+                input.dom.files.forEach((f) {
+                    var fr = new FileReader();
+                    fr.onLoad.listen((e) => _upload(f.name, fr.result.split(',').last));
+                    fr.readAsDataUrl(f);
+                });
+            }
+        }, 'change');
+    }
+
+    _upload(name, content) {
+        observer.execHooks(hook_loading, name);
+        ap.serverCall('/file/upload', {'object': name, 'base': upload, 'content': content})
+        .then((data) => observer.execHooks(hook_loaded, name));
+    }
+
+}
+
 /*class FileUploader extends Button {
     app.Application ap;
 
@@ -463,72 +532,3 @@ class FileUploader_ extends Button {
     }
 
 }*/
-
-class FileUploader extends Button {
-    app.Application ap;
-
-    static const String hook_before = 'hook_before';
-    static const String hook_loading = 'hook_loading';
-    static const String hook_loaded = 'hook_loaded';
-
-    CJSElement input;
-    dynamic id;
-    utils.Observer observer;
-
-    String upload;
-
-    FileUploader ([this.ap]) : super () {
-        observer = new utils.Observer();
-        createForm();
-        setStyle({'position':'relative','overflow':'hidden'}).append(input);
-    }
-
-    setUpload (String upload) {
-        this.upload = upload;
-        return this;
-    }
-
-    setState (bool state) {
-        super.setState(state);
-        if(input == null)
-            return this;
-        if(!state)
-            input.hide();
-        else
-            input.show();
-        return this;
-    }
-
-    createForm () {
-        input = new CJSElement(new InputElement());
-        input.dom
-            ..type = 'file'
-            ..name = 'filename[]'
-            ..multiple = true;
-        input.setStyle({
-            'opacity':'0',
-            'position':'absolute',
-            'top':'-100px',
-            'right':'0px',
-            'font-size':'200px',
-            'cursor':'pointer',
-            'text-align':'right'
-        })
-        .addAction((e) {
-            if(input.dom.files.length > 0) {
-                input.dom.files.forEach((f) {
-                    var fr = new FileReader();
-                    fr.onLoad.listen((e) => _upload(f.name, fr.result.split(',').last));
-                    fr.readAsDataUrl(f);
-                });
-            }
-        }, 'change');
-    }
-
-    _upload(name, content) {
-        observer.execHooks(hook_loading, name);
-        ap.serverCall('/file/upload', {'object': name, 'base': upload, 'content': content})
-        .then((data) => observer.execHooks(hook_loaded, name));
-    }
-
-}

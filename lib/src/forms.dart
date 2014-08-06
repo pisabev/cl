@@ -1524,7 +1524,7 @@ abstract class FileManagerBase {
         this.tree_dom = tree_dom;
         tree = new gui.TreeBuilder({
             'value':'[ $main ]',
-            'id':base,
+            'id':main,
             'icons': icons,
             'action': clicked,
             'load': (renderer, item) {

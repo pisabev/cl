@@ -419,7 +419,7 @@ class FileUploader extends Button {
                 input.dom.files.forEach((f) {
                     var fr = new FileReader();
                     fr.onLoad.listen((e) {
-                        ap.serverCall('file/upload', {'object':f.name, 'base': '../tmp', 'content':fr.result});
+                        ap.serverCall('/file/upload', {'object':f.name, 'base': '../tmp', 'content':fr.result});
                         print(f.name);
                         print(fr.result);
                     });

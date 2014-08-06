@@ -1768,7 +1768,7 @@ class FileManager extends FileManagerBase {
             clicked(current);
             return true;
         });
-        menu.add(uploader.addAction((e) => uploader.setUpload('media/${current.id}')));
+        menu.add(uploader.addAction((e) => uploader.setUpload('$base/${current.id}')));
         menu.add(new action.Button().setName('filedelete').setTitle(INTL.Delete_file()).setState(false).setIcon('delete').addAction(delete));
     }
 

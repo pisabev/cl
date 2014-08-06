@@ -398,7 +398,7 @@ class FileUploader extends Button {
     }
 
     createForm () {
-        var input = new CJSElement(new InputElement());
+        input = new CJSElement(new InputElement());
         input.dom.type = 'file';
         input.dom.name = 'filename[]';
         input.dom.multiple = true;

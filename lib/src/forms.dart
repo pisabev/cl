@@ -1523,8 +1523,8 @@ abstract class FileManagerBase {
     initTree (CJSElement tree_dom, [String call = '/directory/list']) {
         this.tree_dom = tree_dom;
         tree = new gui.TreeBuilder({
-            'value':'[ $main ]',
-            'id':main,
+            'value': '[ $main ]',
+            'id': main,
             'icons': icons,
             'action': clicked,
             'load': (renderer, item) {
@@ -1628,7 +1628,7 @@ abstract class FileManagerBase {
         };
         var o = {
             'value':'[ $main ]',
-            'id':base,
+            'id': main,
             'icons': icons,
             'action': moveTo,
             'load': (renderer,item) {

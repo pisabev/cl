@@ -176,7 +176,7 @@ class CJSElement<E extends Element> {
         return dom.classes.contains(clas);
     }
 
-    set(String attr, String value) {
+    setAttribute(String attr, String value) {
         dom.setAttribute(attr, value);
         return this;
     }

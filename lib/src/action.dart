@@ -53,7 +53,7 @@ class Button extends CJSElement {
                 var rect = getRectangle();
                 tip = new CJSElement(new DivElement())
                     ..addClass('ui-data-tip $pos-tip')
-                    ..set('data-tips', text)
+                    ..setAttribute('data-tips', text)
                     ..setStyle({
                         'top':'${rect.top + ((offset_top)? rect.height : 0)}px',
                         'left':'${rect.left + ((offset_left)? rect.width : 0)}px'

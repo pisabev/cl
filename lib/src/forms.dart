@@ -1508,25 +1508,158 @@ class Tag extends DataElement {
     }
 }
 
-class FileManager {
+abstract class FileManagerBase {
     app.Application ap;
     app.WinApp wapi;
+    String main;
+    String base;
+    Map icons;
+    gui.TreeBuilder tree;
+    CJSElement tree_dom;
+    gui.Tree current;
+
+    FileManagerBase(this.ap, this.base, this.main, this.icons);
+
+    initTree (CJSElement tree_dom, [String call = '/directory/list']) {
+        this.tree_dom = tree_dom;
+        tree = new gui.TreeBuilder({
+            'value':'[ $main ]',
+            'id':base,
+            'icons': icons,
+            'action': clicked,
+            'load': (renderer, item) {
+                ap.serverCall(call, {
+                    'base': base,
+                    'object': item.id
+                }, tree_dom)
+                .then((data) => renderer(item, data));
+            }
+        });
+        tree_dom.append(tree);
+        tree.loadTree(tree.main);
+    }
+
+    clicked(gui.Tree object);
+
+    folderAdd (e) {
+        gui.Tree parent = current;
+        var newfolder = parent.add({'value':'','type':'directory'});
+        parent.initialize(parent.level, parent.isLast, parent.leftSide);
+        parent.isLoading = false;
+        parent.loadChilds = false;
+        parent.isOpen = false;
+        parent.operateNode();
+        var input = new Input();
+        var called = false;
+        var addCatRefresh = (KeyEvent e) {
+            if(e is FocusEvent || e.keyCode == 13 || e.keyCode == 27 || e.type=='blur') {
+                if(called)
+                    return;
+                called = true;
+                ap.serverCall('/directory/add', {
+                    'base': base,
+                    'parent': parent.id,
+                    'object': input.getValue()
+                }, tree_dom)
+                .then((data) {
+                    parent.treeBuilder.refreshTree(parent);
+                });
+            }
+        };
+        input.setValue('New folder')
+        .appendTo(newfolder.domValue)
+        .focus()
+        .select()
+        .addAction(addCatRefresh,'blur')
+        .addAction(addCatRefresh,'keydown');
+    }
+
+    edit (e) {
+        var field = current.domValue;
+        var input = new Input();
+        new CJSElement(field).setHtml('').removeClass('active').append(input);
+        input.setValue(current.value).focus().select();
+        var called = false;
+        var addCatRefresh = (KeyEvent e) {
+            if(e is KeyboardEvent && e.keyCode == 27) {
+                field.innerHtml = current.value;
+            } if(e.type == 'blur' || (e is KeyboardEvent && e.keyCode == 13)) {
+                if(called)
+                    return;
+                called = true;
+                ap.serverCall((current.type == 'folder')? '/directory/rename' : '/file/rename', {
+                    'base': base,
+                    'object': current.id,
+                    'name': current.parent.id + '/' + input.getValue()
+                }, tree_dom)
+                .then((data) => current.treeBuilder.refreshTree(current.parent));
+            }
+        };
+        input.addAction(addCatRefresh,'blur')
+        .addAction(addCatRefresh,'keydown');
+    }
+
+    delete (e) {
+        ap.serverCall((current.type == 'folder')? '/directory/delete' : '/file/delete', {
+            'base': base,
+            'object':current.id
+        }, tree_dom)
+        .then((data) => current.treeBuilder.refreshTree(current.parent));
+    }
+
+    move (e) {
+        var html = {'inner': new ContainerDataLight()};
+        wapi.load({'title': INTL.Move_to(), 'icon': 'move', 'type':'bound'}, this);
+        wapi.win.getContent().addRow(html['inner']);
+        var container = new CJSElement(new DivElement()).setClass('ui-tree-cont');
+        html['inner'].dom.innerHtml = '';
+        html['inner'].append(container);
+        var moveTo = (folder) {
+            if((current.id != folder.id && current.parent.id != folder.id))
+                ap.serverCall((current.type == 'folder')? '/directory/move' : '/file/move', {
+                    'base': base,
+                    'object': this.current.id,
+                    'to':'${folder.id}/${current.value}'
+                }, tree_dom)
+                .then((data) {
+                    current.treeBuilder.refreshTree(current.treeBuilder.main);
+                    wapi.win.close();
+                });
+        };
+        var o = {
+            'value':'[ $main ]',
+            'id':base,
+            'icons': icons,
+            'action': moveTo,
+            'load': (renderer,item) {
+                ap.serverCall('/directory/list', {
+                    'base': base,
+                    'object': item.id
+                }, tree_dom)
+                .then((data) => renderer(item,data));
+            }
+        };
+        tree = new gui.TreeBuilder(o);
+        container.append(tree);
+        tree.main.openChilds();
+        wapi.win.render(300, 350);
+    }
+
+}
+
+class FileManager extends FileManagerBase {
     Map html;
     var w = {'title':INTL.File_manager(), 'icon':'group', 'width':1000, 'height':570, 'type':'bound'};
     Function callback;
-    String main = 'upload';
-    String base = '../media';
-    gui.TreeBuilder tree;
-    var current;
     var current_file;
     action.Menu menuTop;
     action.Menu menu;
     List list;
 
-    FileManager(this.ap, this.callback) {
+    FileManager(ap, this.callback) : super (ap, '../media', 'upload', {'folder':'group'}) {
         wapi = new app.WinApp(ap);
         initInterface();
-        initTree();
+        initTree(html['left_inner']);
         wapi.render();
         initLeftMenuTop();
         initRightMenuTop();
@@ -1578,25 +1711,7 @@ class FileManager {
         }
     }
 
-    initTree () {
-        tree = new gui.TreeBuilder({
-            'value':'[ '+INTL.Folders()+' ]',
-            'id':main,
-            'icons': {'folder':'group'},
-            'action': clickedFolder,
-            'load': (renderer, item) {
-                ap.serverCall('/directory/list', {
-                    'base': base,
-                    'dirname': item.id
-                },  html['left_inner'])
-                .then((data) => renderer(item, data));
-            }
-        });
-        html['left_inner'].append(tree);
-        tree.loadTree(tree.main);
-    }
-
-    clickedFolder (folder) {
+    clicked (folder) {
         if(folder.id != main) {
             menuTop.initButtons(['folderadd','folderedit','foldermove','folderdelete']);
             menu.initButtons(['fileadd']);
@@ -1609,7 +1724,7 @@ class FileManager {
         list = [];
         ap.serverCall('/file/list', {
             'base': base,
-            'dirname':current.id
+            'object':current.id
         }, html['right_inner'])
         .then((data) {
             html['right_inner'].removeChilds();
@@ -1641,144 +1756,20 @@ class FileManager {
     initLeftMenuTop () {
         menuTop = new action.Menu(html['left_options_top']);
         menuTop.add(new action.Button().setName('folderadd').setState(false).setIcon('group').addAction(folderAdd));
-        menuTop.add(new action.Button().setName('folderedit').setState(false).setIcon('row-edit').addAction(folderEdit));
-        menuTop.add(new action.Button().setName('foldermove').setState(false).setIcon('change').addAction(folderMove));
-        menuTop.add(new action.Button().setName('folderdelete').setState(false).setIcon('delete').addAction(folderDelete));
+        menuTop.add(new action.Button().setName('folderedit').setState(false).setIcon('row-edit').addAction(edit));
+        menuTop.add(new action.Button().setName('foldermove').setState(false).setIcon('change').addAction(move));
+        menuTop.add(new action.Button().setName('folderdelete').setState(false).setIcon('delete').addAction(delete));
     }
 
     initRightMenuTop () {
         menu = new action.Menu(this.html['right_options_top']);
         var uploader = new action.FileUploader().setName('fileadd').setTitle(INTL.Add_file()).setState(false).setIcon('add');
         uploader.observer.addHook(action.FileUploader.hook_loaded, (files) {
-            clickedFolder(current);
+            clicked(current);
             return true;
         });
-        menu.add(uploader.addAction((e) => fileAdd(uploader)));
-        menu.add(new action.Button().setName('filedelete').setTitle(INTL.Delete_file()).setState(false).setIcon('delete').addAction(fileDelete));
+        menu.add(uploader.addAction((e) => uploader.setUpload('upload?path=' + Uri.encodeComponent('media/${current.id}'))));
+        menu.add(new action.Button().setName('filedelete').setTitle(INTL.Delete_file()).setState(false).setIcon('delete').addAction(delete));
     }
 
-    folderAdd (e) {
-        menuTop.initButtons([]);
-        gui.Tree parent = current;
-        var newfolder = parent.add({'value':'','type':'directory'});
-        parent.initialize(parent.level, parent.isLast, parent.leftSide);
-        parent.isLoading = false;
-        parent.loadChilds = false;
-        parent.isOpen = false;
-        parent.operateNode();
-        var input = new Input();
-        var called = false;
-        var addCatRefresh = (KeyEvent e) {
-            if(e is FocusEvent || e.keyCode == 13 || e.keyCode == 27 || e.type=='blur') {
-                if(called)
-                    return;
-                called = true;
-                ap.serverCall('/directory/add', {
-                    'base': base,
-                    'parent': parent.id,
-                    'dirname': input.getValue()
-                }, html['left_inner'])
-                .then((data) {
-                    parent.treeBuilder.refreshTree(parent);
-                });
-            }
-        };
-        input.setValue('New folder')
-            .appendTo(newfolder.domValue)
-            .focus()
-            .select()
-            .addAction(addCatRefresh,'blur')
-            .addAction(addCatRefresh,'keydown');
-    }
-
-    folderDelete (e) {
-        ap.serverCall('/directory/delete', {
-            'base': base,
-            'dirname':current.id
-        }, html['left_inner'])
-        .then((data) {
-            current.treeBuilder.refreshTree(current.parent);
-        });
-    }
-
-    folderEdit (e) {
-        var field = current.domValue;
-        var input = new Input();
-        new CJSElement(field).setHtml('').removeClass('active').append(input);
-        input.setValue(current.value).focus().select();
-        var called = false;
-        var addCatRefresh = (KeyEvent e) {
-            if(e is KeyboardEvent && e.keyCode == 27) {
-                field.innerHtml = current.value;
-            } if(e.type == 'blur' || (e is KeyboardEvent && e.keyCode == 13)) {
-                if(called)
-                    return;
-                called = true;
-                ap.serverCall('/directory/edit', {
-                    'base': base,
-                    'dirname': current.id,
-                    'name': current.parent.id + '/' + input.getValue()
-                }, null)
-                .then((data){
-                    current.treeBuilder.refreshTree(current.parent);
-                    menuTop.initButtons(['folderadd', 'folderedit', 'foldermove', 'folderdelete']);
-                });
-            }
-        };
-        input.addAction(addCatRefresh,'blur')
-            .addAction(addCatRefresh,'keydown');
-    }
-
-    folderMove (e) {
-        var html = {'inner': new ContainerDataLight()};
-        wapi.load({'title': INTL.Move_to(), 'icon': 'group', 'type':'bound'}, this);
-        wapi.win.getContent().addRow(html['inner']);
-        var container = new CJSElement(new DivElement()).setClass('ui-tree-cont');
-        html['inner'].dom.innerHtml = '';
-        html['inner'].append(container);
-        var moveTo = (folder) {
-            if((current.id != folder.id && current.parent.id != folder.id))
-                ap.serverCall('/directory/move', {
-                    'base': base,
-                    'dirname': this.current.id,
-                    'to':'${folder.id}/${current.value}'
-                }, null)
-                .then((data) {
-                    current.treeBuilder.refreshTree(current.treeBuilder.main);
-                    wapi.win.close();
-                });
-        };
-        var o = {
-            'value':'[ '+INTL.Folders()+' ]',
-            'id':main,
-            'icons': {'folder':'group'},
-            'action': moveTo,
-            'load': (renderer,item) {
-                ap.serverCall('/directory/list', {
-                    'base': base,
-                    'dirname': item.id
-                }, null)
-                .then((data) => renderer(item,data));
-            }
-        };
-        tree = new gui.TreeBuilder(o);
-        container.append(tree);
-        tree.main.openChilds();
-        wapi.win.render(300, 350);
-    }
-
-    fileAdd (action.FileUploader uploader) {
-        uploader.setUpload('upload?path=' + Uri.encodeComponent('media/${current.id}'));
-    }
-
-    fileDelete (e) {
-        ap.serverCall('/file/delete', {
-            'base': base,
-            'file' : current_file['file']
-        }, html['right_inner'])
-        .then((data) {
-            current_file['cont'].remove();
-            current_file = null;
-        });
-    }
 }

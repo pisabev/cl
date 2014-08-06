@@ -752,8 +752,6 @@ class IconManager {
         var h3 = new CJSElement(new HeadingElement.h3())
         .appendTo(cont);
         cont.addClass('desktop-icon');
-        cont.addClass('right-tip');
-        cont.dom.setAttribute('data-tips', o['title']);
         h3.dom.text = o['title'];
         icons.add(cont);
     }

@@ -37,9 +37,37 @@ class Button extends CJSElement {
         return this;
     }
 
-    setDataTip(String text, [String pos = 'bottom']) {
-        addClass('$pos-tip');
-        dom.setAttribute('data-tips', text);
+    setTip(String text, [String pos = 'bottom']) {
+        CJSElement tip;
+        Timer timer;
+        bool offset_top = false;
+        bool offset_left = false;
+        switch(pos) {
+            case 'top': offset_top = false; break;
+            case 'bottom': offset_top = true; break;
+            case 'left': offset_left = false; break;
+            case 'right': offset_left = true; break;
+        }
+        addAction((e) {
+            if(state) {
+                var rect = getRectangle();
+                tip = new CJSElement(new DivElement())
+                    ..addClass('ui-data-tip $pos-tip')
+                    ..set('data-tips', text)
+                    ..setStyle({
+                        'top':'${rect.top + ((offset_top)? rect.height : 0)}px',
+                        'left':'${rect.left + ((offset_left)? rect.width : 0)}px'
+                    })
+                    ..appendTo(document.body);
+                timer = new Timer(new Duration(milliseconds:100), () => tip.addClass('show'));
+            }
+        }, 'mouseover');
+        addAction((e) {
+            if(state) {
+                timer.cancel();
+                tip.remove();
+            }
+        }, 'mouseout');
         return this;
     }
 

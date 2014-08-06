@@ -25,6 +25,8 @@ class CJSElement<E extends Element> {
 
     set state(state) => _state = state;
 
+    get state => _state;
+
     setState(bool state) {
         _state = state;
         return this;

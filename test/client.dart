@@ -51,7 +51,7 @@ class Tab extends cl_app.Item {
         grid.addRow(['Date', new cl_form.InputDate().setName('date')]);
         grid.addRow(['DateRange', new cl_form.InputDateRange().setName('date_range')]);
         grid.addRow(['Upload', new cl_action.FileUploader().setTitle('upload').setName('ddd').setUpload('sdsdsdsdsd')]);
-        grid.addRow(['Button', new cl_action.Button().setTitle('Press').setName('sdsd').addAction(
+        grid.addRow(['Button', new cl_action.Button().setTip('Data tip','bottom').setState(true).setTitle('Press').setName('sdsd').addAction(
                 (e) {
                 var req = grid.form.getRequired();
                 if (req.length > 0) {

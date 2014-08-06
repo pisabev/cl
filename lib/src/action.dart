@@ -527,7 +527,7 @@ class FileUploader extends Button {
 
     _upload(name, content) {
         observer.execHooks(hook_loading, name);
-        ap.serverCall('/file/upload', {'object': name, 'base': '../tmp', 'content': content})
+        ap.serverCall('/file/upload', {'object': name, 'base': upload, 'content': content})
         .then((data) => observer.execHooks(hook_loaded, name));
     }
 

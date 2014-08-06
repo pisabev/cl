@@ -375,7 +375,7 @@ class FileUploader extends Button {
 
     String upload;
 
-    FileUploader (this.ap) : super () {
+    FileUploader ([this.ap]) : super () {
         observer = new utils.Observer();
         createForm();
         setStyle({'position':'relative','overflow':'hidden'}).append(form);

@@ -369,7 +369,7 @@ class FileUploader extends Button {
     static const String hook_loading = 'hook_loading';
     static const String hook_loaded = 'hook_loaded';
 
-    CJSElement form;
+    CJSElement input;
     dynamic id;
     utils.Observer observer;
 
@@ -378,7 +378,7 @@ class FileUploader extends Button {
     FileUploader ([this.ap]) : super () {
         observer = new utils.Observer();
         createForm();
-        setStyle({'position':'relative','overflow':'hidden'}).append(form);
+        setStyle({'position':'relative','overflow':'hidden'}).append(input);
     }
 
     setUpload (String upload) {
@@ -388,19 +388,16 @@ class FileUploader extends Button {
 
     setState (bool state) {
         super.setState(state);
-        if(form == null)
+        if(input == null)
             return this;
         if(!state)
-            form.hide();
+            input.hide();
         else
-            form.show();
+            input.show();
         return this;
     }
 
     createForm () {
-        form = new CJSElement(new FormElement());
-        form.dom.method = 'post';
-        form.dom.enctype = 'multipart/form-data';
         var input = new CJSElement(new InputElement());
         input.dom.type = 'file';
         input.dom.name = 'filename[]';
@@ -418,50 +415,17 @@ class FileUploader extends Button {
             if(input.dom.files.length > 0) {
                 input.dom.files.forEach((f) {
                     var fr = new FileReader();
-                    fr.onLoad.listen((e) {
-                        ap.serverCall('/file/upload', {'object':f.name, 'base': '../tmp', 'content':fr.result});
-                        print(f.name);
-                        print(fr.result);
-                    });
+                    fr.onLoad.listen((e) => _upload(f.name, fr.result));
                     fr.readAsDataUrl(f);
                 });
-                var fs = [];
-                input.dom.files.forEach((f) => fs.add(f.name));
-                submit(fs);
             }
-        }, 'change')
-        .appendTo(form);
+        }, 'change');
     }
 
-    submit (List filenames) {
-        var iframe_cont, iframe;
-        var clean = () => iframe_cont.remove();
-        var frame = () {
-            var n = 'f${new Random().nextInt(1000) * 99999}';
-            iframe_cont = new CJSElement(new DivElement()).appendTo(document.body);
-            iframe = new CJSElement(new IFrameElement());
-            iframe.dom.src = 'about:blank';
-            iframe.dom.id = n;
-            iframe.dom.name = n;
-            iframe.setStyle({'display':'none'}).appendTo(iframe_cont);
-            return n;
-        };
-        var loaded = () {
-            observer.execHooks(hook_loaded, filenames);
-            clean();
-        };
-        var submitForm = (f) {
-            f.dom.target = frame();
-            if(observer.execHooks(hook_before, filenames)) {
-                observer.execHooks(hook_loading, filenames);
-                iframe.addAction((e) => loaded(),'load');
-                f.dom.submit();
-            } else {
-                clean();
-            }
-        };
-        submitForm(form);
-        return true;
+    _upload(name, content) {
+        observer.execHooks(hook_loading, name);
+        ap.serverCall('/file/upload', {'object':name, 'base': '../tmp', 'content':content})
+        .then((data) => observer.execHooks(hook_loaded, name));
     }
 
 }

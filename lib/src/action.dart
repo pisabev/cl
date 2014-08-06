@@ -362,7 +362,7 @@ class FileUploader_ extends Button {
 
 }
 
-class FileUploader extends Button {
+/*class FileUploader extends Button {
     app.Application ap;
 
     static const String hook_before = 'hook_before';
@@ -462,9 +462,9 @@ class FileUploader extends Button {
         return true;
     }
 
-}
+}*/
 
-/*class FileUploader extends Button {
+class FileUploader extends Button {
     app.Application ap;
 
     static const String hook_before = 'hook_before';
@@ -518,7 +518,7 @@ class FileUploader extends Button {
             if(input.dom.files.length > 0) {
                 input.dom.files.forEach((f) {
                     var fr = new FileReader();
-                    fr.onLoad.listen((e) => _upload(f.name, fr.result));
+                    fr.onLoad.listen((e) => _upload(f.name, fr.result.split(',').last));
                     fr.readAsDataUrl(f);
                 });
             }
@@ -531,4 +531,4 @@ class FileUploader extends Button {
         .then((data) => observer.execHooks(hook_loaded, name));
     }
 
-}*/
+}

@@ -1609,7 +1609,7 @@ abstract class FileManagerBase {
 
     move (e) {
         var html = {'inner': new ContainerDataLight()};
-        wapi.load({'title': INTL.Move_to(), 'icon': 'move', 'type':'bound'}, this);
+        wapi.load({'title': INTL.Move_to(), 'icon': 'redo', 'type':'bound'}, this);
         wapi.win.getContent().addRow(html['inner']);
         var container = new CJSElement(new DivElement()).setClass('ui-tree-cont');
         html['inner'].dom.innerHtml = '';

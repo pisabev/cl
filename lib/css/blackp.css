@@ -357,7 +357,7 @@ ul.ui-list li:hover, ul.ui-list li.current, ul.ui-list li:hover *, ul.ui-list li
     float:left;
 }
 .ui-button-inner {
-    min-height:23px;
+    min-height:24px;
     padding:0px 11px 0px 11px;
     border-width:1px;
     border-style: solid;
@@ -1467,7 +1467,7 @@ div.search {
 }
 .ui-data-tip.top-tip.show:after,
 .ui-data-tip.top-tip.show:before {
-    bottom: 0px;
+    bottom: 0;
     left: 0;
 }
 .ui-data-tip.top-tip.show:before {
@@ -1489,7 +1489,7 @@ div.search {
 }
 .ui-data-tip.bottom-tip.show:after,
 .ui-data-tip.bottom-tip.show:before {
-    top: 0px;
+    top: 0;
     left: 0;
 }
 .ui-data-tip.bottom-tip.show:before {
@@ -1511,7 +1511,7 @@ div.search {
 }
 .ui-data-tip.right-tip.show:after,
 .ui-data-tip.right-tip.show:before {
-    left: 0px;
+    left: 0;
     top: 0;
 }
 .ui-data-tip.right-tip.show:before {
@@ -1533,7 +1533,7 @@ div.search {
 }
 .ui-data-tip.left-tip.show:after,
 .ui-data-tip.left-tip.show:before {
-    right: 0px;
+    right: 0;
     top: 0;
 }
 .ui-data-tip.left-tip.show:before {

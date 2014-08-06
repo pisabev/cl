@@ -1446,17 +1446,18 @@ div.search {
 }
 /* UI Calendar
 -----------------------------------------------------------------------------------------------------*/
-[data-tips] {
-    position: relative;
+.ui-data-tip {
+    position: absolute;
     text-decoration: none;
+    z-index: 9999999;
 }
-[data-tips]:after,
-[data-tips]:before {
+.ui-data-tip:after,
+.ui-data-tip:before {
     position: absolute;
     z-index: 100;
     opacity: 0;
 }
-[data-tips]:after {
+.ui-data-tip:after {
     content: attr(data-tips);
     min-height: 25px;
     line-height: 25px;
@@ -1475,103 +1476,103 @@ div.search {
     box-sizing: border-box;
     white-space:nowrap;
 }
-[data-tips]:before {
+.ui-data-tip:before {
     content: "";
     width: 0;
     height: 0;
     border-width: 6px;
     border-style: solid;
 }
-[data-tips]:hover:after,
-[data-tips]:hover:before {
+.ui-data-tip.show:after,
+.ui-data-tip.show:before {
     opacity: 1;
 }
 /* Top tips */
-[data-tips].top-tip:after,
-[data-tips].top-tip:before {
+.ui-data-tip.top-tip:after,
+.ui-data-tip.top-tip:before {
     -webkit-transition: bottom 0.25s ease-in-out, opacity 0.25s ease-in-out;
     -moz-transition: bottom 0.25s ease-in-out, opacity 0.25s ease-in-out;
     transition: bottom 0.25s ease-in-out, opacity 0.25s ease-in-out;
-    bottom: 90%;
+    bottom: 10px;
     left: -9999px;
     margin-bottom: 12px;
 }
-[data-tips].top-tip:before {
+.ui-data-tip.top-tip:before {
     border-color: #222 transparent transparent transparent;
     margin-bottom: 0;
 }
-[data-tips].top-tip:hover:after,
-[data-tips].top-tip:hover:before {
-    bottom: 100%;
+.ui-data-tip.top-tip.show:after,
+.ui-data-tip.top-tip.show:before {
+    bottom: 0;
     left: 0;
 }
-[data-tips].top-tip:hover:before {
+.ui-data-tip.top-tip.show:before {
     left: 15px;
 }
 /* Bottom tip */
-[data-tips].bottom-tip:after,
-[data-tips].bottom-tip:before {
+.ui-data-tip.bottom-tip:after,
+.ui-data-tip.bottom-tip:before {
     -webkit-transition: top 0.25s ease-in-out, opacity 0.25s ease-in-out;
     -moz-transition: top 0.25s ease-in-out, opacity 0.25s ease-in-out;
     transition: top 0.25s ease-in-out, opacity 0.25s ease-in-out;
-    top: 90%;
+    top: 10px;
     left: -9999px;
     margin-top: 12px;
 }
-[data-tips].bottom-tip:before {
+.ui-data-tip.bottom-tip:before {
     border-color: transparent transparent #222 transparent;
     margin-top: 0;
 }
-[data-tips].bottom-tip:hover:after,
-[data-tips].bottom-tip:hover:before {
-    top: 100%;
+.ui-data-tip.bottom-tip.show:after,
+.ui-data-tip.bottom-tip.show:before {
+    top: 0;
     left: 0;
 }
-[data-tips].bottom-tip:hover:before {
+.ui-data-tip.bottom-tip.show:before {
     left: 15px;
 }
 /* Right tip */
-[data-tips].right-tip:after,
-[data-tips].right-tip:before {
+.ui-data-tip.right-tip:after,
+.ui-data-tip.right-tip:before {
     -webkit-transition: left 0.25s ease-in-out, opacity 0.25s ease-in-out;
     -moz-transition: left 0.25s ease-in-out, opacity 0.25s ease-in-out;
     transition: left 0.25s ease-in-out, opacity 0.25s ease-in-out;
     top: -9999px;
-    left: 96%;
+    left: 10px;
     margin-left: 12px;
 }
-[data-tips].right-tip:before {
+.ui-data-tip.right-tip:before {
     border-color: transparent #222 transparent transparent;
     margin-left: 0;
 }
-[data-tips].right-tip:hover:after,
-[data-tips].right-tip:hover:before {
-    left: 100%;
+.ui-data-tip.right-tip.show:after,
+.ui-data-tip.right-tip.show:before {
+    left: 0;
     top: 0;
 }
-[data-tips].right-tip:hover:before {
+.ui-data-tip.right-tip.show:before {
     top: 7px;
 }
 /* Left tip */
-[data-tips].left-tip:after,
-[data-tips].left-tip:before {
+.ui-data-tip.left-tip:after,
+.ui-data-tip.left-tip:before {
     -webkit-transition: right 0.25s ease-in-out, opacity 0.25s ease-in-out;
     -moz-transition: right 0.25s ease-in-out, opacity 0.25s ease-in-out;
     transition: right 0.25s ease-in-out, opacity 0.25s ease-in-out;
     top: -9999px;
-    right: 96%;
+    right: 10px;
     margin-right: 12px;
 }
-[data-tips].left-tip:before {
+.ui-data-tip.left-tip:before {
     border-color: transparent transparent transparent #222;
     margin-right: 0;
 }
-[data-tips].left-tip:hover:after,
-[data-tips].left-tip:hover:before {
-    right: 100%;
+.ui-data-tip.left-tip.show:after,
+.ui-data-tip.left-tip.show:before {
+    right: 0;
     top: 0;
 }
-[data-tips].left-tip:hover:before {
+.ui-data-tip.left-tip.show:before {
     top: 7px;
 }
 /* UI Tree

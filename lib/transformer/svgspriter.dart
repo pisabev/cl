@@ -55,7 +55,7 @@ class SVGSpriter extends Transformer {
             ..write('<?xml version="1.0" encoding="utf-8"?>\n')
             ..write('<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">\n')
             ..write('<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="76" height="$offset_current" viewBox="0 0 76.00 $offset_current.00" xml:space="preserve">\n')
-            ..write('<defs><style>path{fill:#BBBBBB;}</style></defs>\n')
+            ..write('<defs><style>path{fill:#AAAAAA;}</style></defs>\n')
             ..writeAll(paths)
             ..write('</svg>');
         var pathdir = path.dirname(transform.primaryInput.id.path);

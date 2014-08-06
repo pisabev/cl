@@ -52,6 +52,8 @@
 .text-subscript:before{background-image:url(../images/icons/text-subscript.svg);}
 .text-superscript:before{background-image:url(../images/icons/text-superscript.svg);}
 .text-underline:before{background-image:url(../images/icons/text-underline.svg);}
+.redo:before{background-image:url(../images/icons/redo.svg);}
+.undo:before{background-image:url(../images/icons/undo.svg);}
 .link-add:before{background-image:url(../images/icons/link-add.svg);}
 .page-paste:before{background-image:url(../images/icons/page-paste.svg);}
 .image:before{background-image:url(../images/icons/image.svg);}

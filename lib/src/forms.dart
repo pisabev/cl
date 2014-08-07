@@ -467,6 +467,8 @@ class Select extends _FieldBuilder<SelectField> {
     _setShadowValue () => domValue.dom.text = getText();
 
     setValue (dynamic value, [bool silent = false]) {
+        if(value == null)
+            value = field.dom.options.first.value;
         field.setValue(value, silent);
         _setShadowValue();
         return this;

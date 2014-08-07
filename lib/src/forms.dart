@@ -459,7 +459,7 @@ class Select extends _FieldBuilder<SelectField> {
     addOption (dynamic value, dynamic title) {
 		new CJSElement(new OptionElement(data: title.toString(), value: value.toString()))..appendTo(field);
         _setShadowValue();
-		if(field.dom.childNodes.length == 1)
+		if(field.dom.options.length == 1)
 			field.setValue(value, true);
         return this;
     }
@@ -468,7 +468,7 @@ class Select extends _FieldBuilder<SelectField> {
 
     setValue (dynamic value, [bool silent = false]) {
         if(value == null)
-            value = field.dom.options.first.value;
+            value = (field.dom.options.length > 0)? field.dom.options.first.value : null;
         field.setValue(value, silent);
         _setShadowValue();
         return this;

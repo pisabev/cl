@@ -8,10 +8,13 @@ class SVGSpriter extends Transformer {
 
     SVGSpriter.asPlugin();
 
-    final String icon_name = 'main-icons';
+    final Map icons = {
+        'main-icons': '#AAAAAA',
+        'blackp-icons' : '#CDCDCD'
+    };
 
     Future<bool> isPrimary(AssetId input) {
-        return new Future.value(input.path.endsWith("$icon_name.css"));
+        return new Future.value(input.path.endsWith("-icons.css"));
     }
 
     Future apply(Transform transform) {
@@ -21,6 +24,7 @@ class SVGSpriter extends Transformer {
             .then((data) => _readSvgFilesContent(data, transform))
             .then((data) {
                 var css_content = _buildFiles(data, transform);
+                transform.logger.warning(transform.primaryInput.id.path.split('/').last);
                 transform.addOutput(new Asset.fromString(transform.primaryInput.id, css_content));
             });
     }
@@ -51,15 +55,16 @@ class SVGSpriter extends Transformer {
                 icon_big_offset += icon_big;
             }
         });
+        var fn = transform.primaryInput.id.path.split('/').last.split('.').first;
         var sb = new StringBuffer()
             ..write('<?xml version="1.0" encoding="utf-8"?>\n')
             ..write('<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">\n')
             ..write('<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="76" height="$offset_current" viewBox="0 0 76.00 $offset_current.00" xml:space="preserve">\n')
-            ..write('<defs><style>path{fill:#AAAAAA;}</style></defs>\n')
+            ..write('<defs><style>path{fill:${icons[fn]};}</style></defs>\n')
             ..writeAll(paths)
             ..write('</svg>');
         var pathdir = path.dirname(transform.primaryInput.id.path);
-        transform.addOutput(new Asset.fromString(new AssetId(transform.primaryInput.id.package, '${path.normalize(pathdir+'/../images')}/$icon_name.svg'), sb.toString()));
+        transform.addOutput(new Asset.fromString(new AssetId(transform.primaryInput.id.package, '${path.normalize(pathdir+'/../images')}/$fn.svg'), sb.toString()));
 
         var sb_css = new StringBuffer();
         data.forEach((Map m) {
@@ -67,8 +72,8 @@ class SVGSpriter extends Transformer {
             if(m.containsKey('declaration-big'))
                 sb_css.write('.icon-big${m['classname']}{${m['declaration-big']}}\n');
         });
-        sb_css.write('.icon:before{background-image:url(../images/$icon_name.svg);background-size:${icon_small}px ${icon_small_offset}px;}\n');
-        sb_css.write('.icon-big:before{background-image:url(../images/$icon_name.svg);background-size:${icon_big}px ${icon_big_offset}px;}');
+        sb_css.write('.icon:before{background-image:url(../images/$fn.svg);background-size:${icon_small}px ${icon_small_offset}px;}\n');
+        sb_css.write('.icon-big:before{background-image:url(../images/$fn.svg);background-size:${icon_big}px ${icon_big_offset}px;}');
         return sb_css.toString();
     }
 

@@ -24,7 +24,6 @@ class SVGSpriter extends Transformer {
             .then((data) => _readSvgFilesContent(data, transform))
             .then((data) {
                 var css_content = _buildFiles(data, transform);
-                transform.logger.warning(transform.primaryInput.id.path.split('/').last);
                 transform.addOutput(new Asset.fromString(transform.primaryInput.id, css_content));
             });
     }

@@ -348,8 +348,8 @@ datePicker (cl_app.Application ap) {
 	d.set(date.year, date.month, 10);
 	win.setTitle('Calendar');
 	win.getContent().append(d);
+    win.addKeyAction(new cl_util.KeyAction(cl_util.KeyAction.CTRL_S, () => print('ctrl+s')));
 	win.render(250, 280, 100, 100);
-	win.initLayout();
 }
 
 datePickerRange (cl_app.Application ap) {

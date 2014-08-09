@@ -293,7 +293,34 @@ class EventValidator {
             return true;
         return false;
     }
+
 }
+
+class KeyAction {
+
+    static String CTRL_S = 'ctrl+s';
+
+    static final Map _combos = {
+        'ctrl+s': (KeyboardEvent e) => (e.ctrlKey && e.which == 83)? true : false
+    };
+
+    String combo;
+    Function action;
+
+    KeyAction(this.combo, this.action);
+
+    run(e) {
+        if(_combos[combo](e)) {
+            e.preventDefault();
+            action();
+        }
+    }
+
+}
+
+Map keybord_combo = {
+    'ctrl+s': (KeyboardEvent e) => (e.ctrlKey && e.which == 83)? true : false
+};
 
 class Calendar {
 

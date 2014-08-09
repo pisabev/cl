@@ -269,11 +269,16 @@ class Win {
 
 	utils.Observer observer;
 
+    List<utils.KeyAction> _key_actions = new List();
+
 	Win (CJSElement cont) {
 		container = cont;
 		_createHtml();
 		_setWinActions();
 		observer = new utils.Observer();
+        win.dom.tabIndex = 0;
+        observer.addHook('focus', win.dom.focus);
+        win.addAction((e) => _key_actions.forEach((action) => action.run(e)), 'keydown');
 	}
 
 	_createHtml() {
@@ -532,6 +537,7 @@ class Win {
             initLayout();
             win.addClass('ui-win-shadowed');
 		}
+        observer.execHooks('focus');
 		return this;
 	}
 
@@ -601,6 +607,9 @@ class Win {
 			win.remove();
 		}
 	}
+
+    addKeyAction(utils.KeyAction action) => _key_actions.add(action);
+
 }
 
 class WinManager {

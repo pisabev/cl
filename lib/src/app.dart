@@ -125,11 +125,7 @@ class Application {
 
     getData(String key) => data['client']['settings'][key];
 
-    Future serverCall(String contr, Map data, [dynamic loading = null]) {
-        Completer completer = new Completer();
-        server_call(contr, data, completer.complete, loading);
-        return completer.future;
-    }
+    Future serverCall(String contr, Map data, [dynamic loading = null]) => server_call(contr, data, loading);
 
     addChartGadget(title, data) {
         var ch = new ChartGadget(title)..appendTo(gadgets);

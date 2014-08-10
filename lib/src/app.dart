@@ -127,6 +127,8 @@ class Application {
 
     Future serverCall(String contr, Map data, [dynamic loading = null]) => server_call(contr, data, loading);
 
+    onServerCall(data) => print('Server call: $data');
+
     addChartGadget(title, data) {
         var ch = new ChartGadget(title)..appendTo(gadgets);
         ch.set(data);

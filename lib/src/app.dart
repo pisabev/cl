@@ -133,6 +133,8 @@ class Application {
     checkPermission(String scope, String operation) {
         if(data == null)
             return false;
+        if(data['client']['user_group_id'] == 1)
+            return true;
         if(data['client']['permissions'][scope] == null)
             return false;
         if(data['client']['permissions'][scope][operation] == 0)

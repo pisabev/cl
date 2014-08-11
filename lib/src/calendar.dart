@@ -91,7 +91,7 @@ class EventCollection {
         return getLongestEvent(getEarliestEvents(getEventsAfterEqualSpot(event.end, noRendered)));
     }
 
-    Map<int, List<Events>> _readEvents(List<Event> events) {
+    Map<int, List<Event>> _readEvents(List<Event> events) {
         int row = 0;
         Map m = new Map();
         while(isEventsRendered()) {
@@ -107,7 +107,7 @@ class EventCollection {
         return m;
     }
 
-    Map<int, List<Events>> _readEvents2(List<Event> events) {
+    Map<int, List<Event>> _readEvents2(List<Event> events) {
         int row = 0;
         Map m = new Map();
         while(isEventsRendered()) {
@@ -212,7 +212,7 @@ class DayCol extends CJSElement with EventCollection {
 
         data.forEach((cur_row, events) {
             int k = cur_row - 1;
-            events.forEach((event) {
+            events.forEach((Event event) {
                 if(calendar.dragd.doms[event] == null)
                     calendar.dragd.doms[event] = new List();
                 DateTime indx_start = utils.Calendar.max(event.start, new DateTime(date.year, date.month, date.day, 0, 0));
@@ -969,7 +969,7 @@ class DragDayContainer {
     List hour_rows;
     List day_cols;
 
-    List<math.Rectangle> rects;
+    List<Map> rects;
 
     Event event_sel;
 

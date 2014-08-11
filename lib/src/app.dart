@@ -896,13 +896,13 @@ class StartMenu extends CJSElement {
                 'desktop': obj['desktop'],
                 '_m': this
             };
-            map[o['key']] = (o['ref'] == 'main')? menu.add(o) : map[o['ref']].add(o);
+            map[o['key']] = (o['ref'] == 'main')? menu.addChild(o) : map[o['ref']].add(o);
         });
         cleanMap(Map m) {
             String key;
             m.forEach((k, StartMenuElement v) {
                 if(v.childs.length == 0 && v.action == null) {
-                    v.parent.remove(v);
+                    v.parent.removeChild(v);
                     key = k;
                 }
             });
@@ -986,7 +986,7 @@ class StartMenuElement extends CJSElement {
 		a.dom.innerHtml = title;
     }
 
-    add (Map el) {
+    addChild (Map el) {
         var child = new StartMenuElement(el);
         child.level++;
         child.parent = this;
@@ -995,7 +995,7 @@ class StartMenuElement extends CJSElement {
         return child;
     }
 
-    remove(StartMenuElement el) {
+    removeChild(StartMenuElement el) {
         childs.remove(el);
         if(childs.length == 0)
             removeClass('ui-start-menu-childs');
@@ -1194,7 +1194,7 @@ class Messager {
 
     set message(String message) => _message = message;
 
-    render ({int width: 500, int height: null}) {
+    render ({int width: 400, int height: null}) {
         Win win = ap.winmanager.loadBoundWin({
             'title': _title,
             'icon': (_type != null)? _type : 'attention'});

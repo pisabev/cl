@@ -407,7 +407,7 @@ class Pie {
 	int segment_count = 0;
 
 	Map center	  = new Map();
-	int radius 	  = 0;
+	double radius = 0.0;
 	int size      = 0;
 	int legend_o  = 10;
 	int legend_l  = 0;

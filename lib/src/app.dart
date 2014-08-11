@@ -83,13 +83,18 @@ class Application {
     }
 
 	setMenu (List menu) {
-        List desktop = [];
+        List m = new List();
+        List d = new List();
         menu.forEach((i) {
+            if(i.containsKey('scope'))
+                if(!checkPermission(i['scope'], 'read'))
+                    return;
             if(i['desktop'] != null && i['desktop'])
-                desktop.add(i);
+                d.add(i);
+            m.add(i);
         });
-        start_menu.setMenuLeft(menu);
-        iconmanager.set(desktop);
+        start_menu.setMenuLeft(m);
+        iconmanager.set(d);
         iconmanager.drawIcons();
 	}
 
@@ -124,6 +129,16 @@ class Application {
     }
 
     getData(String key) => data['client']['settings'][key];
+
+    checkPermission(String scope, String operation) {
+        if(data == null)
+            return false;
+        if(data['client']['permissions'][scope] == null)
+            return false;
+        if(data['client']['permissions'][scope][operation] == 0)
+            return false;
+        return true;
+    }
 
     Future serverCall(String contr, Map data, [dynamic loading = null]) => server_call(contr, data, loading);
 
@@ -867,8 +882,8 @@ class StartMenu extends CJSElement {
     }
 
     setMenuLeft (arr) {
-        var map = {};
-        map['main'] = new StartMenuElement();
+        Map map = new Map();
+        menu = new StartMenuElement();
         arr.forEach((obj) {
             var o = {
                 'title': obj['title'],
@@ -876,15 +891,25 @@ class StartMenu extends CJSElement {
                 'action': obj['action'],
                 'ref': obj['ref'] != null? obj['ref'] : '',
                 'key': obj['key'] != null? obj['key'] : '',
-                'desktop': obj['desktop']
+                'desktop': obj['desktop'],
+                '_m': this
             };
-			o['_m'] = this;
-            //if(o['ref'].isNotEmpty) {
-              //  print('d');
-                map[o['key']] = map[o['ref']].add(o);
-            //}
+            map[o['key']] = (o['ref'] == 'main')? menu.add(o) : map[o['ref']].add(o);
         });
-        menu = map['main'];
+        cleanMap(Map m) {
+            String key;
+            m.forEach((k, StartMenuElement v) {
+                if(v.childs.length == 0 && v.action == null) {
+                    v.parent.remove(v);
+                    key = k;
+                }
+            });
+            if(key != null) {
+                m.remove(key);
+                cleanMap(m);
+            }
+        };
+        cleanMap(map);
         menu.childs.forEach((child) => cont_left.append(child));
         return this;
     }
@@ -943,7 +968,7 @@ class StartMenuElement extends CJSElement {
 			return;
         title = o['title'];
         icon = o['icon'];
-        action = (o['action'] is Function)? o['action'] : (){};
+        action = (o['action'] is Function)? o['action'] : null;
 		_m = o['_m'];
         createDom();
     }
@@ -966,6 +991,12 @@ class StartMenuElement extends CJSElement {
         childs.add(child);
         addClass('ui-start-menu-childs');
         return child;
+    }
+
+    remove(StartMenuElement el) {
+        childs.remove(el);
+        if(childs.length == 0)
+            removeClass('ui-start-menu-childs');
     }
 
     selectParent () {

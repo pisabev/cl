@@ -24,15 +24,17 @@ main() {
       };
       ap.initStartMenu('Test');
       ap.setMenu([
-            {'title':'InputLoader', 'key':'8', 'ref':'main', 'icon': 'product', 'desktop':true, 'action': ()=>ap.load('ItemBuilder', ()=>new InputLoader(ap))},
-            {'title':'Editor', 'key':'1', 'ref':'main', 'icon': 'product', 'desktop':true, 'action': ()=>editor(ap)},
-            {'title':'Tree', 'key':'2', 'ref':'main', 'action': ()=>tree(ap)},
-            {'title':'DatePicker', 'key':'3', 'ref':'main', 'action': ()=>datePicker(ap)},
-            {'title':'DatePickerRange', 'key':'4', 'ref':'main', 'action': ()=>datePickerRange(ap)},
-            {'title':'Tab', 'key':'5', 'ref':'main', 'action': ()=>ap.load('Tab', ()=>new Tab())},
-            {'title':'Test', 'key':'5', 'ref':'main', 'action': ()=>ap.load('Test', ()=>new DatePicker())},
-            {'title':'Grid', 'key':'5', 'ref':'main', 'action': ()=>ap.load('grid', ()=>new Grid())},
-            {'title':'GridData', 'key':'6', 'ref':'main', 'action': ()=>ap.load('gridData', ()=>new GridData())},
+            {'title':'InputLoader', 'key':'1', 'ref':'main', 'icon': 'product', 'desktop':true, 'action': ()=>ap.load('ItemBuilder', ()=>new InputLoader(ap))},
+            {'title':'Editor', 'key':'2', 'ref':'main', 'icon': 'product', 'desktop':true, 'action': ()=>editor(ap)},
+            {'title':'Tree', 'key':'3', 'ref':'main', 'action': ()=>tree(ap)},
+            {'title':'DatePicker', 'key':'4', 'ref':'main', 'action': ()=>datePicker(ap)},
+            {'title':'DatePickerRange', 'key':'5', 'ref':'main', 'action': ()=>datePickerRange(ap)},
+            {'title':'Tab', 'key':'6', 'ref':'main', 'action': ()=>ap.load('Tab', ()=>new Tab())},
+            {'title':'Test', 'key':'7', 'ref':'main', 'action': ()=>ap.load('Test', ()=>new DatePicker())},
+            {'title':'Grid', 'key':'8', 'ref':'main', 'action': ()=>ap.load('grid', ()=>new Grid())},
+            {'title':'GridData', 'key':'9', 'ref':'main', 'action': ()=>ap.load('gridData', ()=>new GridData())},
+            {'title':'GridDataExt', 'key':'10', 'ref':'9'},
+            {'title':'GridDataExt', 'key':'11', 'ref':'10'},
         ]);
       //ap.set(set);
 }

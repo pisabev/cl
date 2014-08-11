@@ -1327,6 +1327,7 @@ html,body{
 .ui-table-grid tfoot td {
     padding:10px;
     white-space:nowrap;
+    vertical-align: top;
 }
 .ui-table-grid tbody td a {
     text-decoration:underline;

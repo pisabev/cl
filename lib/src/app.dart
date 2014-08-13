@@ -145,7 +145,7 @@ class Application {
     }
 
     Future serverCall(String contr, Map data, [dynamic loading = null])
-        => server_call(contr, data, loading).catchError((e) => warning(e));
+        => server_call(contr, data, loading);
 
     onServerCall(data) => print('Server call: $data');
 

@@ -897,7 +897,7 @@ class StartMenu extends CJSElement {
                 'desktop': obj['desktop'],
                 '_m': this
             };
-            map[o['key']] = (o['ref'] == 'main')? menu.addChild(o) : map[o['ref']].add(o);
+            map[o['key']] = (o['ref'] == 'main')? menu.addChild(o) : map[o['ref']].addChild(o);
         });
         cleanMap(Map m) {
             String key;

@@ -118,11 +118,13 @@ class Application {
         return obj;
     }
 
-    warning (Map o) => new Messager(this)
+    warning (Map o) {
+        new Messager(this)
         ..title = o['title']
         ..message = o['message']
         ..type = o['type']
         ..render();
+    }
 
     setData(String key, String value) {
         data['client']['settings'][key] = value;

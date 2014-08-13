@@ -144,8 +144,11 @@ class Application {
         return true;
     }
 
-    Future serverCall(String contr, Map data, [dynamic loading = null])
-        => server_call(contr, data, loading)..catchError((e) => warning(e));
+    Future serverCall(String contr, Map data, [dynamic loading = null]) {
+        var f = server_call(contr, data, loading);
+        f.catchError((e) => warning(e));
+        return f;
+    }
 
     onServerCall(data) => print('Server call: $data');
 

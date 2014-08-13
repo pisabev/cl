@@ -1534,7 +1534,8 @@ abstract class FileManagerBase {
                     'base': base,
                     'object': item.id
                 }, tree_dom)
-                .then((data) => renderer(item, data));
+                .then((data) => renderer(item, data))
+                .catchError(ap.warning);
             }
         });
         tree_dom.append(tree);
@@ -1565,7 +1566,7 @@ abstract class FileManagerBase {
                 }, tree_dom)
                 .then((data) {
                     parent.treeBuilder.refreshTree(parent);
-                });
+                }).catchError(ap.warning);
             }
         };
         input.setValue('New folder')
@@ -1594,7 +1595,8 @@ abstract class FileManagerBase {
                     'object': current.id,
                     'name': current.parent.id + '/' + input.getValue()
                 }, tree_dom)
-                .then((data) => current.treeBuilder.refreshTree(current.parent));
+                .then((data) => current.treeBuilder.refreshTree(current.parent))
+                .catchError(ap.warning);
             }
         };
         input.addAction(addCatRefresh,'blur')
@@ -1626,7 +1628,7 @@ abstract class FileManagerBase {
                 .then((data) {
                     current.treeBuilder.refreshTree(current.treeBuilder.main);
                     wapi.win.close();
-                });
+                }).catchError(ap.warning);
         };
         var o = {
             'value':'[ $main ]',
@@ -1638,7 +1640,8 @@ abstract class FileManagerBase {
                     'base': base,
                     'object': item.id
                 }, tree_dom)
-                .then((data) => renderer(item,data));
+                .then((data) => renderer(item,data))
+                .catchError(ap.warning);
             }
         };
         tree = new gui.TreeBuilder(o);
@@ -1744,7 +1747,7 @@ class FileManager extends FileManagerBase {
                 .addAction((e) => callback('media/${o['file']}'), 'dblclick');
             });
             renderView();
-        });
+        }).catchError(ap.warning);
     }
 
     clickedFile (file) {

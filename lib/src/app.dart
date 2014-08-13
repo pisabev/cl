@@ -145,9 +145,8 @@ class Application {
     }
 
     Future serverCall(String contr, Map data, [dynamic loading = null]) {
-        return server_call(contr, data, loading)
-        .then((r) => r)
-        .catchError((e) => warning(e));
+        return server_call(contr, data, loading).catchError((e) => warning(e), test: () => true);
+        //Future f;
         //f.then((r) {
           //  print(r);
             //return r;

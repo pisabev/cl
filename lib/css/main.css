@@ -998,7 +998,7 @@ html,body{
 .ui-message-options {
     margin-bottom:10px;
 }
-.ui-message.details {
+.ui-message span.details {
     display:block;
     visibility: hidden;
     margin-top:20px;

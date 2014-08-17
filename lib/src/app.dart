@@ -121,6 +121,7 @@ class Application {
     warning (Map o) => new Messager(this)
         ..title = o['title']
         ..message = o['message']
+        ..details = o['details']
         ..type = o['type']
         ..render();
 

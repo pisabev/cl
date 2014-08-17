@@ -1177,7 +1177,7 @@ class HintManager {
 
 class Messager {
     Application ap;
-    String _type, _title, _message;
+    String _type, _title, _message, _details;
     CJSElement _mesDom;
 
     Messager (this.ap) {
@@ -1194,12 +1194,16 @@ class Messager {
 
     set message(String message) => _message = message;
 
+    set details(String details) => _details = details;
+
     render ({int width: 400, int height: null}) {
         Win win = ap.winmanager.loadBoundWin({
             'title': _title,
             'icon': (_type != null)? _type : 'attention'});
         if(_message != null)
-            _mesDom.addClass('ui-message').setHtml(_message);
+            _mesDom.addClass('ui-message').setText(_message);
+        if(_details != null)
+            _mesDom.addClass('ui-message').append(new SpanElement()..text = _details);
         win.getContent().addRow(_mesDom);
         win.render(width, height);
     }
@@ -1220,7 +1224,9 @@ class Questioner extends Messager {
 
     render ({int width: 400, int height: null}) {
         if(_message != null)
-            _mesDom.addClass('ui-message').setHtml(_message);
+            _mesDom.addClass('ui-message').setText(_message);
+        if(_details != null)
+            _mesDom.addClass('ui-message').append(new SpanElement()..text = _details);
         var html = new ContainerOption();
         new action.Menu(html).add(_noDom).add(_yesDom);
         Win win = ap.winmanager.loadBoundWin({
@@ -1253,7 +1259,9 @@ class Confirmer extends Messager {
 
     render ({int width: 400, int height: null}) {
         if(_message != null)
-            _mesDom.addClass('ui-message').setHtml(_message);
+            _mesDom.addClass('ui-message').setText(_message);
+        if(_details != null)
+            _mesDom.addClass('ui-message').append(new SpanElement()..text = _details);
         var html = new ContainerOption();
         new action.Menu(html).add(_okDom);
         Win win = ap.winmanager.loadBoundWin({

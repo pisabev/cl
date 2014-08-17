@@ -1199,7 +1199,7 @@ class Messager {
             'title': _title,
             'icon': (_type != null)? _type : 'attention'});
         if(_message != null)
-            _mesDom.addClass('ui-message').setText(_message);
+            _mesDom.addClass('ui-message').setHtml(_message);
         win.getContent().addRow(_mesDom);
         win.render(width, height);
     }
@@ -1220,7 +1220,7 @@ class Questioner extends Messager {
 
     render ({int width: 400, int height: null}) {
         if(_message != null)
-            _mesDom.addClass('ui-message').setText(_message);
+            _mesDom.addClass('ui-message').setHtml(_message);
         var html = new ContainerOption();
         new action.Menu(html).add(_noDom).add(_yesDom);
         Win win = ap.winmanager.loadBoundWin({
@@ -1253,7 +1253,7 @@ class Confirmer extends Messager {
 
     render ({int width: 400, int height: null}) {
         if(_message != null)
-            _mesDom.addClass('ui-message').setText(_message);
+            _mesDom.addClass('ui-message').setHtml(_message);
         var html = new ContainerOption();
         new action.Menu(html).add(_okDom);
         Win win = ap.winmanager.loadBoundWin({

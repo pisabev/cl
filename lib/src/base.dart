@@ -224,8 +224,6 @@ class CJSElement<E extends Element> {
 
     setHtml(String html) {
         dom.innerHtml = html;
-        DivElement dd;
-        dd.setInnerHtml()
         return this;
     }
 

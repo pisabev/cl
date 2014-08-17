@@ -998,6 +998,11 @@ html,body{
 .ui-message-options {
     margin-bottom:10px;
 }
+.ui-message.details {
+    display:block;
+    visibility: hidden;
+    margin-top:20px;
+}
 .ui-confirm {
     display:block;
     padding:5px 20px 5px 20px;

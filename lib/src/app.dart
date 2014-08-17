@@ -1204,7 +1204,7 @@ class Messager {
         if(_message != null)
             _mesDom.addClass('ui-message').setText(_message);
         if(_details != null)
-            _mesDom.addClass('ui-message').append(new SpanElement()..text = _details);
+            _mesDom.addClass('ui-message').append(new SpanElement()..className = 'details'..text = _details);
         win.getContent().addRow(_mesDom);
         win.render(width, height);
     }
@@ -1227,7 +1227,7 @@ class Questioner extends Messager {
         if(_message != null)
             _mesDom.addClass('ui-message').setText(_message);
         if(_details != null)
-            _mesDom.addClass('ui-message').append(new SpanElement()..text = _details);
+            _mesDom.addClass('ui-message').append(new SpanElement()..className = 'details'..text = _details);
         var html = new ContainerOption();
         new action.Menu(html).add(_noDom).add(_yesDom);
         Win win = ap.winmanager.loadBoundWin({
@@ -1262,7 +1262,7 @@ class Confirmer extends Messager {
         if(_message != null)
             _mesDom.addClass('ui-message').setText(_message);
         if(_details != null)
-            _mesDom.addClass('ui-message').append(new SpanElement()..text = _details);
+            _mesDom.addClass('ui-message').append(new SpanElement()..className = 'details'..text = _details);
         var html = new ContainerOption();
         new action.Menu(html).add(_okDom);
         Win win = ap.winmanager.loadBoundWin({

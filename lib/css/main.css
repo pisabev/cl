@@ -1000,7 +1000,7 @@ html,body{
 }
 .ui-message span.details {
     display:block;
-    visibility: hidden;
+    opacity:0.5;
     margin-top:20px;
 }
 .ui-confirm {

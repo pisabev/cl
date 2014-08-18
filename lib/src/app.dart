@@ -118,12 +118,17 @@ class Application {
         return obj;
     }
 
-    warning (Map o) => new Messager(this)
-        ..title = o['title']
-        ..message = o['message']
-        ..details = o['details']
-        ..type = o['type']
-        ..render();
+    warning (dynamic o) {
+        if(o is Map) {
+            new Messager(this)
+                ..title = o['title']
+                ..message = o['message']
+                ..details = o['details']
+                ..type = o['type']
+                ..render();
+        } else
+            print(o);
+    }
 
     setData(String key, String value) {
         data['client']['settings'][key] = value;

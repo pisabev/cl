@@ -102,7 +102,7 @@ span.tag-hight {
     border-radius:3px;
 }
 span.tag-medium {
-    background: #52CB6C;
+    background: #AECB4E;
     color: #FFFFFF;
     padding: 3px;
     -moz-border-radius:3px;
@@ -110,7 +110,7 @@ span.tag-medium {
     border-radius:3px;
 }
 span.tag-low {
-    background: #AECB4E;
+    background: #52CB6C;
     color: #FFFFFF;
     padding: 3px;
     -moz-border-radius:3px;

@@ -614,14 +614,13 @@ class GridData extends GridList {
 
     _rowForSendFindRemove (type, row) {
         var result = false;
-        for (int i = 0; i < rows_send[type]; i++) {
+        for (int i = 0; i < rows_send[type].length; i++) {
             if (rows_send[type][i] == row) {
                 result = true;
                 rows_send[type].remove(row);
                 break;
             }
         }
-        //rows_send[type].removeWhere((r) => result = r == row);
         return result;
     }
 

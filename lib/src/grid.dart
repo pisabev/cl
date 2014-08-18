@@ -631,6 +631,7 @@ class GridData extends GridList {
     rowRemove (TableRowElement row, [bool show = false]) {
         super.rowRemove(row, show);
         var result = _rowForSendFindRemove('insert', row);
+        print(result);
         if(!result) {
             _rowForSendFindRemove('update', row);
             rows_send['delete'].add(row);

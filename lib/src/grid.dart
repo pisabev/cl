@@ -612,17 +612,7 @@ class GridData extends GridList {
         return rows_send[type].contains(row);
     }
 
-    _rowForSendFindRemove (type, row) {
-        var result = false;
-        for (int i = 0; i < rows_send[type].length; i++) {
-            if (rows_send[type][i] == row) {
-                result = true;
-                rows_send[type].remove(row);
-                break;
-            }
-        }
-        return result;
-    }
+    _rowForSendFindRemove (type, row) => rows_send[type].remove(row);
 
     rowChanged (row) {
         var result = _rowForSendFind('insert', row);

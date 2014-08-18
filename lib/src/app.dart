@@ -1249,11 +1249,11 @@ class Questioner extends Messager {
 }
 
 class Confirmer extends Messager {
-    CJSElement _okDom;
+    CJSElement okDom;
     Function _callback = () => true;
 
     Confirmer (ap) : super(ap) {
-        _okDom = new action.Button().setTitle(INTL.OK()).setStyle({'float':'right'});
+        okDom = new action.Button().setTitle(INTL.OK()).setStyle({'float':'right'});
     }
 
     set onOk(Function callback) => _callback = callback;
@@ -1264,14 +1264,14 @@ class Confirmer extends Messager {
         if(_details != null)
             _mesDom.addClass('ui-message').append(new SpanElement()..className = 'details'..text = _details);
         var html = new ContainerOption();
-        new action.Menu(html).add(_okDom);
+        new action.Menu(html).add(okDom);
         Win win = ap.winmanager.loadBoundWin({
             'title': (_title != null)? _title : INTL.Warning(),
             'icon': (_type != null)? _type : 'warning'});
         win.getContent()
             ..addRow(_mesDom)
             ..addRow(html);
-        _okDom.addAction((e) {
+        okDom.addAction((e) {
             if(_callback())
                 win.close();
         }, 'click');

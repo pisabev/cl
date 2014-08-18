@@ -93,6 +93,30 @@ div,p,a,span {
 .link:hover {
     text-decoration:underline;
 }
+span.tag-high {
+    background: #FF6060;
+    color: #FFFFFF;
+    padding: 3px;
+    -moz-border-radius:3px;
+    -webkit-border-radius: 3px;
+    border-radius:3px;
+}
+span.tag-medium {
+    background: #AECB4E;
+    color: #FFFFFF;
+    padding: 3px;
+    -moz-border-radius:3px;
+    -webkit-border-radius: 3px;
+    border-radius:3px;
+}
+span.tag-low {
+    background: #52CB6C;
+    color: #FFFFFF;
+    padding: 3px;
+    -moz-border-radius:3px;
+    -webkit-border-radius: 3px;
+    border-radius:3px;
+}
 .ui-loader {
     position:absolute;
     top:0px;

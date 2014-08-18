@@ -93,7 +93,7 @@ div,p,a,span {
 .link:hover {
     text-decoration:underline;
 }
-span.tag-hight {
+span.tag-high {
     background: #FF6060;
     color: #FFFFFF;
     padding: 3px;

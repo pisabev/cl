@@ -254,6 +254,7 @@ class GridForm extends GridBase {
             _addEl(first, fieldCell, row);
             fieldCell = null;
         }
+        print('dsds')
         arr.forEach((el) {
             if (el != null && fieldCell == null)
                 fieldCell = cellCreate(row);

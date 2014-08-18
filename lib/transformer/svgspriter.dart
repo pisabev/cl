@@ -35,7 +35,9 @@ class SVGSpriter extends Transformer {
             icon_small = 24,
             icon_small_offset = 0,
             icon_big = 92,
-            icon_big_offset = 0;
+            icon_big_offset = 0,
+            icon_large = 120,
+            icon_large_offset = 0;
         data.forEach((Map m) {
             if (m.containsKey('content')) {
                 String s = m['content'];
@@ -49,9 +51,11 @@ class SVGSpriter extends Transformer {
                 paths.add(lsb.toString());
                 m['declaration'] = 'background-position: 0px -${icon_small_offset}px';
                 m['declaration-big'] = 'background-position: 0px -${icon_big_offset}px';
+                m['declaration-large'] = 'background-position: 0px -${icon_large_offset}px';
                 offset_current += offset;
                 icon_small_offset += icon_small;
                 icon_big_offset += icon_big;
+                icon_large_offset += icon_large;
             }
         });
         var fn = transform.primaryInput.id.path.split('/').last.split('.').first;
@@ -70,9 +74,12 @@ class SVGSpriter extends Transformer {
             sb_css.write('.icon${m['classname']}{${m['declaration']}}\n');
             if(m.containsKey('declaration-big'))
                 sb_css.write('.icon-big${m['classname']}{${m['declaration-big']}}\n');
+            if(m.containsKey('declaration-large'))
+                sb_css.write('.icon-large${m['classname']}{${m['declaration-large']}}\n');
         });
         sb_css.write('.icon:before{background-image:url(../images/$fn.svg);background-size:${icon_small}px ${icon_small_offset}px;}\n');
-        sb_css.write('.icon-big:before{background-image:url(../images/$fn.svg);background-size:${icon_big}px ${icon_big_offset}px;}');
+        sb_css.write('.icon-big:before{background-image:url(../images/$fn.svg);background-size:${icon_big}px ${icon_big_offset}px;}\n');
+        sb_css.write('.icon-large:before{background-image:url(../images/$fn.svg);background-size:${icon_large}px ${icon_large_offset}px;}');
         return sb_css.toString();
     }
 

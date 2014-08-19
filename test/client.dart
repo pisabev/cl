@@ -64,6 +64,14 @@ class Tab extends cl_app.Item {
             }
         )]);
         grid.setValue({'text':'dsds', 'date': '2013-12-22', 'date_range': ['22/12/2013', 'null']});
+
+        cl_form.GridForm grd = new cl_form.GridForm(new cl_form.Form()).setName('pay_on_delivery').setContext('store_settings').setClass('ui-table-custom');
+        //.addHook('hooks_value', notify)
+        //.addHook('hooks_value', this.ui.tab.tabChanged.bind(this.ui.tab))
+        //.addHook('hooks_require', function () {this.ui.tab.showTab(8); return false; }.bind(this));
+        grd.addRow(['ddd', new cl_form.Check().setName('active')]);
+        grid.addRow(['aaa', grd]);
+
         wapi = new cl_app.WinApp(ap);
         wapi.load(w, this);
         wapi.win.getContent()

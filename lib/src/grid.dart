@@ -254,13 +254,11 @@ class GridForm extends GridBase {
             _addEl(first, fieldCell, row);
             fieldCell = null;
         }
-        print('before');
         arr.forEach((el) {
             if (el != null && fieldCell == null)
                 fieldCell = cellCreate(row);
             _addEl(el, fieldCell, row);
         });
-        print('after');
         return row;
     }
 
@@ -271,6 +269,7 @@ class GridForm extends GridBase {
             if(el is Data && _reg)
                 registerElement(el);
             new RowFormDataCell(this, row, fieldCell, el)..render();
+            print(el);
         }
     }
 

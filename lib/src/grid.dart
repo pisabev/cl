@@ -269,17 +269,16 @@ class GridForm extends GridBase {
             if(el is Data && _reg)
                 registerElement(el);
             new RowFormDataCell(this, row, fieldCell, el)..render();
-            print(el);
         }
     }
 
     setValue(dynamic data, [bool silent = false]) {
-        form.setData(data);
+        if(data is Map)
+            form.setData(data);
+        return this;
     }
 
-    getValue() {
-        return form.toOBJ(true);
-    }
+    getValue() => form.toOBJ(true);
 
     registerElement(el) {
         el.addHook(Data.hook_value, observer.getHook(Data.hook_value));

@@ -275,6 +275,8 @@ class GridForm extends GridBase {
     setValue(dynamic data, [bool silent = false]) {
         if(data is Map)
             form.setData(data);
+        else
+            form.clear();
         return this;
     }
 

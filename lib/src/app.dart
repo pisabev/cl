@@ -131,6 +131,8 @@ class Application {
     }
 
     setData(String key, String value) {
+        if(data['client']['settings'] == null)
+            data['client']['settings'] = new Map();
         data['client']['settings'][key] = value;
     }
 

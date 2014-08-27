@@ -1210,6 +1210,7 @@ class Editor extends DataElement {
 				.addAction(_onBlur, 'keyup');
 		frame.dom.contentEditable = 'true';
         //_exec("styleWithCSS",'true');
+        _exec("useCSS",'true');
     }
 
     _createMenu () {

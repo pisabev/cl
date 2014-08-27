@@ -152,11 +152,7 @@ class CJSElement<E extends Element> {
     }
 
     setStyle(Map styleMap) {
-        styleMap.forEach((s,i) {
-            if(s == 'float')
-                dom.style.setProperty('cssFloat', styleMap[s]);
-            dom.style.setProperty(s, styleMap[s]);
-        });
+        styleMap.forEach((k,v) => dom.style.setProperty(k, v));
         return this;
     }
 

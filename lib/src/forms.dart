@@ -1209,7 +1209,7 @@ class Editor extends DataElement {
 				.addAction(_getPath, 'mousedown').appendTo(body)
 				.addAction(_onBlur, 'keyup');
 		frame.dom.contentEditable = 'true';
-        _exec("styleWithCSS",'true');
+        //_exec("styleWithCSS",'true');
     }
 
     _createMenu () {

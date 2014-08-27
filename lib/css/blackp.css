@@ -82,10 +82,10 @@ div,p,a,span {
     width:auto !important;
 }
 .left {
-    float:left;
+    float:left !important;
 }
 .right {
-    float:right;
+    float:right !important;
 }
 .link {
     color:#485E88;

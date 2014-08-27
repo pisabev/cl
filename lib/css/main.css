@@ -556,12 +556,7 @@ html,body{
 }
 .ui-page {
     color:#8E8E8E;
-    background-color: #6F85A6;
-    background-image: -webkit-linear-gradient(top, #3B4D66, #465C7A);
-    background-image: -moz-linear-gradient(top, #3B4D66, #465C7A);
-    background-image: -ms-linear-gradient(top, #3B4D66, #465C7A);
-    background-image: -o-linear-gradient(top, #3B4D66, #465C7A);
-    background-image: linear-gradient(to bottom, #3B4D66, #465C7A);
+    background-color: #5D718E;
     overflow:hidden;
     min-height:600px;
     position:relative;
@@ -576,9 +571,9 @@ html,body{
     height:30px;
     background:#3B4D66;
     border-top:1px solid #2F3F57;
-    -moz-box-shadow:inset 0px 1px 0px 0px #577297;
-    -webkit-box-shadow:inset 0px 1px 0px 0px #577297;
-    box-shadow:inset 0px 1px 0px 0px #577297;
+    -moz-box-shadow:inset 0px 1px 0px 0px #4D6383;
+    -webkit-box-shadow:inset 0px 1px 0px 0px #4D6383;
+    box-shadow:inset 0px 1px 0px 0px #4D6383;
 }
 
 /* UI Center part
@@ -687,12 +682,12 @@ html,body{
     width:310px;
     position:absolute;
     z-index:999999;
-    border:1px solid #2F3F57;
     border-bottom:none;
     border-left:none;
     -moz-box-shadow: 0px 0px 8px #3F5277;
     -webkit-box-shadow: 0px 0px 8px #3F5277;
     box-shadow: 0px 0px 8px #3F5277;
+    margin-top:-1px;
 }
 .ui-start-menu-top {
     overflow:hidden;
@@ -937,9 +932,9 @@ html,body{
     cursor: se-resize;
 }
 .ui-win-shadowed {
-    -moz-box-shadow: 0px 0px 8px #2D3B4E, inset 0px 1px 0px 0px #577297;
-    -webkit-box-shadow: 0px 0px 8px #2D3B4E, inset 0px 1px 0px 0px #577297;
-    box-shadow: 0px 0px 8px #2D3B4E, inset 0px 1px 0px 0px #577297;
+    -moz-box-shadow: 0px 0px 8px #2D3B4E, inset 0px 1px 0px 0px #4D6383;
+    -webkit-box-shadow: 0px 0px 8px #2D3B4E, inset 0px 1px 0px 0px #4D6383;
+    box-shadow: 0px 0px 8px #2D3B4E, inset 0px 1px 0px 0px #4D6383;
     -moz-border-radius:5px;
     -webkit-border-radius: 5px;
     border-radius:5px;
@@ -958,6 +953,7 @@ html,body{
     padding:2px;
     position:relative;
     overflow:hidden;
+    text-shadow: 1px 1px 1px #2C394C;
 }
 .ui-win div.title h3, .ui-win div.title h3 span {
     color:#EEEEEE;
@@ -1135,7 +1131,7 @@ html,body{
 .ui-tab-options-inner {
     position:relative;
     overflow:hidden;
-    top:1px;
+    margin-bottom:-1px;
 }
 .ui-tab-choice-inner {
     height:100%;

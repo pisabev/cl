@@ -427,6 +427,21 @@ ul.ui-list li:hover, ul.ui-list li.current, ul.ui-list li:hover *, ul.ui-list li
     background:linear-gradient(to bottom, #f9f9f9 5%, #e9e9e9 100%);
     filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#f9f9f9', endColorstr='#e9e9e9',GradientType=0);
 }
+.ui-button-inner.ui-button-title.type2, .ui-button-option .ui-button-inner.type2 {
+    border-color:#384A62;
+    -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+    -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+    box-shadow:inset 0px 1px 0px 0px #4D6586;
+    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #455A77), color-stop(1, #3B4D66));
+    background:-moz-linear-gradient(top, #455A77 5%, #3B4D66 100%);
+    background:-webkit-linear-gradient(top, #455A77 5%, #3B4D66 100%);
+    background:-o-linear-gradient(top, #455A77 5%, #3B4D66 100%);
+    background:-ms-linear-gradient(top, #455A77 5%, #3B4D66 100%);
+    background:linear-gradient(to bottom, #455A77 5%, #3B4D66 100%);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#455A77', endColorstr='#3B4D66',GradientType=0);
+    color:#CDCDCD;
+    text-shadow: 1px 1px 1px #36465D;
+}
 .ui-button-option .ui-button, .ui-button-ul .ui-button {
     margin:0px !important;
 }
@@ -540,6 +555,16 @@ ul.ui-list li:hover, ul.ui-list li.current, ul.ui-list li:hover *, ul.ui-list li
     background:linear-gradient(to bottom, #e9e9e9 5%, #f9f9f9 100%);
     filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#e9e9e9', endColorstr='#f9f9f9',GradientType=0);
     background-color:#e9e9e9;
+}
+.ui-button-active:hover .ui-button-inner.type2 {
+    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #3B4D66), color-stop(1, #455A77));
+    background:-moz-linear-gradient(top, #3B4D66 5%, #455A77 100%);
+    background:-webkit-linear-gradient(top, #3B4D66 5%, #455A77 100%);
+    background:-o-linear-gradient(top, #3B4D66 5%, #455A77 100%);
+    background:-ms-linear-gradient(top, #3B4D66 5%, #455A77 100%);
+    background:linear-gradient(to bottom, #3B4D66 5%, #455A77 100%);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#3B4D66', endColorstr='#455A77',GradientType=0);
+    background-color:#3B4D66;
 }
 .ui-paginator .ui-button-active:hover .ui-button-inner {
     border-color: #CDCDCD;

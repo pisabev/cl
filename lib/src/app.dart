@@ -932,6 +932,7 @@ class StartMenu extends CJSElement {
                 'action': obj['action']
             };
             var b = new action.Button();
+            b.domAction.addClass('type2');
             b.setTitle(o['title']);
             if(o['icon'] != null)
 				b.setIcon(o['icon']);

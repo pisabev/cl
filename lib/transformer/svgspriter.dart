@@ -9,7 +9,7 @@ class SVGSpriter extends Transformer {
     SVGSpriter.asPlugin();
 
     final Map icons = {
-        'main-icons': '#AAAAAA',
+        'main-icons': '#BBBBBB',
         'blackp-icons' : '#CDCDCD'
     };
 

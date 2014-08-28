@@ -731,6 +731,7 @@ html,body{
     padding-bottom:5px;
     padding-right:10px;
     line-height:23px;
+    text-shadow: 0 0 1px #DDDDDD;
 }
 .ui-start-menu-element a.icon:before {
     top:5px;

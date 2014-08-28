@@ -30,7 +30,7 @@ class Application {
 
     Function server_call;
 
-    StatsGadget stats_gadget;
+    Map stats_gadget = new Map();
 
 	Application([Container cont]) {
 		container = (cont != null)? cont : document.body;
@@ -159,10 +159,10 @@ class Application {
         ch.set(data);
     }
 
-    addStats(title, value) {
-        if(stats_gadget == null)
-            stats_gadget = new StatsGadget('Statistics')..appendTo(gadgets);
-        stats_gadget.add(title, value);
+    addStats(key, title, value) {
+        if(!stats_gadget.containsKey(key))
+            stats_gadget[key] = new StatsGadget(key)..appendTo(gadgets);
+        stats_gadget[key].add(title, value);
     }
 
     _onError(ErrorEvent e) {

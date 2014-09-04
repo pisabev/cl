@@ -548,6 +548,8 @@ class Win {
         body = container.getMutableRectangle();
         box = new math.MutableRectangle(0, 0, 0, 0);
 		win.appendTo(container);
+        width = width == null? null : math.min(body.width, width);
+        height = height == null? null : math.min(body.height, height);
 		if((width == null || width == 0) && (height == null || height == 0)) {
 			maximize();
 		} else {

@@ -550,7 +550,7 @@ class Win {
 		win.appendTo(container);
         width = width == null? null : math.min(body.width, width);
         height = height == null? null : math.min(body.height, height);
-		if((width == null || width == 0) && (height == null || height == 0)) {
+		if(((width == null || width == 0) && (height == null || height == 0)) || (width == body.width && height == body.height)) {
 			maximize();
 		} else {
             _setWidth(math.max(width,_min_width));

@@ -1187,6 +1187,11 @@ html,body{
 .ui-table-list {
     overflow:hidden;
 }
+.ui-table-list.shadow {
+    box-shadow: 0 0 5px 3px #4A4A4A;
+    position: relative;
+    z-index:1;
+}
 .ui-table-list .ui-icon-arrow, .ui-table-list .ui-icon-asc, .ui-table-list .ui-icon-desc {
     position:absolute;
     width:20px;
@@ -1263,6 +1268,7 @@ html,body{
 .ui-table-list tfoot td {
     padding:10px;
     white-space:nowrap;
+    vertical-align: top;
 }
 .ui-table-list thead td.highlighted {
     background-color:#485E88;

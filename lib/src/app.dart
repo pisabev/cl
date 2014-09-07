@@ -948,7 +948,7 @@ class StartMenu extends CJSElement {
     setUser (String user) {
         var u = new CJSElement(new SpanElement())
             .setClass('ui-app-user icon user')
-            .appendTo(this.cont_top);
+            .appendTo(cont_top);
 		u.dom.text = user;
     }
 

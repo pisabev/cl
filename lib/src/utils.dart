@@ -138,6 +138,21 @@ math.MutableRectangle centerRect(Rectangle rect, Rectangle ref) {
     return box;
 }
 
+getScrollbarWidth() {
+    var outer = new DivElement();
+    outer.style.width = "100px";
+    outer.style.height = "100px";
+    document.body.append(outer);
+    var widthNoScroll = outer.offsetWidth;
+    outer.style.overflow = "scroll";
+    var inner = document.createElement("div");
+    inner.style.width = "100%";
+    outer.append(inner);
+    var widthWithScroll = inner.offsetWidth;
+    outer.remove();
+    return widthNoScroll - widthWithScroll;
+}
+
 /*class Point {
 	int x = 0;
 	int y = 0;

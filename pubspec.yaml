@@ -1,7 +1,7 @@
 name: cjs
-version: 1.0.0
 author: Petar Sabev
 description: UI Framework
+version: 1.0.0
 dependencies:
   intl: any
   barback: any

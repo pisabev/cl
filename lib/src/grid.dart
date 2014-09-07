@@ -59,6 +59,10 @@ class GridColumn {
         }
         if(selector != null)
             header_title_cell.classes.add('highlighted');
+        _setWidth();
+    }
+
+    _setWidth() {
         if(width != null) {
             header_title_cell.style.width = width;
         }
@@ -166,7 +170,7 @@ class Render extends RenderBase {
 
 
 class GridBase extends DataElement<TableElement> {
-    CJSElement table, thead, tbody, tfoot;
+    CJSElement thead, tbody, tfoot;
 
     GridBase() : super (new CJSElement(new TableElement())) {
         thead = new CJSElement(dom.createTHead()).appendTo(this);
@@ -295,6 +299,7 @@ class GridList extends GridBase {
     static const String hook_row = 'hook_row';
     static const String hook_row_after = 'hook_row_after';
     static const String hook_render = 'hook_render';
+    static const String hook_layout = 'hook_layout';
 
     Expando _exp = new Expando();
 
@@ -318,6 +323,8 @@ class GridList extends GridBase {
     addRowHookAfter (Function func) => addHook(hook_row_after, func);
 
     addHookRender (Function func) => addHook(hook_render, func);
+
+    addHookLayout (Function func) => addHook(hook_layout, func);
 
     addHookOrder (Function func) => addHook(hook_order, func);
 
@@ -496,14 +503,6 @@ class GridList extends GridBase {
 
     getRowIndex (row) {
         return row.rowIndex - thead.dom.childNodes.length;
-        /*for (int i = 0, l = tbody.dom.childNodes.length; i < l; i++)
-            if(tbody.dom.childNodes[i] == row) {
-                print('------');
-                print(row.rowIndex);
-                print(i);
-                return i;
-            }
-        return 0;*/
     }
 
     empty () {
@@ -511,6 +510,62 @@ class GridList extends GridBase {
         return this;
     }
 
+}
+
+class GridListFixed extends GridList {
+    var cont_head;
+    var cont_body;
+
+    GridListFixed() : super() {
+        addHookRender(fixTable);
+        addHookLayout(() {fixReset(); fixTable();});
+    }
+
+    fixTable() {
+        if(tbody.dom.childNodes.length == 0)
+            return;
+        List widths = [];
+        List widths2 = [];
+
+        for (var i = 0; i < thead.dom.childNodes[0].childNodes.length; i++)
+            widths.add(new CJSElement(thead.dom.childNodes[0].childNodes[i]).getWidth());
+        for (var i = 0; i < tbody.dom.childNodes[0].childNodes.length; i++)
+            widths2.add(new CJSElement(tbody.dom.childNodes[0].childNodes[i]).getWidth());
+
+        var parent = new CJSElement(dom.parentNode);
+        var table_in = new CJSElement(new TableElement());
+        cont_head = new CJSElement(new DivElement()).setClass('ui-table-list shadow').append(table_in);
+        cont_body = new CJSElement(new DivElement()).setStyle({'overflow':'auto', 'position': 'relative'}).append(this);
+        parent.append(cont_head).append(cont_body);
+        table_in.append(thead);
+
+        var height_cont = parent.getHeight() - cont_head.getHeight();
+        cont_body.setStyle({'height':'${height_cont}px'});
+        if(height_cont < getHeight())
+            widths[widths.length - 1] += utils.getScrollbarWidth();
+
+        for (var i = 0; i < thead.dom.childNodes[0].childNodes.length; i++)
+            new CJSElement(thead.dom.childNodes[0].childNodes[i]).setStyle({'width':'${widths[i]}px'});
+        for (var i = 0; i < tbody.dom.childNodes[0].childNodes.length; i++)
+            new CJSElement(tbody.dom.childNodes[0].childNodes[i]).setStyle({'width':'${widths2[i]}px'});
+
+    }
+
+    fixReset() {
+        if(cont_head != null) {
+            append(thead);
+            new CJSElement(cont_head.dom.parentNode).append(this);
+            cont_head.remove();
+            cont_body.remove();
+            map.forEach((k, v) => v._setWidth());
+        }
+    }
+
+    empty() {
+        fixReset();
+        super.empty();
+        return this;
+    }
 }
 
 class GridData extends GridList {

@@ -743,7 +743,7 @@ class EventCalendar {
             cell.text = '${utils.Calendar.dayFromDate(dates[day].weekday).substring(0, 3)} ${dates[day].month}/${dates[day].day}';
             cell.className = utils.Calendar.isWeekendFromDate(dates[day].weekday)? 'weekend' : '';
         }
-        row.append(new Element.td()..style.width = '${_getScrollbarWidth()}px');
+        row.append(new Element.td()..style.width = '${utils.getScrollbarWidth()}px');
 
         setBodyHeight();
     }
@@ -830,21 +830,6 @@ class EventCalendar {
             var year_start = end.year == start.year ? '' : ', ${start.year}';
             domMonth.setHtml('${month_start} ${start.day}${year_start} - ${month_end}${end.day}, ${end.year}');
         }
-    }
-
-    _getScrollbarWidth() {
-        var outer = new DivElement();
-        outer.style.width = "100px";
-        outer.style.height = "100px";
-        document.body.append(outer);
-        var widthNoScroll = outer.offsetWidth;
-        outer.style.overflow = "scroll";
-        var inner = document.createElement("div");
-        inner.style.width = "100%";
-        outer.append(inner);
-        var widthWithScroll = inner.offsetWidth;
-        outer.remove();
-        return widthNoScroll - widthWithScroll;
     }
 
     _normDate(DateTime date) => new DateTime(date.year, date.month, date.day);

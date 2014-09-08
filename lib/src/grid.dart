@@ -527,6 +527,7 @@ class GridListFixed extends GridList {
         List widths = [];
         List widths2 = [];
 
+        var width = getWidth();
         for (var i = 0; i < thead.dom.childNodes[0].childNodes.length; i++)
             widths.add(new CJSElement(thead.dom.childNodes[0].childNodes[i]).getWidth());
         for (var i = 0; i < tbody.dom.childNodes[0].childNodes.length; i++)
@@ -535,14 +536,18 @@ class GridListFixed extends GridList {
         var parent = new CJSElement(dom.parentNode);
         var table_in = new CJSElement(new TableElement());
         cont_head = new CJSElement(new DivElement()).setClass('ui-table-list shadow').append(table_in);
-        cont_body = new CJSElement(new DivElement()).setStyle({'overflow':'auto', 'position': 'relative'}).append(this);
+        cont_body = new CJSElement(new DivElement()).setStyle({'overflow':'auto', 'position': 'relative'})
+            .addAction((e) {
+                cont_head.dom.scrollLeft = cont_body.dom.scrollLeft;
+            },'scroll')
+            .append(this);
         parent.append(cont_head).append(cont_body);
-        table_in.append(thead);
+        var scroll_bar = parent.dom.clientHeight < parent.dom.scrollHeight? utils.getScrollbarWidth() : 0;
+        table_in.setWidth(width + scroll_bar).append(thead);
+        setWidth(width);
 
-        var height_cont = parent.getHeight() - cont_head.getHeight();
-        cont_body.setStyle({'height':'${height_cont}px'});
-        if(height_cont < getHeight())
-            widths[widths.length - 1] += utils.getScrollbarWidth();
+        cont_body.setStyle({'height':'${parent.getHeight() - cont_head.getHeight()}px'});
+        widths[widths.length - 1] += scroll_bar;
 
         for (var i = 0; i < thead.dom.childNodes[0].childNodes.length; i++)
             new CJSElement(thead.dom.childNodes[0].childNodes[i]).setStyle({'width':'${widths[i]}px'});
@@ -557,6 +562,7 @@ class GridListFixed extends GridList {
             new CJSElement(cont_head.dom.parentNode).append(this);
             cont_head.remove();
             cont_body.remove();
+            setStyle({'width': '100%'});
             map.forEach((k, v) => v._setWidth());
         }
     }

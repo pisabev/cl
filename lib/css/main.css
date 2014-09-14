@@ -1232,6 +1232,7 @@ html,body{
 }
 .ui-table-custom tbody td {
     background:#FFFFFF;
+    vertical-align: top;
 }
 .ui-table-custom tbody tr.blur td {
     color:#CDCDCD;

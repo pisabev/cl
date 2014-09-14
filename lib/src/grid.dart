@@ -578,6 +578,8 @@ class GridData extends GridList {
     List<TableRowElement> rows;
     Map<String, List> rows_send;
 
+    bool full_data = false;
+
     GridData () {
         setClass('ui-table-grid');
         _initSendRows();
@@ -609,7 +611,7 @@ class GridData extends GridList {
 
     getValue([bool full = false]) {
         var data;
-        if(full) {
+        if(full_data || full) {
             data = new List();
             tbody.dom.childNodes.forEach((row) => data.add(rowToMap(row)));
         } else {

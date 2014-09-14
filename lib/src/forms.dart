@@ -889,6 +889,11 @@ abstract class _Lang extends DataElement<DivElement> {
         return this;
     }
 
+    setTitle(String title) {
+        langs.forEach((inp) => inp.field.dom.placeholder = title);
+        return this;
+    }
+
     disable () {
 		langs.forEach((v) => v.disable());
         return this;

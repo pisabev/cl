@@ -2454,3 +2454,6 @@ div.search {
     background:#485E88;
     box-shadow: 1px -1px 1px 0px #000000;
 }
+.price-right {
+    text-align:right;
+}

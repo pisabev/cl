@@ -172,6 +172,18 @@ class Application {
 
 }
 
+class Notificator {
+
+    push(String message) {
+
+    }
+
+    render() {
+
+    }
+
+}
+
 class WinApp {
     Application app;
     Map w;

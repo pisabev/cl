@@ -1291,14 +1291,11 @@ html,body{
 }
 .ui-table-list tbody td {
     white-space: nowrap;
-    height:30px;
+    line-height:24px;
     padding:3px;
     overflow:hidden;
     text-overflow:ellipsis;
     background:#FFFFFF;
-}
-.ui-table-list tbody td * {
-    line-height:23px;
 }
 .ui-table-list tbody tr:nth-child(2n) td {
     background:#F9F9F9;
@@ -1326,7 +1323,6 @@ html,body{
     background:#D9DDFF;
 }
 .ui-table-list tfoot td {
-    padding:10px;
     white-space:nowrap;
     vertical-align: top;
 }
@@ -1383,14 +1379,20 @@ html,body{
     background:#FFFFFF;
 }
 .ui-table-grid tfoot td {
-    padding:10px;
     white-space:nowrap;
     vertical-align: top;
 }
 .ui-table-grid tbody td a {
     text-decoration:underline;
 }
-
+table.total td {
+    background:transparent !important;
+    padding:0 0 0 5px;
+    text-align: right;
+}
+table.total tr:hover td {
+    background:transparent;
+}
 /* UI Table image
 -----------------------------------------------------------------------------------------------------*/
 table.image-cont {
@@ -2453,7 +2455,4 @@ div.search {
 .triangle.current::before {
     background:#485E88;
     box-shadow: 1px -1px 1px 0px #000000;
-}
-.price-right {
-    text-align:right;
 }

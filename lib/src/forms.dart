@@ -1131,7 +1131,7 @@ class Editor extends DataElement {
 	CJSElement<DivElement> frame;
     TextArea field;
     CJSElement head, body, footer, path;
-	utils.Draggable drag;
+	utils.Drag drag;
 
     action.Menu menu;
     Map menu_els;
@@ -1202,10 +1202,10 @@ class Editor extends DataElement {
         body = new CJSElement(new DivElement()).setClass('ui-editor-body').appendTo(this);
         footer = new CJSElement(new DivElement()).setClass('ui-editor-footer').addClass('ui-editor-footer-resize').appendTo(this);
 
-		drag = new utils.Draggable(footer, 'editor')
-        	..observer.addHook('start', (list) => _resizeBefore(list[0]))
-        	..observer.addHook('on', (list) => _resizeOn(list[0]))
-        	..observer.addHook('stop', (list) => _resizeAfter(list[0]));
+		drag = new utils.Drag(footer, 'editor')
+        	..start(_resizeBefore)
+        	..on(_resizeOn)
+        	..end(_resizeAfter);
 
         field = new TextArea().hide().setStyle({'width':'100%'}).appendTo(body);
         path = new CJSElement(new SpanElement()).setStyle({'float':'left','white-space':'nowrap','line-height':'26px','padding-left':'3px'}).appendTo(footer);

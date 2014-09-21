@@ -90,7 +90,7 @@ class Drag {
     }
 }
 
-class Draggable {
+/*class Draggable {
 	CJSElement object;
 	String namespace;
 	Observer observer;
@@ -118,7 +118,7 @@ class Draggable {
 			observer.execHooks('stop', [e]);
 		});
 	}
-}
+}*/
 
 math.Point boundPoint(math.Point p, math.Point ref1, math.Point ref2) {
     var max = (math.Point p, math.Point ref) => new math.Point(math.max(p.x, ref.x), math.max(p.y, ref.y));

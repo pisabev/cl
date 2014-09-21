@@ -592,7 +592,7 @@ class EventCalendar {
             calendar_helper.setRange(cur, arr[0], arr[1]);
         }, 'click');
         contr_right.removeActionsAll().addAction((e) {
-            cur = new DateTime(cur.year, cucr.month + 1);
+            cur = new DateTime(cur.year, cur.month + 1);
             List arr = _setViewMonth();
             calendar_helper.setRange(cur, arr[0], arr[1]);
         }, 'click');

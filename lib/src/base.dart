@@ -141,13 +141,13 @@ class CJSElement<E extends Element> {
         return this;
     }
 
-    setHeight(int height) {
-        dom.style.height = height.toString() + 'px';
+    setHeight(int height, [String unit = 'px']) {
+        dom.style.height = height.toString() + unit;
         return this;
     }
 
-    setWidth(int width) {
-        dom.style.width = width.toString() + 'px';
+    setWidth(int width, [String unit = 'px']) {
+        dom.style.width = width.toString() + unit;
         return this;
     }
 
@@ -232,24 +232,6 @@ class CJSElement<E extends Element> {
         return this;
     }
 
-/*Map getDimensions() => {
-        'width': getWidth(),
-        'height': getHeight()
-    };
-
-    Map getDimensionsInner() => {
-        'width': getWidthInner(),
-        'height': getHeightInnerShift()
-    };*/
-
-    /*Map getPosition() {
-        var pos = dom.getBoundingClientRect();
-        return {
-            'left': pos.left.toInt(),
-            'top': pos.top.toInt()
-        };
-    }*/
-
 }
 
 class Container extends CJSElement<DivElement> {
@@ -285,7 +267,7 @@ class Container extends CJSElement<DivElement> {
 
     Container addSlider () {
         var col = new Container();
-        var prev, next, prev_width, next_width, res, box, diff_x, _e;
+        var prev, next, prev_width, next_width, res, box;
 
         var getPrevCol = (cur) {
             var c = null;
@@ -302,7 +284,8 @@ class Container extends CJSElement<DivElement> {
             return c;
         };
 
-        var drag = new Drag(col, 'slider')
+        var drag = new Drag(col, 'slider');
+        drag
             ..start((MouseEvent e) {
                 e.stopPropagation();
                 prev = getPrevCol(col);
@@ -313,23 +296,20 @@ class Container extends CJSElement<DivElement> {
                 box = col.getRectangle();
                 res.setRectangle(box);
                 document.body.append(res.dom);
-                diff_x = 0;
-                _e = e;
             })
             ..on((MouseEvent e) {
-                diff_x = e.page.x - _e.page.x;
-                var min_p = prev_width + diff_x - 150;
+                var min_p = prev_width + drag.dx - 150;
                 if(min_p < 0)
-                    diff_x -= min_p;
-                var min_n = next_width - diff_x - 150;
+                    drag.dx -= min_p;
+                var min_n = next_width - drag.dx - 150;
                 if(min_n < 0)
-                    diff_x += min_n;
-                res.setStyle({'left': '${box.left + diff_x}px'});
+                    drag.dx += min_n;
+                res.setStyle({'left': '${box.left + drag.dx}px'});
             })
             ..end((MouseEvent e) {
                 res.remove();
-                prev.setWidth(prev_width + diff_x);
-                next.setWidth(next_width - diff_x);
+                prev.setWidth(prev_width + drag.dx);
+                next.setWidth(next_width - drag.dx);
             });
 
         append(col);

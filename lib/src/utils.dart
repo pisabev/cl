@@ -90,140 +90,6 @@ class Drag {
     }
 }
 
-/*class Draggable {
-	CJSElement object;
-	String namespace;
-	Observer observer;
-
-	bool enable = true;
-
-	Draggable(CJSElement el, [String nspace = 'draggable']) {
-		object = el;
-		namespace = nspace;
-		observer = new Observer();
-		el.addAction(drag, 'mousedown' + '.' + nspace);
-	}
-
-	drag (MouseEvent e) {
-		if(!enable)
-			return;
-		observer.execHooks('start', [e]);
-		var document_move = document.onMouseMove.listen((e) {
-			observer.execHooks('on', [e]);
-		});
-		var document_up = null;
-		document_up = document.onMouseUp.listen((e) {
-			document_move.cancel();
-			document_up.cancel();
-			observer.execHooks('stop', [e]);
-		});
-	}
-}*/
-
-math.Point boundPoint(math.Point p, math.Point ref1, math.Point ref2) {
-    var max = (math.Point p, math.Point ref) => new math.Point(math.max(p.x, ref.x), math.max(p.y, ref.y));
-    var min = (math.Point p, math.Point ref) => new math.Point(math.min(p.x, ref.x), math.min(p.y, ref.y));
-    return min(max(p, ref1), ref2);
-}
-
-math.MutableRectangle boundRect(Rectangle rect, Rectangle ref) {
-    math.Point point = boundPoint(rect.bottomRight, ref.topLeft, ref.bottomRight);
-    return new math.MutableRectangle(point.x - rect.width, point.y - rect.height, rect.width, rect.height);
-}
-
-math.MutableRectangle centerRect(Rectangle rect, Rectangle ref) {
-    math.MutableRectangle box = new math.MutableRectangle.fromPoints(rect.topLeft, rect.bottomRight);
-    box.left = ref.left + ref.width ~/2 - box.width ~/2;
-    box.top = ref.top + ref.height ~/2 - box.height ~/2;
-    return box;
-}
-
-getScrollbarWidth() {
-    var outer = new DivElement();
-    outer.style.width = "100px";
-    outer.style.height = "100px";
-    document.body.append(outer);
-    var widthNoScroll = outer.offsetWidth;
-    outer.style.overflow = "scroll";
-    var inner = document.createElement("div");
-    inner.style.width = "100%";
-    outer.append(inner);
-    var widthWithScroll = inner.offsetWidth;
-    outer.remove();
-    return widthNoScroll - widthWithScroll;
-}
-
-/*class Point {
-	int x = 0;
-	int y = 0;
-
-	Point(int x, int y) {
-		this.x = x;
-		this.y = y;
-	}
-
-	Point operator +(Point p) {
-		return new Point(x + p.x, y + p.y);
-	}
-
-	Point operator -(Point p) {
-		return new Point(x - p.x, y - p.y);
-	}
-
-	Point min(Point p) {
-		var _x = (x > p.x)? p.x : x;
-		var _y = (y > p.y)? p.y : y;
-		return new Point(_x, _y);
-	}
-
-	Point max(Point p) {
-		var _x = (x < p.x)? p.x : x;
-		var _y = (y < p.y)? p.y : y;
-		return new Point(_x, _y);
-	}
-
-	Point bound(Point p1, Point p2) {
-		return max(p1).min(p2);
-	}
-
-    toString() => {
-        'x': x,
-        'y': y
-    }.toString();
-}
-
-class Box {
-
-	Point p;
-	int w;
-	int h;
-
-	Box(int x, int y, int w, int h) {
-		p = new Point(x, y);
-		this.w = w;
-		this.h = h;
-	}
-
-	center(Box bound) {
-		Box newBox = new Box(p.x, p.y, w, h);
-		newBox.p.x = bound.p.x + bound.w ~/2 - newBox.w ~/2;
-		newBox.p.y = bound.p.y + bound.h ~/2 - newBox.h ~/2;
-  		return newBox;
-	}
-
-	bound(Box bound) {
-		Point point = new Point(p.x + w, p.y + h);
-		point = point.bound(bound.p, new Point(bound.p.x + bound.w, bound.p.y + bound.h));
-		return new Box(point.x - w, point.y - h, w, h);
-	}
-
-    toString() => {
-        'w': w,
-        'h': h,
-        'p': p
-    }.toString();
-}*/
-
 class EventValidator {
     KeyboardEvent event;
 
@@ -342,28 +208,9 @@ class Calendar {
     static bool firstDayMonday = true;
 
     static List label_months = new DateFormat().dateSymbols.MONTHS;
-		/*INTL.January(),
-		INTL.February(),
-		INTL.March(),
-		INTL.April(),
-		INTL.May(),
-		INTL.June(),
-		INTL.July(),
-		INTL.August(),
-		INTL.September(),
-		INTL.October(),
-		INTL.November(),
-		INTL.December()
-	];*/
+
     static List label_days = new DateFormat().dateSymbols.WEEKDAYS;
-		/*INTL.Monday(),
-		INTL.Tuesday(),
-		INTL.Wednesday(),
-		INTL.Thursday(),
-		INTL.Friday(),
-		INTL.Saturday(),
-		INTL.Sunday()
-    ];*/
+
     static List ranges = [
         {'title': INTL.Today(), 'method': getTodayRange},
         {'title': INTL.Yesterday(), 'method': getYesterdayRange},
@@ -594,4 +441,37 @@ class Calendar {
       	return label_months[date.month - 1].substring(0, 3);
 	}
 
+}
+
+math.Point boundPoint(math.Point p, math.Point ref1, math.Point ref2) {
+    var max = (math.Point p, math.Point ref) => new math.Point(math.max(p.x, ref.x), math.max(p.y, ref.y));
+    var min = (math.Point p, math.Point ref) => new math.Point(math.min(p.x, ref.x), math.min(p.y, ref.y));
+    return min(max(p, ref1), ref2);
+}
+
+math.MutableRectangle boundRect(Rectangle rect, Rectangle ref) {
+    math.Point point = boundPoint(rect.bottomRight, ref.topLeft, ref.bottomRight);
+    return new math.MutableRectangle(point.x - rect.width, point.y - rect.height, rect.width, rect.height);
+}
+
+math.MutableRectangle centerRect(Rectangle rect, Rectangle ref) {
+    math.MutableRectangle box = new math.MutableRectangle.fromPoints(rect.topLeft, rect.bottomRight);
+    box.left = ref.left + ref.width ~/2 - box.width ~/2;
+    box.top = ref.top + ref.height ~/2 - box.height ~/2;
+    return box;
+}
+
+getScrollbarWidth() {
+    var outer = new DivElement()
+    	..style.width = "100px"
+    	..style.height = "100px";
+    document.body.append(outer);
+    var widthNoScroll = outer.offsetWidth;
+    outer.style.overflow = "scroll";
+    var inner = document.createElement("div")
+    	..style.width = "100%";
+    outer.append(inner);
+    var widthWithScroll = inner.offsetWidth;
+    outer.remove();
+    return widthNoScroll - widthWithScroll;
 }

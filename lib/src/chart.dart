@@ -1,73 +1,5 @@
 part of chart;
 
-/*testSVG(dom) {
-    var d = new CJSElement(new DivElement()).appendTo(dom).setClass('ui-gadget-outer');
-    var h2 = new CJSElement(new HeadingElement.h2()).appendTo(d);
-    var i = new CJSElement(new DivElement()).appendTo(d).setClass('ui-gadget-inner');
-    h2.dom.text = 'Title';
-
-	var chart = new Chart(i, 450, 300);
-	chart.setData([['x',200],['x2',70], ['x3',230], ['x4',60], ['x4',50], ['x4',20], ['x',1000], ['x2',70], ['x3',230], ['x4',60], ['x4',50], ['x4',20], ['x4',20], ['x',1000], ['x2',70], ['x3',230], ['x4',60], ['x4',50],['x3',230], ['x4',60], ['x4',50], ['x4',20],['x3',230], ['x4',60], ['x4',50], ['x4',20]]);
-	chart.initGraph();
-	chart.renderGrid();
-	chart.renderGraph();
-
-    var d1 = new CJSElement(new DivElement()).appendTo(dom).setClass('ui-gadget-outer');
-    var h21 = new CJSElement(new HeadingElement.h2()).appendTo(d1);
-    var i1 = new CJSElement(new DivElement()).appendTo(d1).setClass('ui-gadget-inner');
-    h21.dom.text = 'Title';
-
-	var pie = new Pie(i1, 450, 300);
-    pie.initDisplay();
-	pie.setData([['Петър Събев',70], ['Йордан Иванов',50], ['Анастасия',40]]);
-	pie.draw();
-
-   /* var d3 = new CJSElement(new DivElement()).appendTo(dom).setClass('ui-gadget-outer');
-    var h23 = new CJSElement(new HeadingElement.h2()).appendTo(d3);
-    var i3 = new CJSElement(new DivElement()).appendTo(d3).setClass('ui-gadget-inner');
-    h23.dom.text = 'Title';
-
-    var chart2 = new Chart(i3, 450, 300);
-    chart2.setData([['x',200],['x2',70], ['x3',230], ['x4',60], ['x4',50], ['x4',20], ['x',1000], ['x2',70], ['x3',230], ['x4',60], ['x4',50], ['x4',20], ['x4',20], ['x',1000], ['x2',70], ['x3',230], ['x4',60], ['x4',50],['x3',230], ['x4',60], ['x4',50], ['x4',20],['x3',230], ['x4',60], ['x4',50], ['x4',20]]);
-    chart2.initGraph();
-    chart2.renderGrid();
-    chart2.renderGraph();*/
-    testSvg2(dom);
-}
-testSvg2(dom) {
-    var d = new CJSElement(new DivElement()).appendTo(dom).setClass('ui-gadget-outer');
-    var h2 = new CJSElement(new HeadingElement.h2()).appendTo(d);
-    var i = new CJSElement(new DivElement()).appendTo(d).setClass('ui-gadget-inner');
-    h2.dom.text = 'Title';
-
-    var chart = new Chart(i, 450, 300);
-    chart.setData([['x',200],['x2',70], ['x3',230], ['x4',60], ['x4',50], ['x4',20], ['x',1000], ['x2',70], ['x3',230], ['x4',60], ['x4',50], ['x4',20], ['x4',20], ['x',1000], ['x2',70], ['x3',230], ['x4',60], ['x4',50],['x3',230], ['x4',60], ['x4',50], ['x4',20],['x3',230], ['x4',60], ['x4',50], ['x4',20]]);
-    chart.initGraph();
-    chart.renderGrid();
-    chart.renderGraph();
-
-    var d1 = new CJSElement(new DivElement()).appendTo(dom).setClass('ui-gadget-outer');
-    var h21 = new CJSElement(new HeadingElement.h2()).appendTo(d1);
-    var i1 = new CJSElement(new DivElement()).appendTo(d1).setClass('ui-gadget-inner');
-    h21.dom.text = 'Title';
-
-    var pie = new Pie(i1, 450, 300);
-    pie.initDisplay();
-    pie.setData([['Петър Събев',70], ['Йордан Иванов',50], ['Анастасия',40]]);
-    pie.draw();
-/*
-    var d3 = new CJSElement(new DivElement()).appendTo(dom).setClass('ui-gadget-outer');
-    var h23 = new CJSElement(new HeadingElement.h2()).appendTo(d3);
-    var i3 = new CJSElement(new DivElement()).appendTo(d3).setClass('ui-gadget-inner');
-    h23.dom.text = 'Title';
-
-    var chart2 = new Chart(i3, 450, 300);
-    chart2.setData([['x',200],['x2',70], ['x3',230], ['x4',60], ['x4',50], ['x4',20], ['x',1000], ['x2',70], ['x3',230], ['x4',60], ['x4',50], ['x4',20], ['x4',20], ['x',1000], ['x2',70], ['x3',230], ['x4',60], ['x4',50],['x3',230], ['x4',60], ['x4',50], ['x4',20],['x3',230], ['x4',60], ['x4',50], ['x4',20]]);
-    chart2.initGraph();
-    chart2.renderGrid();
-    chart2.renderGraph();*/
-}*/
-
 class Chart {
 	CJSElement container;
 	int width =              0;
@@ -225,11 +157,12 @@ class Chart {
     	path.setAttribute('d', sb.toString());
 
     	sb_anim_from.write(' $graphWidth,0 z');
-    	anim.setAttribute('id', 'anim');
-    	anim.setAttribute('attributeName', 'd');
-        anim.setAttribute('from', sb_anim_from.toString());
-        anim.setAttribute('to', sb.toString());
-        anim.setAttribute('dur', '0.2s');
+    	anim
+            ..setAttribute('id', 'anim')
+    	    ..setAttribute('attributeName', 'd')
+            ..setAttribute('from', sb_anim_from.toString())
+            ..setAttribute('to', sb.toString())
+            ..setAttribute('dur', '0.2s');
 
         path.append(anim);
 
@@ -318,14 +251,15 @@ class Chart {
 	        ..setAttribute('attributeName', 'opacity')
 	        ..setAttribute('dur', '0.5s');
     	label.style.visibility = 'hidden';
-    	label_rect = new RectElement();
-    	label_rect.setAttribute('rx', '5');
-    	label_rect.setAttribute('ry', '5');
+    	label_rect = new RectElement()
+            ..setAttribute('rx', '5')
+            ..setAttribute('ry', '5');
         label_text = new TextElement();
-        label.append(label_anim);
-        label.append(label_anim_op);
-        label.append(label_rect);
-        label.append(label_text);
+        label
+            ..append(label_anim)
+            ..append(label_anim_op)
+            ..append(label_rect)
+            ..append(label_text);
         legend.append(label);
     }
 
@@ -335,11 +269,13 @@ class Chart {
     	var box = label_text.getBBox();
     	var rect_width = box.width + label_padding*2;
     	var rect_height = box.height + label_padding*2;
-    	label_rect.setAttribute('class', classname);
-    	label_rect.setAttribute('width', '$rect_width');
-        label_rect.setAttribute('height', '$rect_height');
-        label_text.setAttribute('x', '${label_padding}');
-        label_text.setAttribute('y', '${box.height + label_padding - 3}');
+    	label_rect
+            ..setAttribute('class', classname)
+    	    ..setAttribute('width', '$rect_width')
+            ..setAttribute('height', '$rect_height');
+        label_text
+            ..setAttribute('x', '${label_padding}')
+            ..setAttribute('y', '${box.height + label_padding - 3}');
 
         var offset_x = label_offset;
         if(x + label_offset + rect_width > graphEndX)
@@ -350,11 +286,13 @@ class Chart {
 
         label_anim.setAttribute('from', '$label_current');
     	label_current = '${x + offset_x},${y + offset_y}';
-    	label_anim.setAttribute('to', '$label_current');
-    	label_anim.beginElement();
-    	label_anim_op.setAttribute('from', '0');
-    	label_anim_op.setAttribute('to', '1');
-    	label_anim_op.beginElement();
+    	label_anim
+            ..setAttribute('to', '$label_current')
+    	    ..beginElement();
+    	label_anim_op
+            ..setAttribute('from', '0')
+    	    ..setAttribute('to', '1')
+    	    ..beginElement();
     	label.setAttribute('transform', 'translate($label_current)');
     }
 
@@ -364,35 +302,36 @@ class Chart {
 
     _createPoint(dynamic value, String classname, dynamic x, dynamic y) {
     	var circle = new CircleElement()
-    		..setAttribute('cx', '$x')
-    		..setAttribute('cy', '$y')
-    		..onMouseOver.listen((e) => _labelShow(value, classname, x + graphStartX, graphEndY - y))
-    		..onMouseOut.listen(_labelHide),
-    		anim1 = new AnimateElement()
-	        ..setAttribute('attributeName', 'r')
-	        ..setAttribute('from', '0')
-	        ..setAttribute('to', '3')
-	        ..setAttribute('fill', 'freeze')
-	        ..setAttribute('dur', '0.2s')
-	        ..setAttribute('begin', 'anim.end'),
-    		anim2 = new AnimateElement()
-	        ..setAttribute('attributeName', 'r')
-	        ..setAttribute('from', '3')
-	        ..setAttribute('to', '5')
-	        ..setAttribute('fill', 'freeze')
-	        ..setAttribute('dur', '0.2s')
-	        ..setAttribute('begin', 'mouseover'),
-    		anim3 = new AnimateElement()
-	        ..setAttribute('attributeName', 'r')
-	        ..setAttribute('from', '5')
-	        ..setAttribute('to', '3')
-	        ..setAttribute('fill', 'freeze')
-	        ..setAttribute('dur', '0.2s')
-	        ..setAttribute('begin', 'mouseout');
+            ..setAttribute('cx', '$x')
+            ..setAttribute('cy', '$y')
+            ..onMouseOver.listen((e) => _labelShow(value, classname, x + graphStartX, graphEndY - y))
+            ..onMouseOut.listen(_labelHide),
+        anim1 = new AnimateElement()
+            ..setAttribute('attributeName', 'r')
+            ..setAttribute('from', '0')
+            ..setAttribute('to', '3')
+            ..setAttribute('fill', 'freeze')
+            ..setAttribute('dur', '0.2s')
+            ..setAttribute('begin', 'anim.end'),
+        anim2 = new AnimateElement()
+            ..setAttribute('attributeName', 'r')
+            ..setAttribute('from', '3')
+            ..setAttribute('to', '5')
+            ..setAttribute('fill', 'freeze')
+            ..setAttribute('dur', '0.2s')
+            ..setAttribute('begin', 'mouseover'),
+        anim3 = new AnimateElement()
+            ..setAttribute('attributeName', 'r')
+            ..setAttribute('from', '5')
+            ..setAttribute('to', '3')
+            ..setAttribute('fill', 'freeze')
+            ..setAttribute('dur', '0.2s')
+            ..setAttribute('begin', 'mouseout');
 
-    	circle.append(anim1);
-    	circle.append(anim2);
-    	circle.append(anim3);
+    	circle
+            ..append(anim1)
+    	    ..append(anim2)
+            ..append(anim3);
     	return circle;
     }
 

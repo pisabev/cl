@@ -993,7 +993,7 @@ class StartMenuElement extends CJSElement {
 			return;
         title = o['title'];
         icon = o['icon'];
-        action = (o['action'] is Function)? o['action'] : null;
+        action = (o['action'] is Function)? o['action'] : (){};
 		_m = o['_m'];
         createDom();
     }

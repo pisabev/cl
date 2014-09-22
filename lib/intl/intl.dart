@@ -2,27 +2,6 @@ part of base;
 
 class INTL {
 
-    /*static January() => Intl.message('January', name:'January');
-    static February() => Intl.message('February', name:'February');
-    static March() => Intl.message('March', name:'March');
-    static April() => Intl.message('April', name:'April');
-    static May() => Intl.message('May', name:'May');
-    static June() => Intl.message('June', name:'June');
-    static July() => Intl.message('July', name:'July');
-    static August() => Intl.message('August', name:'August');
-    static September() => Intl.message('September', name:'September');
-    static October() => Intl.message('October', name:'October');
-    static November() => Intl.message('November', name:'November');
-    static December() => Intl.message('December', name:'December');
-
-    static Monday() => Intl.message('Monday', name:'Monday');
-    static Tuesday() => Intl.message('Tuesday', name:'Tuesday');
-    static Wednesday() => Intl.message('Wednesday', name:'Wednesday');
-    static Thursday() => Intl.message('Thursday', name:'Thursday');
-    static Friday() => Intl.message('Friday', name:'Friday');
-    static Saturday() => Intl.message('Saturday', name:'Saturday');
-    static Sunday() => Intl.message('Sunday', name:'Sunday');*/
-
     static Today() => Intl.message('Today', name:'Today');
     static Yesterday() => Intl.message('Yesterday', name:'Yesterday');
     static One_week_back() => Intl.message('One week back', name:'One_week_back');

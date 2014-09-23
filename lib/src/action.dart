@@ -32,8 +32,8 @@ class Button extends CJSElement {
         return this;
     }
 
-    setWidth(int width) {
-        domAction.setWidth(width);
+    setWidth(int width, [String unit = 'px']) {
+        domAction.setWidth(width, unit);
         return this;
     }
 

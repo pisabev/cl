@@ -337,8 +337,6 @@ class Win {
 					..addAction((MouseEvent e) => e.stopPropagation(), 'mousedown')
 					..addAction((MouseEvent e) => minimize(), 'click');
 
-		//win.dom.onTransitionEnd.listen((e) => initLayout());
-
 		win_top
 			..append(win_title)
 			..append(win_close)
@@ -378,16 +376,12 @@ class Win {
                 _initSize();
 				win.addClass('transform');
                 Point page = new Point(e.page.x, e.page.y);
-				//utils.Point page = new utils.Point(e.page.x, e.page.y);
                 _win_diff = page - box.topLeft;
-				//_win_diff = page - box.p;
 			})
 			..on((MouseEvent e) {
                 e.stopPropagation();
                 Point pos = new Point(e.page.x, e.page.y) - _win_diff;
                 pos = utils.boundPoint(pos, _win_bound_low, _win_bound_up);
-				//utils.Point pos = new utils.Point(e.page.x, e.page.y);
-				//pos = (pos - _win_diff).bound(_win_bound_low, _win_bound_up);
 				setPosition(pos.x, pos.y);
 			})
 			..end((e) => win.removeClass('transform'));
@@ -581,8 +575,9 @@ class Win {
 	setPosition(int left, int top) {
         box.top = top;
         box.left = left;
-        win.setStyle({'top': '${top}px', 'left': '${left}px'});
-		_resize_cont.setStyle({'top': '${top}px', 'left': '${left}px'});
+        var m = {'top': '${top}px', 'left': '${left}px'};
+        win.setStyle(m);
+		_resize_cont.setStyle(m);
 		return this;
 	}
 

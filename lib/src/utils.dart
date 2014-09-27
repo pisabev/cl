@@ -20,8 +20,8 @@ class Observer {
 		}
 	}
 
-	getHook (String scope) {
-		return _hook[scope];
+	getHook ([String scope]) {
+		return scope != null? _hook[scope] : _hook;
 	}
 
 	execHooks (String scope, [List<dynamic> list]) {

@@ -456,6 +456,8 @@ class Select extends _FieldBuilder<SelectField> {
         setClass('ui-field-select');
     }
 
+    set type(type) => _type = type;
+
     addOption (dynamic value, dynamic title) {
 		new CJSElement(new OptionElement(data: title.toString(), value: value.toString()))..appendTo(field);
         _setShadowValue();

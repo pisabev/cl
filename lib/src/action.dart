@@ -102,19 +102,23 @@ class ButtonOption extends CJSElement {
     List sub = new List();
     String _name;
 
+    bool _dropDown = true;
+
     ButtonOption () : super (new SpanElement()) {
         setClass('ui-button-option');
         domAction = new Button().appendTo(this).addClass('ui-main');
         domActionOptions = new Button().appendTo(this).addClass('ui-option');
         domActionOptions.addAction(_showList,'click');
-        var doc = new CJSElement(document);
-        domActionOptions.addAction((e) => doc.addAction((MouseEvent e) {
+        domList = new CJSElement(new UListElement()).addClass('ui-button-option-ul').appendTo(this).hide();
+        setState(true);
+    }
+
+    _addDocAction(doc) {
+        doc.addAction((MouseEvent e) {
             doc.removeAction('mousedown.button_option');
             if(sub.any((but) => but.domAction.dom != e.target))
                 _showList(e);
-        },'mousedown.button_option'),'click');
-        domList = new CJSElement(new UListElement()).addClass('ui-button-option-ul').appendTo(this).hide();
-        setState(true);
+        },'mousedown.button_option');
     }
 
     setName(String name) {
@@ -122,40 +126,61 @@ class ButtonOption extends CJSElement {
         return this;
     }
 
+    set dropDown(bool dropDown) {
+        _dropDown = dropDown;
+        //sub.forEach((but) => but.setStyle(_dropDown? {'margin': '-1px 0 0 0'} : {'margin': '0 0 0 0'}));
+    }
+
     getName() => _name;
 
     addSub (button) {
         sub.add(button);
-        button.addAction(_showList, 'click');
+        button.addAction((e) => e.stopPropagation(), 'mousedown');
+        button.addAction((e) => _hideL(), 'click');
         new CJSElement(new LIElement()).append(button).appendTo(domList);
         return this;
     }
 
     _showList([e]) {
-        if(!_showed) {
-            domList.show();
-            _showed = true;
-            addClass('ui-open');
-            var pos = domList.getRectangle(),
-                width = getWidth(),
-                height = domAction.getHeight();
-            domList.appendTo(document.body)
-            .setStyle({
-                'position':'absolute',
-                'top':'${pos.top + height}px',
-                'left':'${pos.left}px',
-                'width': '${width}px'});
-        } else {
-            domList.hide();
-            _showed = false;
-            removeClass('ui-open');
-            domList.appendTo(this)
-            .setStyle({
-                'position':'relative',
-                'top':'0px',
-                'left':'0px'});
-            domList.hide();
-        }
+        if(!_showed)
+            _showL();
+        else
+            _hideL();
+    }
+
+    _showL() {
+        domList.show();
+        _showed = true;
+        addClass('ui-open');
+        var pos = domList.getRectangle(),
+        width = getWidth(),
+        height = domAction.getHeight();
+        domList.appendTo(document.body)
+        .addClass(_dropDown? 'down' : 'up')
+        .setStyle({
+            'position':'absolute',
+            'top':'${pos.top + height - (_dropDown? 0 : (domList.getHeight() + getHeight() - 1))}px',
+            'left':'${pos.left}px',
+            'width': '${width}px'});
+        var doc = new CJSElement(document);
+        doc.addAction((MouseEvent e) {
+            doc.removeAction('mousedown.button_option');
+            if(sub.any((but) => but.domAction.dom != e.target))
+                _showList(e);
+        },'mousedown.button_option');
+    }
+
+    _hideL() {
+        domList.hide();
+        _showed = false;
+        removeClass('ui-open');
+        domList.appendTo(this)
+        .setStyle({
+            'position':'relative',
+            'top':'0px',
+            'left':'0px'});
+        domList.hide();
+        new CJSElement(document).removeAction('mousedown.button_option');
     }
 
     setIcon (icon, [pos]) {
@@ -173,6 +198,7 @@ class ButtonOption extends CJSElement {
     enable () => setState(true);
 
     setState (state) {
+        _hideL();
         domAction.setState(state);
         domActionOptions.setState(state);
         return this;

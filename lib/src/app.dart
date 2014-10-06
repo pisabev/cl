@@ -1289,7 +1289,10 @@ class Confirmer extends Messager {
             ..addRow(_mesDom)
             ..addRow(html);
         okDom.addAction((e) {
-            if(_callback())
+            var res = _callback();
+            if(res is Future)
+                res.then((res) => res? win.close() : null);
+            else if(res)
                 win.close();
         }, 'click');
         win.render(width, height);

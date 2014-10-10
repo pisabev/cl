@@ -701,7 +701,7 @@ class TreeBuilder<E extends Tree> extends CJSElement {
     bool checkSingle = false;
     bool startOpen = false;
     Map icons = new Map();
-    Function action, actionCheck, load;
+    Function action, actionCheck, load, valueTransform;
 
     TreeBuilder (o) : super (new DivElement()){
         action = (o['action'] is Function)? o['action'] : (_) {};
@@ -710,6 +710,7 @@ class TreeBuilder<E extends Tree> extends CJSElement {
         icons = (o['icons'] is Map)? o['icons']: {};
         checkObj = o['checkObj'];
         checkSingle = (o['checkSingle'] is bool)? o['checkSingle'] : false;
+        valueTransform = (o['valueTransform'] is Function)? o['valueTransform'] : valueDefaultTransform;
         var init = {'value':o['value'], 'id':(o['id'] != null)? o['id'] : 0, 'type':o['type'], 'loadchilds': true};
         var folder = (checkObj != null)? ((checkObj is List && !checkSingle)? new TreeCheck(init) : new TreeChoice(init)) : new Tree(init);
 		folder.treeBuilder = this;
@@ -744,6 +745,8 @@ class TreeBuilder<E extends Tree> extends CJSElement {
         load(renderTree, item);
     }
 
+    valueDefaultTransform(dynamic d) => d;
+
     renderTree (Tree item, Map data) {
         item.removeChilds();
         if(data.isNotEmpty) {
@@ -753,7 +756,7 @@ class TreeBuilder<E extends Tree> extends CJSElement {
             temp['item'] = item;
             for (var i = 0, l = childs.length; i < l; i++) {
                 var cur = childs[i];
-                temp[cur['r']] = temp[cur['p']].add(cur['d']);
+                temp[cur['r']] = temp[cur['p']].add(valueTransform(cur['d']));
             }
             if (meta == 'start_open') {
                 startOpen = true;

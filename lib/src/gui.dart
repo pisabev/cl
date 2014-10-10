@@ -91,7 +91,7 @@ class Tab extends CJSElement {
         if(title == null)
             option.hide();
 
-        var view = {'option': option, 'cont': choice, 'title':span };
+        var view = {'option': option, 'cont': choice, 'title':span, 'form':o };
         view_cur = view;
         views[id] = view;
         setTabTitle(id, title);

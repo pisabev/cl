@@ -47,10 +47,17 @@ class Data {
         return this;
     }
 
+    removeHook (String hook, Function func) {
+        observer.removeHook(hook, func);
+        return this;
+    }
+
     setRequired(bool required) {
         _required = required;
         return this;
     }
+
+    isRequired() => _required;
 
     isReady () {
         var value = getValue();
@@ -254,19 +261,21 @@ class Text extends DataElement {
 	}
 }
 
-class SelectField extends FormElement {
+/*class SelectField extends FormElement {
 
 	SelectField () : super (new SelectElement()) {
 		addAction((e) => setValue(dom.value, false), 'change');
 	}
 
     setValue(dynamic value, [bool silent = false]) {
+        if(value == 'null')
+            value = null;
         super.setValue(value, silent);
         dom.value = value.toString();
         return this;
     }
 
-}
+}*/
 
 abstract class _FieldBuilder<E extends FormElement> extends DataElement<SpanElement> {
 	E field;
@@ -289,12 +298,11 @@ abstract class _FieldBuilder<E extends FormElement> extends DataElement<SpanElem
 
     setRequired (bool required) {
         field.setRequired(required);
-        if  (required) {
-            field.addHook(Data.hook_require, () {
-                addClass('error');
-                return true;
-            });
-        }
+        _func() {addClass('error'); return true;};
+        if (required)
+            field.addHook(Data.hook_require, _func);
+        else
+            field.removeHook(Data.hook_require, _func);
         return this;
     }
 
@@ -440,47 +448,41 @@ class Check extends FormElement<CheckboxInputElement> {
 
 }
 
-class Select extends _FieldBuilder<SelectField> {
+class Select extends _FieldBuilder<FormElement> {
 
     CJSElement domValue;
     String _type;
 
-    Select ([String type = 'int']) : super (new SelectField()){
-        _type = type;
+    Select ([this._type = 'int']) : super (new FormElement(new SelectElement())) {
 		domValue = new CJSElement(new SpanElement())..setClass('ui-select');
 		field.remove();
 		append(domValue);
 		field.appendTo(this);
-        addAction((e) => _setShadowValue(), 'change');
-        addAction((e) => _setShadowValue(), 'keyup');
+        addAction((e) => setValue(field.dom.value, false), 'change');
         setClass('ui-field-select');
     }
 
     set type(type) => _type = type;
 
-    addOption (dynamic value, dynamic title) {
-		new CJSElement(new OptionElement(data: title.toString(), value: value.toString()))..appendTo(field);
-        _setShadowValue();
-		if(field.dom.options.length == 1)
-			field.setValue(value, true);
-        return this;
-    }
-
     _setShadowValue () => domValue.dom.text = getText();
 
     setValue (dynamic value, [bool silent = false]) {
-        if(value == null)
-            value = (field.dom.options.length > 0)? field.dom.options.first.value : null;
+        if(value == 'null')
+            value = null;
+        if(_type == 'int' && value is String && value.isNotEmpty)
+            value = int.parse(value);
         field.setValue(value, silent);
+        field.dom.value = value.toString();
         _setShadowValue();
         return this;
     }
 
-    getValue () {
-		var value = field.getValue();
-        if(value == 'null')
-            return null;
-        return (_type == 'int' && value is String && value.isNotEmpty)? int.parse(value): value;
+    addOption (dynamic value, dynamic title) {
+        new CJSElement(new OptionElement(data: title.toString(), value: value.toString()))..appendTo(field);
+        _setShadowValue();
+        if(field.dom.options.length == 1)
+            field.setValue(value, true);
+        return this;
     }
 
     setOptions (List arr) {

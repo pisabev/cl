@@ -118,7 +118,7 @@ class Application {
         return obj;
     }
 
-    warning (dynamic o) {
+    warning (dynamic o, [stack]) {
         if(o is Map) {
             new Messager(this)
                 ..title = o['title']
@@ -126,8 +126,14 @@ class Application {
                 ..details = o['details']
                 ..type = o['type']
                 ..render();
-        } else
-            print(o);
+        } else {
+            new Messager(this)
+                ..title = 'Error'
+                ..message = o.toString()
+                ..details = stack.toString()
+                ..type = 'error'
+                ..render();
+        }
     }
 
     setData(String key, String value) {

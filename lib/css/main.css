@@ -1058,6 +1058,7 @@ html,body{
     display:block;
     opacity:0.5;
     margin-top:20px;
+    text-align:left;
 }
 .ui-confirm {
     display:block;

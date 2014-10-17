@@ -516,14 +516,20 @@ class GridListFixed extends GridList {
     var cont_head;
     var cont_body;
 
+    var _focus_el;
+
     GridListFixed() : super() {
         addHookRender(fixTable);
         addHookLayout(() {fixReset(); fixTable();});
     }
 
     fixTable() {
-        if(tbody.dom.childNodes.length == 0)
+        if(tbody.dom.childNodes.length == 0) {
+            if(_focus_el != null)
+                _focus_el.focus();
             return;
+        }
+
         List widths = [];
         List widths2 = [];
 
@@ -554,10 +560,13 @@ class GridListFixed extends GridList {
         for (var i = 0; i < tbody.dom.childNodes[0].childNodes.length; i++)
             new CJSElement(tbody.dom.childNodes[0].childNodes[i]).setStyle({'width':'${widths2[i]}px'});
 
+        if(_focus_el != null)
+            _focus_el.focus();
     }
 
     fixReset() {
-        if(cont_head != null) {
+        _focus_el = document.activeElement;
+        if(cont_head != null && cont_head.dom.parentNode != null) {
             append(thead);
             new CJSElement(cont_head.dom.parentNode).append(this);
             cont_head.remove();

@@ -467,12 +467,14 @@ class Select extends _FieldBuilder<FormElement> {
     _setShadowValue () => domValue.dom.text = getText();
 
     setValue (dynamic value, [bool silent = false]) {
+        if(value == null)
+            value = field.dom.options.length > 0? field.dom.options.first.value : null;
         if(value == 'null')
             value = null;
         if(_type == 'int' && value is String && value.isNotEmpty)
             value = int.parse(value);
-        field.setValue(value, silent);
         field.dom.value = value.toString();
+        field.setValue(value, silent);
         _setShadowValue();
         return this;
     }
@@ -481,7 +483,7 @@ class Select extends _FieldBuilder<FormElement> {
         new CJSElement(new OptionElement(data: title.toString(), value: value.toString()))..appendTo(field);
         _setShadowValue();
         if(field.dom.options.length == 1)
-            field.setValue(value, true);
+            setValue(value, true);
         return this;
     }
 

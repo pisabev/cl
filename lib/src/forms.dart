@@ -211,7 +211,7 @@ class InputField<E extends InputElement> extends FormElement<E> {
     }
 
     Future _validateValue (e) {
-        if(getValue() == null || getValue().isEmpty)
+        if(getValue() == null || (type == null && getValue().isEmpty))
             return new Future.value();
         return Future.wait(_validate_value.map((f) => f(e))).then((List res) {
             if(res.any((r) => r == false)) {

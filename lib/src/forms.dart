@@ -875,6 +875,12 @@ abstract class _Lang extends DataElement<DivElement> {
         return this;
     }
 
+    setAllValues (value, [silent]) {
+        langs.forEach((v) => v.setValue(value, silent));
+        showSingleValue(_static['current']);
+        return this;
+    }
+
     showSingleValue (key) {
         hideAll();
         langs[key].show();

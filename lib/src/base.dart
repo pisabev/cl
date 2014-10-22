@@ -49,7 +49,7 @@ class CJSElement<E extends Element> {
         if(_events[ev[0]][ev[1]] == null)
             _events[ev[0]][ev[1]] = new List<Function>();
 
-        dom.addEventListener(ev[0], f);
+        dom.addEventListener(ev[0], f, false);
         _events[ev[0]][ev[1]].add(f);
 
         return this;

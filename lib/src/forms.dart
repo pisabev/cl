@@ -173,15 +173,10 @@ class InputField<E extends InputElement> extends FormElement<E> {
                 }, onInput: true);
                 break;
         }
+        addAction((e) => setValue(dom.value, false), 'blur');
         addAction(_validateValue, 'blur');
         addAction(_validateInput, 'keydown');
-        addAction((e) {
-            var sel_start = dom.selectionStart,
-            sel_end = dom.selectionEnd;
-            setValue(dom.value, false);
-            dom.selectionStart = sel_start;
-            dom.selectionEnd = sel_end;
-        }, 'keyup');
+        addAction((e) => e.keyCode == 13? setValue(dom.value, false) : null, 'keydown');
     }
 
     setValue(dynamic value, [bool silent = false]) {
@@ -262,22 +257,6 @@ class Text extends DataElement {
 		return this;
 	}
 }
-
-/*class SelectField extends FormElement {
-
-	SelectField () : super (new SelectElement()) {
-		addAction((e) => setValue(dom.value, false), 'change');
-	}
-
-    setValue(dynamic value, [bool silent = false]) {
-        if(value == 'null')
-            value = null;
-        super.setValue(value, silent);
-        dom.value = value.toString();
-        return this;
-    }
-
-}*/
 
 abstract class _FieldBuilder<E extends FormElement> extends DataElement<SpanElement> {
 	E field;
@@ -754,6 +733,8 @@ class InputLoader extends InputFunction {
                     setValue([cur[0]['k'], cur[0]['v']]);
                     _hideList();
                 }
+            } else {
+                setValue([null, '']);
             }
             return true;
         }
@@ -763,14 +744,14 @@ class InputLoader extends InputFunction {
     _keyAction (e) {
         if(!_navAction(e, true)) {
             _hideList();
-            _proceedLoad(field.getValue());
+            _proceedLoad(field.dom.value);
         }
     }
 
-    _renderList (List o) {
+    renderList (List o) {
         domList.removeChilds();
         list = new List();
-        var string = field.getValue();
+        var string = field.dom.value;
         o.forEach((el) {
             var e = new CJSElement(new LIElement()).addAction((e) => setValue([el['k'], el['v']]), 'mousedown');
             var p = '(${string})';
@@ -782,6 +763,7 @@ class InputLoader extends InputFunction {
     }
 
     _showList() {
+        _hideList();
         var width = getWidth(),
             shift = getHeightInnerShift() / 2,
             left = getRectangle();
@@ -811,6 +793,7 @@ class InputLoader extends InputFunction {
     }
 
     _proceedLoad (string) {
+        list = null;
         if(string == '') {
             _hideList();
         } else {
@@ -821,7 +804,7 @@ class InputLoader extends InputFunction {
 
     onLoad (data) {
         removeClass('loading');
-        _renderList(data);
+        renderList(data);
     }
 
 }

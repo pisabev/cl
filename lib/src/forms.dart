@@ -173,7 +173,7 @@ class InputField<E extends InputElement> extends FormElement<E> {
                 }, onInput: true);
                 break;
         }
-        addAction((e) => setValue(dom.value, false), 'blur');
+        addAction((e) => (getValue().toString() != dom.value)? setValue(dom.value, false) : null, 'blur');
         addAction(_validateValue, 'blur');
         addAction(_validateInput, 'keydown');
         addAction((e) => e.keyCode == 13? setValue(dom.value, false) : null, 'keydown');
@@ -1378,14 +1378,19 @@ class Editor extends DataElement {
     }
 
     _setIframeValue (value) {
-    	frame.dom.innerHtml = value.toString();
+        final NodeValidatorBuilder _htmlValidator = new NodeValidatorBuilder.common()
+            ..allowElement('a', attributes: ['style', 'class'])
+            ..allowElement('span', attributes: ['style', 'class'])
+            ..allowElement('p', attributes: ['style', 'class'])
+            ..allowElement('div', attributes: ['style', 'class']);
+        frame.dom.setInnerHtml(value.toString(), validator: _htmlValidator);
         return this;
     }
 
     _onBlur (e) {
-		var fixed = _fixHtml(frame.dom.innerHtml);
-        if (field.getValue() != fixed)
-            field.setValue(fixed);
+		var html = frame.dom.innerHtml;
+        if (field.getValue() != html)
+            field.setValue(html);
         removeClass('ui-editor-error');
     }
 
@@ -1416,26 +1421,6 @@ class Editor extends DataElement {
         }
     }
 
-    _fixHtml (String html) {
-		return html
-            .replaceAll(new RegExp(r' class="apple-style-span', multiLine: true, caseSensitive: false),'')
-            .replaceAll(new RegExp(r'<span style="">', multiLine: true, caseSensitive: false),'')
-            .replaceAll(new RegExp(r'<br>', multiLine: true, caseSensitive: false), '<br />')
-            .replaceAll(new RegExp(r'<br ?\/?>$', multiLine: true, caseSensitive: false), '')
-            .replaceAll(new RegExp(r'^<br ?\/?>', multiLine: true, caseSensitive: false), '')
-			.replaceAllMapped(new RegExp(r'<span class="apple-style-span">(.*)<\/span>', multiLine: true, caseSensitive: false), (m) => '${m[1]}')
-            .replaceAllMapped(new RegExp(r'(<img [^>]+[^\/])>', multiLine: true, caseSensitive: false), (m) => '${m[1]} />')
-			.replaceAllMapped(new RegExp(r'<b\b[^>]*>(.*?)<\/b[^>]*>', multiLine: true, caseSensitive: false), (m) => '<strong>${m[1]}</strong>')
-			.replaceAllMapped(new RegExp(r'<i\b[^>]*>(.*?)<\/i[^>]*>', multiLine: true, caseSensitive: false), (m) => '<em>${m[1]}</em>')
-			.replaceAllMapped(new RegExp(r'<u\b[^>]*>(.*?)<\/u[^>]*>', multiLine: true, caseSensitive: false), (m) => '<span style="text-decoration:underline">${m[1]}</span>')
-            .replaceAllMapped(new RegExp(r'<(b|strong|em|i|u) style="font-weight: normal;?">(.*)<\/(b|strong|em|i|u)>', multiLine: true, caseSensitive: false), (m) => '${m[2]}')
-			.replaceAllMapped(new RegExp(r'<(b|strong|em|i|u) style="(.*)">(.*)<\/(bs|strong|em|i|u)>', multiLine: true, caseSensitive: false), (m) => '<span style="${m[2]}"><${m[4]}>${m[3]}</${m[4]}></span>')
-			.replaceAllMapped(new RegExp(r'<span style="font-weight: normal;?">(.*)<\/span>', multiLine: true, caseSensitive: false), (m) => '${m[1]}')
-			.replaceAllMapped(new RegExp(r'<span style="font-style: italic;?">(.*)<\/span>', multiLine: true, caseSensitive: false), (m) => '<em>${m[1]}</em>')
-			.replaceAllMapped(new RegExp(r'<span style="font-weight: bold;?">(.*)<\/span>|<b\b[^>]*>(.*?)<\/b[^>]*>', multiLine: true, caseSensitive: false), (m) => '<strong>${m[1]}</strong>')
-			.replaceAllMapped(new RegExp(r'<font face="(.*)">(.*)<\/font>', multiLine: true, caseSensitive: false), (m) => '<span style="font-family:${m[1]}">${m[2]}</span>');
-    }
-
     _toggleSource (e) {
         if (frame.getStyle('display') == 'none') {
             frame.show();
@@ -1445,8 +1430,7 @@ class Editor extends DataElement {
             menu.indexOfElements.forEach((b) => b.setState(true));
         } else {
             frame.hide();
-			var fixed = _fixHtml(frame.dom.innerHtml);
-            field.setValue(fixed, true).show();
+            field.setValue(frame.dom.innerHtml, true).show();
             path.hide();
             menu.initButtons([]);
         }

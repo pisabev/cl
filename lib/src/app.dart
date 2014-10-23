@@ -5,6 +5,8 @@ class Application {
     Map data;
     Function data_persist = (Map data) => new Future.value(null);
 
+    List<Notificator> listeners = new List();
+
 	Element container;
 
 	Container
@@ -158,7 +160,10 @@ class Application {
 
     Future serverCall(String contr, Map data, [dynamic loading = null]) => server_call(contr, data, loading);
 
-    onServerCall(data) => print('Server call: $data');
+    onServerCall(List data) {
+        var matches = listeners.where((n) => n.id == data[0]);
+        matches.forEach((l) => l.add(data[1]));
+    }
 
     addChartGadget(title, data) {
         var ch = new ChartGadget(title)..appendTo(gadgets);
@@ -180,13 +185,15 @@ class Application {
 
 class Notificator {
 
-    push(String message) {
+    String id;
 
-    }
+    StreamController contr = new StreamController.broadcast();
 
-    render() {
+    Notificator(this.id);
 
-    }
+    add(data) => contr.add(data);
+
+    listen(onData) => contr.stream.listen(onData);
 
 }
 

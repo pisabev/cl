@@ -1120,9 +1120,6 @@ class Paginator extends DataElement {
 
 }
 
-final NodeValidatorBuilder _htmlValidator = new NodeValidatorBuilder.common()
-    ..allowInlineStyles();
-
 class Editor extends DataElement {
     app.Application ap;
 	CJSElement<DivElement> frame;
@@ -1140,6 +1137,13 @@ class Editor extends DataElement {
 	CJSElement _fixover;
 	math.Point _res_pos;
 	int _res;
+
+    final NodeValidatorBuilder _htmlValidator = new NodeValidatorBuilder.common()
+        ..allowElement('a', attributes: ['style', 'class', 'href'])
+        ..allowElement('span', attributes: ['style', 'class'])
+        ..allowElement('p', attributes: ['style', 'class'])
+        ..allowElement('div', attributes: ['style', 'class'])
+        ..allowInlineStyles();
 
     Editor (this.ap) : super(new DivElement()) {
 		setClass('ui-editor');
@@ -1378,11 +1382,6 @@ class Editor extends DataElement {
     }
 
     _setIframeValue (value) {
-        final NodeValidatorBuilder _htmlValidator = new NodeValidatorBuilder.common()
-            ..allowElement('a', attributes: ['style', 'class'])
-            ..allowElement('span', attributes: ['style', 'class'])
-            ..allowElement('p', attributes: ['style', 'class'])
-            ..allowElement('div', attributes: ['style', 'class']);
         frame.dom.setInnerHtml(value.toString(), validator: _htmlValidator);
         return this;
     }

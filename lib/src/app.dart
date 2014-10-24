@@ -9,6 +9,9 @@ class Application {
 
 	Element container;
 
+	Notify notify;
+	List<String> notifications = new List();
+
 	Container
         page,
 
@@ -28,7 +31,7 @@ class Application {
 
     StartMenu start_menu;
 
-	var system;
+	var system, count;
 
     Function server_call;
 
@@ -77,6 +80,24 @@ class Application {
         new Timer.periodic(new Duration(seconds:1), timer_func);
         timer_func();
         system = new CJSElement(new AnchorElement()).setClass('ui-addon icon message').appendTo(addons);
+		count = new SpanElement()..style.display = 'none';
+		count.onClick.listen((e) {
+			showNotify();
+		});
+		system.append(count);
+		notify = new Notify();
+		addons.append(notify);
+	}
+
+	showNotify() {
+		notify.render(notifications);
+	}
+
+	addNotification(String note) {
+		notifications.add(note);
+		count
+			..style.display = 'block'
+			..text = '${notifications.length}';
 	}
 
     initStartMenu(String title, [String icon]) {
@@ -181,6 +202,30 @@ class Application {
         new CJSElement(new SpanElement()).appendTo(system).dom.text = '!';
     }
 
+}
+
+class Notify extends CJSElement {
+
+	var inner = new CJSElement(new DivElement());
+
+	Notify() : super(new DivElement()) {
+		addClass('ui-notify');
+		append(inner);
+		addAction((e) => e.stopPropagation(),'mousedown');
+	}
+
+	addRow(CJSElement el) => inner.append(el);
+
+	render(List data) {print('sdsd');
+		inner.removeChilds();
+		data.forEach(addRow);
+		show();
+		var down = null;
+		down = document.onMouseDown.listen((e) {
+			hide();
+			down.cancel();
+		});
+	}
 }
 
 class Notificator {

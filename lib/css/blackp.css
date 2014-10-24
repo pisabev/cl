@@ -653,7 +653,39 @@ html,body{
 .ui-gadgets td.right {
     white-space: nowrap;
 }
-
+.ui-notify {
+    position:absolute;
+    width:200px;
+    display:none;
+    right:30px;
+    bottom:30px;
+    max-height: 300px;
+    overflow:auto;
+    padding-bottom:10px;
+}
+.ui-notify div {
+    background:#535353;
+    -moz-box-shadow: 0px 0px 8px #0E0E0E;
+    -webkit-box-shadow: 0px 0px 8px #0E0E0E;
+    box-shadow: 0px 0px 8px #0E0E0E;
+}
+.ui-notify a {
+    display:block;
+    padding:3px;
+}
+.ui-notify a:hover {
+    background:#555555;
+}
+.ui-notify:after {
+    content:"";
+    width: 0;
+    height: 0;
+    right:24px;
+    position:absolute;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-top: 7px solid #535353;
+}
 /* UI Bottom Part
 -----------------------------------------------------------------------------------------------------*/
 
@@ -778,11 +810,6 @@ html,body{
 .ui-bottom-addons .ui-timer {
     color:#A5A5A5;
     line-height:24px;
-}
-.ui-bottom-addons a {
-    display:block;
-    height:24px;
-    position:relative;
 }
 .ui-bottom-addons a.ui-addon span {
     font-size:10px;

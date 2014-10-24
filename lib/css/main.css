@@ -709,6 +709,39 @@ html,body{
     white-space: nowrap;
 }
 
+.ui-notify {
+    position:absolute;
+    width:200px;
+    display:none;
+    right:30px;
+    bottom:30px;
+    max-height: 300px;
+    overflow:auto;
+    padding-bottom:10px;
+}
+.ui-notify div {
+    background:#FFFFFF;
+    -moz-box-shadow: 0px 0px 8px #3F5277;
+    -webkit-box-shadow: 0px 0px 8px #3F5277;
+    box-shadow: 0px 0px 8px #3F5277;
+}
+.ui-notify a {
+    display:block;
+    padding:3px;
+}
+.ui-notify a:hover {
+    background:#F8F8F8;
+}
+.ui-notify:after {
+    content:"";
+    width: 0;
+    height: 0;
+    right:24px;
+    position:absolute;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-top: 7px solid #FFFFFF;
+}
 /* UI Bottom Part
 -----------------------------------------------------------------------------------------------------*/
 
@@ -837,11 +870,6 @@ html,body{
 .ui-bottom-addons .ui-timer {
     color:#EEEEEE;
     line-height:24px;
-}
-.ui-bottom-addons a {
-    display:block;
-    height:24px;
-    position:relative;
 }
 .ui-bottom-addons a.ui-addon span {
     font-size:10px;

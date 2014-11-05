@@ -1196,7 +1196,6 @@ html,body{
 .ui-table-form .ui-field-input, .ui-table-form .ui-field-area {
     width:100%;
 }
-
 /*---- table_form_custom -----*/
 .ui-table-custom {
     background:#6D6D6D;
@@ -1221,6 +1220,15 @@ html,body{
 }
 .ui-table-custom tfoot {
     display:none;
+}
+
+/*---- table_form_clean -----*/
+.ui-table-clean {
+    width:auto;
+    border-spacing: 0px;
+}
+.ui-table-clean td {
+    padding:0px 5px 5px 0px
 }
 
 /*---- table_list -----*/

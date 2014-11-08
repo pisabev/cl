@@ -510,6 +510,10 @@ class GridList extends GridBase {
         return this;
     }
 
+    get scrollTop => tbody.dom.scrollTop;
+
+    set scrollTop(int scroll_top) => tbody.dom.scrollTop = scroll_top;
+
 }
 
 class GridListFixed extends GridList {
@@ -517,6 +521,7 @@ class GridListFixed extends GridList {
     var cont_body;
 
     var _focus_el;
+    var _scroll_top;
 
     GridListFixed() : super() {
         addHookRender(fixTable);
@@ -541,6 +546,7 @@ class GridListFixed extends GridList {
 
         var parent = new CJSElement(dom.parentNode);
         var table_in = new CJSElement(new TableElement());
+
         cont_head = new CJSElement(new DivElement()).setClass('ui-table-list shadow').append(table_in);
         cont_body = new CJSElement(new DivElement()).setStyle({'overflow':'auto', 'position': 'relative'})
             .addAction((e) {
@@ -562,9 +568,12 @@ class GridListFixed extends GridList {
 
         if(_focus_el != null)
             _focus_el.focus();
+
+        scrollTop = _scroll_top;
     }
 
     fixReset() {
+        _scroll_top = scrollTop;
         _focus_el = document.activeElement;
         if(cont_head != null && cont_head.dom.parentNode != null) {
             append(thead);
@@ -579,7 +588,17 @@ class GridListFixed extends GridList {
     empty() {
         fixReset();
         super.empty();
+        _scroll_top = 0;
         return this;
+    }
+
+    get scrollTop => cont_head != null? cont_body.dom.scrollTop : tbody.dom.scrollTop;
+
+    set scrollTop(int scroll_top) {
+        _scroll_top = scroll_top;
+        cont_head != null?
+            cont_body.dom.scrollTop = _scroll_top :
+            tbody.dom.scrollTop = _scroll_top;
     }
 }
 

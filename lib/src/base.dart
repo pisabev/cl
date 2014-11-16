@@ -255,7 +255,7 @@ class Container extends CJSElement<DivElement> {
 	Container addCol(Container col) {
 		append(col);
 		cols.add(col);
-		col.setClass('ui-column');
+		col.addClass('ui-column');
 		return this;
   	}
 

@@ -658,41 +658,36 @@ html,body{
     overflow:auto;
     position:absolute;
     width:500px;
+    padding:0px 10px 0px 10px;
     top:0px;
     right:0px;
 }
 .ui-gadgets .ui-gadget-outer {
     background:#F7F7F7;
-    margin:10px 10px 0px 0px;
+    margin:10px 0px 0px 0px;
     -moz-box-shadow: 0px 0px 8px #2D3B56;
     -webkit-box-shadow: 0px 0px 8px #2D3B56;
     box-shadow: 0px 0px 8px #2D3B56;
     -moz-border-radius:3px;
     -webkit-border-radius: 3px;
     border-radius:3px;
-    padding:3px;
+    width:100%;
     float:right;
 }
 .ui-gadgets .ui-gadget-inner {
-    background:#F7F7F7;
     overflow:hidden;
     color:#666666;
     padding:5px;
 }
 .ui-gadgets .ui-gadget-inner.chart {
-    width:400px;
     height:300px;
-}
-.ui-gadgets .ui-gadget-inner.text {
-    width:400px;
 }
 .ui-gadgets .ui-gadget-content {
     padding:10px;
 }
 .ui-gadgets h2 {
     padding:10px;
-    color:#FFFFFF;
-    background:#556F95;
+    border-bottom:1px solid #CDCDCD;
 }
 .ui-gadgets table {
     width:100%;

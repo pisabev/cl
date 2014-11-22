@@ -20,7 +20,8 @@ class Chart {
 	int graphOffsetTop =     15;
 	int graphOffsetBottom =  50;
 	int graphOffsetLeft =    15;
-	int graphOffsetRight =   50;
+	int graphOffsetRight =   70;
+    int legend_o =           10;
 
 	double crispOffset = 	 0.5;
 
@@ -44,7 +45,7 @@ class Chart {
 	var gridRatioY =         1;
 	var gridRatioX =         1;
 
-	List data;
+    List data = new List();
 
 	Chart (this.container, [this.width, this.height]) {
         reset();
@@ -58,9 +59,10 @@ class Chart {
             ..setAttribute('height', '$height')
             ..setAttribute('class', 'ui-chart-grid');
         container.append(svg);
+        data = new List();
     }
 
-    setData (List d) {
+    addData (List d, String title) {
         var highest = highestY;
         var set = (d.length==1)? [['',0], d[0], ['',0]] : d;
         for (var i=0, l=set.length;i<l;i++) {
@@ -71,7 +73,10 @@ class Chart {
                 highest=cur;
             }
         }
-        data = set;
+        data.add({
+            'set': set,
+            'label': title
+        });
         highestY = highest;
     }
 
@@ -126,50 +131,56 @@ class Chart {
             	..setAttribute('x2','$x')
             	..setAttribute('y2','$graphHeight');
             graph.append(l);
-            _createLabelX(data[i * gridRatioX][0], graphStartX + x, graphEndY);
+            _createLabelX(data.first['set'][i * gridRatioX][0], graphStartX + x, graphEndY);
         }
     }
 
     renderGraph () {
-    	_createLabel();
-		String classname = 'path${++graph_count}';
-    	var group = new GElement()..setAttribute('class', classname);
+        data.forEach((set) {
+            var data = set['set'];
+            var label = set['label'];
+            _createLabel();
+            String classname = 'path${++graph_count}';
+            var group = new GElement()..setAttribute('class', classname);
 
-    	var path = new PathElement();
-    	StringBuffer sb = new StringBuffer();
-    	sb.write('M 0,0');
+            var path = new PathElement();
+            StringBuffer sb = new StringBuffer();
+            sb.write('M 0,0');
 
-    	StringBuffer sb_anim_from = new StringBuffer();
-    	var anim = new AnimateElement();
-    	sb_anim_from.write('M 0,0');
+            StringBuffer sb_anim_from = new StringBuffer();
+            var anim = new AnimateElement();
+            sb_anim_from.write('M 0,0');
 
-    	List points = new List();
-    	bool add_points = (data.length * 6 < graphWidth);
-    	for(int i = 0; i < data.length; i++) {
-    		var y = (gridRatioY == 0)? 0 : (data[i][1] / gridRatioY) * gridOffsetY;
-    		var x = i * (gridOffsetX/gridRatioX);
-    		sb.write(' $x,$y');
-    		sb_anim_from.write(' $x, 0');
-    		if(add_points)
-    			points.add(_createPoint('${data[i][0]} - ${data[i][1]}', classname, x, y));
-    	}
-    	sb.write(' $graphWidth,0 z');
-    	path.setAttribute('d', sb.toString());
+            List points = new List();
+            bool add_points = (data.length * 6 < graphWidth);
+            for(int i = 0; i < data.length; i++) {
+                var y = (gridRatioY == 0)? 0 : (data[i][1] / gridRatioY) * gridOffsetY;
+                var x = i * (gridOffsetX/gridRatioX);
+                sb.write(' $x,$y');
+                sb_anim_from.write(' $x, 0');
+                if(add_points)
+                    points.add(_createPoint('${data[i][0]} - ${data[i][1]}', classname, x, y));
+            }
+            sb.write(' $graphWidth,0 z');
+            path.setAttribute('d', sb.toString());
 
-    	sb_anim_from.write(' $graphWidth,0 z');
-    	anim
-            ..setAttribute('id', 'anim')
-    	    ..setAttribute('attributeName', 'd')
-            ..setAttribute('from', sb_anim_from.toString())
-            ..setAttribute('to', sb.toString())
-            ..setAttribute('dur', '0.2s');
+            sb_anim_from.write(' $graphWidth,0 z');
+            anim
+                ..setAttribute('id', 'anim')
+                ..setAttribute('attributeName', 'd')
+                ..setAttribute('from', sb_anim_from.toString())
+                ..setAttribute('to', sb.toString())
+                ..setAttribute('dur', '0.2s');
 
-        path.append(anim);
+            path.append(anim);
 
-    	group.append(path);
-    	points.forEach((point) => group.append(point));
+            group.append(path);
+            points.forEach((point) => group.append(point));
 
-    	graph.append(group);
+            _getLegend(label, 'path${graph_count}', graphWidth + graphOffsetLeft + legend_o, graph_count - 1);
+
+            graph.append(group);
+        });
     }
 
     _calcGridYCountRatio () {
@@ -187,7 +198,7 @@ class Chart {
     }
 
     _calcGridX () {
-        var gridCountX = data.length - 1;
+        var gridCountX = data.first['set'].length - 1;
         gridCountX = (gridCountX >= 1)? gridCountX : 1;
         var gridRatioX = 1;
         while ((graphWidth / (gridCountX / gridRatioX)) / minOffsetGridX < 1) {
@@ -333,6 +344,30 @@ class Chart {
     	    ..append(anim2)
             ..append(anim3);
     	return circle;
+    }
+
+    _getLegend(dynamic value, String classname, x, num) {
+        var group = new GElement()..setAttribute('class', classname),
+            rect = new RectElement(),
+            text = new TextElement();
+
+        group
+            ..append(rect)
+            ..append(text)
+            ..setAttribute('transform', 'translate($x, ${num*30 + graphOffsetTop})');
+            //..onMouseOver.listen((e) =>_animateSegment(num, '1', '0.2'))
+            //..onMouseOut.listen((e) => _animateSegment(num, '0.2', '1'));
+
+        rect
+            ..setAttribute('width', '20')
+            ..setAttribute('height', '20');
+
+        text
+            ..setAttribute('x', '25')
+            ..setAttribute('y', '14')
+            ..text = value;
+
+        svg.append(group);
     }
 
 }

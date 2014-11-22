@@ -387,7 +387,9 @@ class TextArea extends _FieldBuilder<TextAreaField> {
 
 class Check extends FormElement<CheckboxInputElement> {
 
-	Check () : super (new CheckboxInputElement()) {
+    String _type;
+
+	Check ([this._type = 'int']) : super (new CheckboxInputElement()) {
         addAction((e) => setValue(getValue(), false), 'click');
     }
 
@@ -404,14 +406,18 @@ class Check extends FormElement<CheckboxInputElement> {
     }
 
     setValue (dynamic value, [bool silent = false]) {
-        dom.checked = (value == null || value == 0)? false : true;
-        dom.value = value.toString();
+        dom.checked = (value == null || value == 0 || value == false)? false : true;
+        //dom.value = value.toString();
         if (!silent)
             execHooks(Data.hook_value);
         return this;
     }
 
-    getValue () => (dom.checked)? 1 : 0;
+    _getIntValue() => (dom.checked)? 1 : 0;
+
+    _getBoolValue() => (dom.checked)? true : false;
+
+    getValue () => _type == 'int'? _getIntValue() : _getBoolValue();
 
 	disable() {
 		setState(false);

@@ -1933,6 +1933,9 @@ div.search {
     fill-opacity: 1;
     stroke-width:2px;
 }
+.ui-chart-grid .path1 rect {
+    fill: #6C8CC8;
+}
 .ui-chart-grid .current rect.path1 {
     fill: #405377;
 }
@@ -1948,6 +1951,12 @@ div.search {
     fill: #C86C5E;
     fill-opacity: 1;
     stroke-width:2px;
+}
+.ui-chart-grid .path2 rect {
+    fill: #C86C5E;
+}
+.ui-chart-grid .current rect.path2 {
+    fill: #C86C5E;
 }
 /* UI Pie
 -----------------------------------------------------------------------------------------------------*/
@@ -2418,6 +2427,9 @@ div.search {
     width:100%;
     table-layout: fixed;
 }
+.custom-dashstats td {
+    vertical-align: top;
+}
 .custom-dashstats-list {
     overflow:auto;
 }
@@ -2437,7 +2449,6 @@ div.search {
 }
 .custom-dashstats p.custom-foot {
     text-align:center;
-    height:30px;
 }
 .ui-box {
     padding-right:10px;

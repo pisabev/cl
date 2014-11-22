@@ -1404,18 +1404,22 @@ class ChartGadget extends GadgetBase {
     set (graph) {
         //print(new DateFormat('','bg_BG').dateSymbols.NARROWWEEKDAYS);
         var ch = new chart.Chart(domContent, domContent.getWidthInner(), domContent.getHeightInner());
-        List data = new List();
-        graph.forEach((k, v) {
-            List d = new List();
-            DateTime x = utils.Calendar.parse(k);
-            d.add(new DateFormat('d MMM \nyyyy').format(x));
-            d.add(v);
-            data.add(d);
-        });
-        ch.setData(data);
-        ch.initGraph();
-        ch.renderGrid();
-        ch.renderGraph();
+		if(graph.length == 0)
+			graph.add({'graph': {}, 'label': ''});
+		graph.forEach((g) {
+			List data = new List();
+			g['graph'].forEach((k, v) {
+				List d = new List();
+				DateTime x = utils.Calendar.parse(k);
+				d.add(new DateFormat('d MMM \nyyyy').format(x));
+				d.add(v);
+				data.add(d);
+			});
+			ch.addData(data, g['label']);
+		});
+		ch.initGraph();
+		ch.renderGrid();
+		ch.renderGraph();
     }
 
 }

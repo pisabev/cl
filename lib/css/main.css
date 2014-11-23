@@ -1821,7 +1821,39 @@ div.search {
 .ui-editor-header .ui-button, .ui-editor-footer .ui-button {
     margin:0px;
 }
-
+.editor-context {
+    width:100%;
+    height:100%;
+    background-repeat: no-repeat;
+    background-position:center center;
+}
+.editor-tab {
+    line-height:22px;
+    float:left;
+    background-color:#FBFBFB;
+    border: 1px solid #DDDDDD;
+    margin:5px 0 0 5px;
+    position:relative;
+    padding:0 22px 0 5px;
+    cursor: default;
+    -moz-border-radius:3px;
+    -webkit-border-radius: 3px;
+    border-radius:3px;
+}
+.editor-tab.unactive {
+    background:#EEEEEE;
+}
+.editor-tab em {
+    color:#FF0000;
+}
+.editor-tab a {
+    position:absolute;
+    top:0px;
+    right:0px;
+}
+.ace_editor, .ace_editor * {
+    font-family: 'Monaco', 'Menlo', 'Droid Sans Mono', 'Courier New', monospace !important;
+}
 /* UI Color Picker
 -----------------------------------------------------------------------------------------------------*/
 .ui-colorpicker-container {

@@ -844,7 +844,7 @@ abstract class _Lang extends DataElement<DivElement> {
 	    	flags[i.toString()] = l['code'];
 			i++;
 		});
-		showSingleValue(0);
+		showSingleValue(_static['current']);
     }
 
     DataElement _builder ();

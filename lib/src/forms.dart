@@ -731,7 +731,7 @@ class InputLoader extends InputFunction {
             return true;
         } else if(k.isKeyEnter()) {
             e.stopPropagation();
-            e.preventDefault();
+            //e.preventDefault();
             if(list != null) {
                 var cur_indx = (list.length == 1) ? 0 : _getCurrent();
                 if (cur_indx >= 0) {
@@ -739,7 +739,7 @@ class InputLoader extends InputFunction {
                     setValue([cur[0]['k'], cur[0]['v']]);
                     _hideList();
                 }
-            } else {
+            } else if (getValue() == null) {
                 setValue([null, '']);
             }
             return true;

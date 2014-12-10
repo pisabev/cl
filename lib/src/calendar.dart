@@ -773,16 +773,13 @@ class EventCalendar {
 
     _weekSlices(DateTime start, [DateTime end]) {
         _firstDate(DateTime date) {
-            while (date.weekday != utils.Calendar.weekDayFirst())
-                date = new DateTime(date.year, date.month, date.day - 1);
-            return date;
+            return new DateTime(date.year, date.month, date.day - (date.weekday - utils.Calendar.weekDayFirst()));
         }
 
         _endDate(DateTime date) {
-            while (date.weekday != utils.Calendar.weekDayLast())
-                date = new DateTime(date.year, date.month, date.day + 1);
-            return date;
+            return new DateTime(date.year, date.month, date.day + (date.weekday - utils.Calendar.weekDayLast()));
         }
+
         if(end == null)
             end = start;
         start = _firstDate(start);

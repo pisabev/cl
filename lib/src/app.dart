@@ -186,15 +186,12 @@ class Application {
         matches.forEach((l) => l.add(data[1]));
     }
 
-    addChartGadget(title, data) {
-        var ch = new ChartGadget(title)..appendTo(gadgets);
-        ch.set(data);
-    }
+    addChartGadget(title, contr, params) => new ChartGadget(this, title, contr, params)..appendTo(gadgets)..render();
 
-    addStats(key, title, value) {
+    addStats(key, title, contr, params) {
         if(!stats_gadget.containsKey(key))
-            stats_gadget[key] = new StatsGadget(key)..appendTo(gadgets);
-        stats_gadget[key].add(title, value);
+            stats_gadget[key] = new StatsGadget(this, key)..appendTo(gadgets);
+        stats_gadget[key].add(title, contr, params);
     }
 
     _onError(ErrorEvent e) {
@@ -1358,10 +1355,13 @@ class Confirmer extends Messager {
 }
 
 class GadgetBase extends CJSElement {
+	Application ap;
     String title;
+	String contr;
+	Map params;
     CJSElement domContent;
 
-    GadgetBase(this.title) : super (new CJSElement(new DivElement()).setClass('ui-gadget-outer')) {
+    GadgetBase(this.ap, this.title, [this.contr, this.params]) : super (new CJSElement(new DivElement()).setClass('ui-gadget-outer')) {
         createDom();
     }
 
@@ -1374,7 +1374,7 @@ class GadgetBase extends CJSElement {
 class StatsGadget extends GadgetBase {
     forms.GridBase grid;
 
-    StatsGadget (title) : super(title) {
+    StatsGadget (ap, title) : super(ap, title) {
         domContent.addClass('text');
         grid = new forms.GridBase();
         grid.appendTo(domContent);
@@ -1382,14 +1382,16 @@ class StatsGadget extends GadgetBase {
         grid.tfoot.hide();
     }
 
-    add (title, value) {
+    add (title, contr, params) {
         var row = grid.rowCreate();
         var cell_left = grid.cellCreate(row);
         cell_left.className = 'left';
         var cell_right = grid.cellCreate(row);
         cell_right.className = 'right';
         cell_left.text = '$title';
-        cell_right.text = '$value';
+		ap.serverCall(contr, params, domContent).then((d) {
+			cell_right.text = '$d';
+		});
         return this;
     }
 
@@ -1397,9 +1399,11 @@ class StatsGadget extends GadgetBase {
 
 class ChartGadget extends GadgetBase {
 
-    ChartGadget (title) : super(title) {
+    ChartGadget (ap, title, contr, params) : super(ap, title, contr, params) {
         domContent.addClass('chart');
     }
+
+	render() => ap.serverCall(contr, params, domContent).then((d) => set(d['chart']));
 
     set (graph) {
         //print(new DateFormat('','bg_BG').dateSymbols.NARROWWEEKDAYS);

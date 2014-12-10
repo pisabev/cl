@@ -235,9 +235,9 @@ class Calendar {
         return new DateTime(utc.year, utc.month, utc.day);
     }
 
-    static weekDayFirst() => firstDayMonday? 1 : 7;
+    static weekDayFirst() => firstDayMonday? 1 : 0;
 
-    static weekDayLast() => firstDayMonday? 7 : 1;
+    static weekDayLast() => firstDayMonday? 7 : 6;
 
     static max(DateTime d1, DateTime d2) {
         int diff = d1.compareTo(d2);

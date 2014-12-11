@@ -34,6 +34,7 @@
 .supplier:before{background-image:url(../images/icons/user.svg);}
 .edit:before{background-image:url(../images/icons/document.svg);}
 .archive:before{background-image:url(../images/icons/archive.svg);}
+.file-archive:before{background-image:url(../images/icons/file-archive.svg);}
 .settings:before{background-image:url(../images/icons/settings.svg);}
 .number:before{background-image:url(../images/icons/units.svg);}
 .weight:before{background-image:url(../images/icons/weight.svg);}

@@ -209,13 +209,13 @@ span.tag-low {
   padding:3px;
   height:24px;
   line-height:17px !important;
-}
-.ui-field-input.focus, .ui-field-select.focus {
-  @include box-shadow(inset 0 0 10px #EEEEEE);
   @include transition(all 0.5s ease-in-out);
-}
-.ui-field-input.error, .ui-field-select.error {
-  border-color:#FF3E3E;
+  &.focus {
+    @include box-shadow(inset 0 0 10px #EEEEEE);
+  }
+  &.error {
+    border-color:#FF3E3E;
+  }
 }
 .ui-field-input.textarea {
   height:100px;
@@ -260,14 +260,14 @@ ul.ui-list {
   background:#EEEEEE;
   z-index: 999999;
   @include box-shadow(0 8px 6px -6px #C5C5C5);
-}
-ul.ui-list li {
-  cursor: pointer;
-  padding:3px;
-}
-ul.ui-list li:hover, ul.ui-list li.current, ul.ui-list li:hover *, ul.ui-list li.current * {
-  background:#3B4D66;
-  color:#FFFFFF;
+  li {
+    cursor: pointer;
+    padding:3px;
+  }
+  li:hover, li.current, li:hover *, li.current * {
+    background:#3B4D66;
+    color:#FFFFFF;
+  }
 }
 .ui-field-input {
   .ui-loader {

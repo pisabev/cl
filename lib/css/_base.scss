@@ -11,9 +11,10 @@
 }
 
 @mixin transition($transitions...) {
-  -moz-box-shadow: $transitions;
-  -webkit-box-shadow: $transitions;
-  box-shadow: $transitions;
+  transition: $transitions;
+  -moz-transition: $transitions;
+  -webkit-transition: $transitions;
+  -o-transition: $transitions;
 }
 
 @mixin transform($transform) {

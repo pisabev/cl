@@ -137,9 +137,10 @@ span.tag-low {
   background: #FFFFFF url(../images/ui/loader.gif) center center no-repeat; }
   .ui-loader.active {
     opacity: 0.5;
-    -moz-box-shadow: all 0.5s ease-in-out;
-    -webkit-box-shadow: all 0.5s ease-in-out;
-    box-shadow: all 0.5s ease-in-out; }
+    transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -webkit-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out; }
 
 #ui-unactivepage {
   position: absolute;
@@ -151,9 +152,10 @@ span.tag-low {
   background: #FFFFFF; }
   #ui-unactivepage.active {
     opacity: 0.5;
-    -moz-box-shadow: all 0.5s ease-in-out;
-    -webkit-box-shadow: all 0.5s ease-in-out;
-    box-shadow: all 0.5s ease-in-out; }
+    transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -webkit-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out; }
 
 .ui-process-loading {
   position: absolute;
@@ -233,18 +235,17 @@ span.tag-low {
   border-radius: 3px;
   padding: 3px;
   height: 24px;
-  line-height: 17px !important; }
-
-.ui-field-input.focus, .ui-field-select.focus {
-  -moz-box-shadow: inset 0 0 10px #EEEEEE;
-  -webkit-box-shadow: inset 0 0 10px #EEEEEE;
-  box-shadow: inset 0 0 10px #EEEEEE;
-  -moz-box-shadow: all 0.5s ease-in-out;
-  -webkit-box-shadow: all 0.5s ease-in-out;
-  box-shadow: all 0.5s ease-in-out; }
-
-.ui-field-input.error, .ui-field-select.error {
-  border-color: #FF3E3E; }
+  line-height: 17px !important;
+  transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -webkit-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out; }
+  .ui-field-input.focus, .ui-field-select.focus {
+    -moz-box-shadow: inset 0 0 10px #EEEEEE;
+    -webkit-box-shadow: inset 0 0 10px #EEEEEE;
+    box-shadow: inset 0 0 10px #EEEEEE; }
+  .ui-field-input.error, .ui-field-select.error {
+    border-color: #FF3E3E; }
 
 .ui-field-input.textarea {
   height: 100px; }
@@ -294,14 +295,12 @@ ul.ui-list {
   -moz-box-shadow: 0 8px 6px -6px #C5C5C5;
   -webkit-box-shadow: 0 8px 6px -6px #C5C5C5;
   box-shadow: 0 8px 6px -6px #C5C5C5; }
-
-ul.ui-list li {
-  cursor: pointer;
-  padding: 3px; }
-
-ul.ui-list li:hover, ul.ui-list li.current, ul.ui-list li:hover *, ul.ui-list li.current * {
-  background: #3B4D66;
-  color: #FFFFFF; }
+  ul.ui-list li {
+    cursor: pointer;
+    padding: 3px; }
+  ul.ui-list li:hover, ul.ui-list li.current, ul.ui-list li:hover *, ul.ui-list li.current * {
+    background: #3B4D66;
+    color: #FFFFFF; }
 
 .ui-field-input .ui-loader {
   background-image: url(../images/ui/tree/loading_white.gif);
@@ -604,9 +603,10 @@ html, body {
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
-    -moz-box-shadow: background 0.3s ease-in-out;
-    -webkit-box-shadow: background 0.3s ease-in-out;
-    box-shadow: background 0.3s ease-in-out; }
+    transition: background 0.3s ease-in-out;
+    -moz-transition: background 0.3s ease-in-out;
+    -webkit-transition: background 0.3s ease-in-out;
+    -o-transition: background 0.3s ease-in-out; }
     .ui-desktop a:hover {
       background: #48586E;
       opacity: 0.8; }
@@ -725,9 +725,10 @@ html, body {
 
 .ui-start-menu-element {
   display: block;
-  -moz-box-shadow: background 0.5s ease-in-out;
-  -webkit-box-shadow: background 0.5s ease-in-out;
-  box-shadow: background 0.5s ease-in-out; }
+  transition: background 0.5s ease-in-out;
+  -moz-transition: background 0.5s ease-in-out;
+  -webkit-transition: background 0.5s ease-in-out;
+  -o-transition: background 0.5s ease-in-out; }
   .ui-start-menu-element a {
     display: block;
     padding-top: 5px;
@@ -831,9 +832,10 @@ html, body {
 .ui-win-tab-active {
   border: 1px solid #283546;
   background: #283546;
-  -moz-box-shadow: background 0.5s ease-in-out;
-  -webkit-box-shadow: background 0.5s ease-in-out;
-  box-shadow: background 0.5s ease-in-out; }
+  transition: background 0.5s ease-in-out;
+  -moz-transition: background 0.5s ease-in-out;
+  -webkit-transition: background 0.5s ease-in-out;
+  -o-transition: background 0.5s ease-in-out; }
 
 .ui-win-tab span a, .ui-win-tab-active span a {
   line-height: 24px;
@@ -914,9 +916,10 @@ html, body {
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   border-radius: 5px;
-  -moz-box-shadow: opacity 0.2s ease-in-out;
-  -webkit-box-shadow: opacity 0.2s ease-in-out;
-  box-shadow: opacity 0.2s ease-in-out; }
+  transition: opacity 0.2s ease-in-out;
+  -moz-transition: opacity 0.2s ease-in-out;
+  -webkit-transition: opacity 0.2s ease-in-out;
+  -o-transition: opacity 0.2s ease-in-out; }
   .ui-win-shadowed .title {
     cursor: move; }
   .ui-win-shadowed.transform {
@@ -1014,9 +1017,10 @@ html, body {
   -moz-box-shadow: 0 0 4px #777777;
   -webkit-box-shadow: 0 0 4px #777777;
   box-shadow: 0 0 4px #777777;
-  -moz-box-shadow: opacity 0.5s ease-in-out;
-  -webkit-box-shadow: opacity 0.5s ease-in-out;
-  box-shadow: opacity 0.5s ease-in-out; }
+  transition: opacity 0.5s ease-in-out;
+  -moz-transition: opacity 0.5s ease-in-out;
+  -webkit-transition: opacity 0.5s ease-in-out;
+  -o-transition: opacity 0.5s ease-in-out; }
   .ui-popUp a.ui-option {
     display: block;
     height: 23px;
@@ -1420,9 +1424,10 @@ div.search {
   .ui-data-tip.show:after, .ui-data-tip.show:before {
     opacity: 1; }
   .ui-data-tip.top-tip:after, .ui-data-tip.top-tip:before {
-    -moz-box-shadow: bottom 0.25s ease-in-out, opacity 0.25s ease-in-out;
-    -webkit-box-shadow: bottom 0.25s ease-in-out, opacity 0.25s ease-in-out;
-    box-shadow: bottom 0.25s ease-in-out, opacity 0.25s ease-in-out;
+    transition: bottom 0.25s ease-in-out, opacity 0.25s ease-in-out;
+    -moz-transition: bottom 0.25s ease-in-out, opacity 0.25s ease-in-out;
+    -webkit-transition: bottom 0.25s ease-in-out, opacity 0.25s ease-in-out;
+    -o-transition: bottom 0.25s ease-in-out, opacity 0.25s ease-in-out;
     bottom: 10px;
     left: -9999px;
     margin-bottom: 12px; }
@@ -1435,9 +1440,10 @@ div.search {
   .ui-data-tip.top-tip.show:before {
     left: 15px; }
   .ui-data-tip.bottom-tip:after, .ui-data-tip.bottom-tip:before {
-    -moz-box-shadow: bottom 0.25s ease-in-out, opacity 0.25s ease-in-out;
-    -webkit-box-shadow: bottom 0.25s ease-in-out, opacity 0.25s ease-in-out;
-    box-shadow: bottom 0.25s ease-in-out, opacity 0.25s ease-in-out;
+    transition: bottom 0.25s ease-in-out, opacity 0.25s ease-in-out;
+    -moz-transition: bottom 0.25s ease-in-out, opacity 0.25s ease-in-out;
+    -webkit-transition: bottom 0.25s ease-in-out, opacity 0.25s ease-in-out;
+    -o-transition: bottom 0.25s ease-in-out, opacity 0.25s ease-in-out;
     top: 10px;
     left: -9999px;
     margin-top: 12px; }
@@ -1450,9 +1456,10 @@ div.search {
   .ui-data-tip.bottom-tip.show:before {
     left: 15px; }
   .ui-data-tip.right-tip:after, .ui-data-tip.right-tip:before {
-    -moz-box-shadow: bottom 0.25s ease-in-out, opacity 0.25s ease-in-out;
-    -webkit-box-shadow: bottom 0.25s ease-in-out, opacity 0.25s ease-in-out;
-    box-shadow: bottom 0.25s ease-in-out, opacity 0.25s ease-in-out;
+    transition: bottom 0.25s ease-in-out, opacity 0.25s ease-in-out;
+    -moz-transition: bottom 0.25s ease-in-out, opacity 0.25s ease-in-out;
+    -webkit-transition: bottom 0.25s ease-in-out, opacity 0.25s ease-in-out;
+    -o-transition: bottom 0.25s ease-in-out, opacity 0.25s ease-in-out;
     top: -9999px;
     left: 10px;
     margin-left: 12px; }
@@ -1465,9 +1472,10 @@ div.search {
   .ui-data-tip.right-tip.show:before {
     top: 7px; }
   .ui-data-tip.left-tip:after, .ui-data-tip.left-tip:before {
-    -moz-box-shadow: bottom 0.25s ease-in-out, opacity 0.25s ease-in-out;
-    -webkit-box-shadow: bottom 0.25s ease-in-out, opacity 0.25s ease-in-out;
-    box-shadow: bottom 0.25s ease-in-out, opacity 0.25s ease-in-out;
+    transition: bottom 0.25s ease-in-out, opacity 0.25s ease-in-out;
+    -moz-transition: bottom 0.25s ease-in-out, opacity 0.25s ease-in-out;
+    -webkit-transition: bottom 0.25s ease-in-out, opacity 0.25s ease-in-out;
+    -o-transition: bottom 0.25s ease-in-out, opacity 0.25s ease-in-out;
     top: -9999px;
     right: 10px;
     margin-right: 12px; }

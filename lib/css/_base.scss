@@ -1,0 +1,73 @@
+@mixin box-shadow($shadows...) {
+  -moz-box-shadow: $shadows;
+  -webkit-box-shadow: $shadows;
+  box-shadow: $shadows;
+}
+
+@mixin box-sizing($sizing) {
+  -moz-box-sizing: $sizing;
+  -webkit-box-sizing: $sizing;
+  box-sizing: $sizing;
+}
+
+@mixin transition($transitions...) {
+  -moz-box-shadow: $transitions;
+  -webkit-box-shadow: $transitions;
+  box-shadow: $transitions;
+}
+
+@mixin transform($transform) {
+  transform: $transform;
+  -moz-transform: $transform;
+  -ms-transform: $transform;
+  -o-transform: $transform;
+  -webkit-transform: $transform;
+}
+
+@mixin border-radius($radius) {
+  -moz-border-radius: $radius;
+  -webkit-border-radius: $radius;
+  border-radius: $radius;
+}
+
+@mixin border-bottom-right-radius($radius) {
+  -moz-border-bottom-right-radius: $radius;
+  -webkit-border-bottom-right-radius: $radius;
+  border-bottom-right-radius: $radius;
+}
+
+@mixin border-top-right-radius($radius) {
+  -moz-border-top-right-radius: $radius;
+  -webkit-border-top-right-radius: $radius;
+  border-top-right-radius: $radius;
+}
+
+@mixin border-bottom-left-radius($radius) {
+  -moz-border-bottom-left-radius: $radius;
+  -webkit-border-bottom-left-radius: $radius;
+  border-bottom-left-radius: $radius;
+}
+
+@mixin border-top-left-radius($radius) {
+  -moz-border-top-left-radius: $radius;
+  -webkit-border-top-left-radius: $radius;
+  border-top-left-radius: $radius;
+}
+
+@mixin gradient($from, $to) {
+  background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, $from), color-stop(1, $to));
+  background:-moz-linear-gradient(top, $from 5%, $to 100%);
+  background:-webkit-linear-gradient(top, $from 5%, $to 100%);
+  background:-o-linear-gradient(top, $from 5%, $to 100%);
+  background:-ms-linear-gradient(top, $from 5%, $to 100%);
+  background:linear-gradient(to bottom, $from 5%, $to 100%);
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='$from', endColorstr='$to',GradientType=0);
+}
+
+div,p,a,span {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}

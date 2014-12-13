@@ -41,13 +41,13 @@ class SVGInliner extends Transformer {
                     ..write(path)
                     ..write('</svg>');
                 paths.add(lsb.toString());
-                m['declaration'] = 'background-image: url("data:image/svg+xml;${lsb.toString()}");';
+                m['declaration'] = 'background-image: url("data:image/svg+xml;utf8,${lsb.toString()}");';
             }
         });
 
         var sb_css = new StringBuffer();
         data.forEach((Map m) {
-            sb_css.write('.icon${m['classname']}{${m['declaration']}}\n');
+            sb_css.write('${m['classname']}{${m['declaration']}}\n');
         });
         return sb_css.toString();
     }

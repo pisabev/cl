@@ -41,7 +41,7 @@ class SVGInliner extends Transformer {
                     ..write(path)
                     ..write('</svg>');
                 paths.add(lsb.toString());
-                m['declaration'] = 'background-image: url("data:image/svg+xml;utf8,${lsb.toString()}");';
+                m['declaration'] = 'background-image: url("data:image/svg+xml;utf8,${Uri.encodeFull(lsb.toString())}");';
             }
         });
 

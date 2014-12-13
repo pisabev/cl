@@ -6,5 +6,6 @@ dependencies:
   intl: any
   barback: any
   path: any
+  crypto: any
 transformers:
 - cjs/transformer/svginliner

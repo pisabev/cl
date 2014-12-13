@@ -28,38 +28,34 @@ img {border:0;}
 .icon {
   position:relative;
   padding-left:24px;
-  &:before {
+  &:before, &-middle:before, &-big:before, &-large:before {
     content:"";
-    width:24px;
-    height:24px;
-    line-height:24px;
-    text-align:center;
     position:absolute;
     top:0;
     left:0;
-    background-size:24px 24px;
+    @include transition(all 0.5s ease-in-out);
     background-repeat: no-repeat;
   }
-}
-.icon-big:before {
-  content:"";
-  width:92px;
-  height:92px;
-  position:absolute;
-  top:0;
-  left:0;
-  background-size:92px 92px;
-  background-repeat: no-repeat;
-}
-.icon-large:before {
-  content:"";
-  width:120px;
-  height:120px;
-  position:absolute;
-  top:0;
-  left:0;
-  background-size:120px 120px;
-  background-repeat: no-repeat;
+  &:before {
+    width:24px;
+    height:24px;
+    background-size:24px 24px;
+  }
+  &-middle:before {
+    width:48px;
+    height:48px;
+    background-size:48px 48px;
+  }
+  &-big:before {
+    width:92px;
+    height:92px;
+    background-size:92px 92px;
+  }
+  &-large:before {
+    width:120px;
+    height:120px;
+    background-size:120px 120px;
+  }
 }
 .full {
   width:100% !important;

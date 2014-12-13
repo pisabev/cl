@@ -91,9 +91,9 @@
 .page-white-put:before {background-image:url(../images/icons/file-unknown.svg);}
 .upload:before {background-image:url(../images/icons/upload.svg);}
 .download:before {background-image:url(../images/icons/download.svg);}
-.icon.add:before{content:'+';background:none;font-size:16px;color:#8BA9CA;line-height:21px;}
-.icon.minus:before{content:'-';background:none;font-size:16px;color:#8BA9CA;line-height:21px;}
-.icon.controls-last:before{content:'››';background:none;font-size:24px;color:#8BA9CA;line-height:21px;}
-.icon.controls-first:before{content:'‹‹';background:none;font-size:24px;color:#8BA9CA;line-height:21px;}
-.icon.controls-previous:before{content:'‹';background:none;font-size:24px;color:#8BA9CA;line-height:21px;}
-.icon.controls-next:before{content:'›';background:none;font-size:24px;color:#8BA9CA;line-height:21px;}
+.icon.add:before{content:'+';text-align:center;background:none;font-size:16px;color:#8BA9CA;line-height:21px;}
+.icon.minus:before{content:'-';text-align:center;background:none;font-size:16px;color:#8BA9CA;line-height:21px;}
+.icon.controls-last:before{content:'››';text-align:center;background:none;font-size:24px;color:#8BA9CA;line-height:21px;}
+.icon.controls-first:before{content:'‹‹';text-align:center;background:none;font-size:24px;color:#8BA9CA;line-height:21px;}
+.icon.controls-previous:before{content:'‹';text-align:center;background:none;font-size:24px;color:#8BA9CA;line-height:21px;}
+.icon.controls-next:before{content:'›';text-align:center;background:none;font-size:24px;color:#8BA9CA;line-height:21px;}

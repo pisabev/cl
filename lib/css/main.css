@@ -45,37 +45,32 @@ img {
 .icon {
   position: relative;
   padding-left: 24px; }
-  .icon:before {
+  .icon:before, .icon-middle:before, .icon-big:before, .icon-large:before {
     content: "";
-    width: 24px;
-    height: 24px;
-    line-height: 24px;
-    text-align: center;
     position: absolute;
     top: 0;
     left: 0;
-    background-size: 24px 24px;
+    transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -webkit-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
     background-repeat: no-repeat; }
-
-.icon-big:before {
-  content: "";
-  width: 92px;
-  height: 92px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-size: 92px 92px;
-  background-repeat: no-repeat; }
-
-.icon-large:before {
-  content: "";
-  width: 120px;
-  height: 120px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-size: 120px 120px;
-  background-repeat: no-repeat; }
+  .icon:before {
+    width: 24px;
+    height: 24px;
+    background-size: 24px 24px; }
+  .icon-middle:before {
+    width: 48px;
+    height: 48px;
+    background-size: 48px 48px; }
+  .icon-big:before {
+    width: 92px;
+    height: 92px;
+    background-size: 92px 92px; }
+  .icon-large:before {
+    width: 120px;
+    height: 120px;
+    background-size: 120px 120px; }
 
 .full {
   width: 100% !important; }

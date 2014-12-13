@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'package:barback/barback.dart';
-import 'package:crypto/crypto.dart';
 
 import 'dart:async';
 import 'package:path/path.dart' as path;
@@ -10,7 +8,7 @@ class SVGInliner extends Transformer {
     SVGInliner.asPlugin();
 
     final Map icons = {
-        'main-icons': '#BBBBBB',
+        'main-icons': '#CDCDCD',
         'blackp-icons' : '#CDCDCD'
     };
 
@@ -31,20 +29,20 @@ class SVGInliner extends Transformer {
 
     _buildFiles(List data, Transform transform) {
         List paths = new List();
+        var fn = transform.primaryInput.id.path.split('/').last.split('.').first;
         data.forEach((Map m) {
             if (m.containsKey('content')) {
                 String s = m['content'];
                 var match = new RegExp(r'<path\b[^>]*/>', multiLine: true, caseSensitive: false).firstMatch(s);
                 var path = match[0]
                     .replaceAll(new RegExp(r'"', multiLine: true, caseSensitive: false), "'")
-                    .replaceAll(new RegExp(r'\sfill\s*=\s*".*?"', multiLine: true, caseSensitive: false), "fill='#CDCDCD'");
+                    .replaceAll(new RegExp(r'\sfill\s*=\s*".*?"', multiLine: true, caseSensitive: false), "fill='${icons[fn]}'");
                 var lsb = new StringBuffer()
                     ..write("<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' baseProfile='full' width='76' height='76' viewBox='0 0 76.00 76.00' xml:space='preserve'>")
                     ..write(path)
                     ..write('</svg>');
                 paths.add(lsb.toString());
                 m['declaration'] = 'background-image: url("data:image/svg+xml;charset=utf8,${Uri.encodeComponent(lsb.toString())}");';
-                //m['declaration'] = 'background-image: url("data:image/svg+xml;base64,${CryptoUtils.bytesToBase64(UTF8.encode(lsb.toString()))}");';
             }
         });
 

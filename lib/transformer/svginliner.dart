@@ -48,7 +48,7 @@ class SVGInliner extends Transformer {
 
         var sb_css = new StringBuffer();
         data.forEach((Map m) {
-            sb_css.write('${m['classname']}{${m['declaration']}}\n');
+            sb_css.write('.icon${m['classname']}{${m['declaration']}}\n');
         });
         return sb_css.toString();
     }

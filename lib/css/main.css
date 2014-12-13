@@ -13,7 +13,7 @@ div, p, a, span {
   color: #666666;
   outline: 0;
   font-size: 12px;
-  font-family: tahoma,verdana,sans-serif; }
+  font-family: arial, sans-serif; }
 
 *, *:before, *:after {
   -moz-box-sizing: border-box;
@@ -257,7 +257,8 @@ span.tag-low {
   background: linear-gradient(to bottom, #f9f9f9 5%, #e9e9e9 100%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$from', endColorstr='$to',GradientType=0); }
   .ui-field-select select {
-    opacity: 0; }
+    opacity: 0;
+    width: 100%; }
   .ui-field-select .ui-select {
     position: absolute;
     font-weight: normal;

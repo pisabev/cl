@@ -38,7 +38,7 @@ class SVGInliner extends Transformer {
                     .replaceAll(new RegExp(r'"', multiLine: true, caseSensitive: false), "'")
                     .replaceAll(new RegExp(r'\sfill\s*=\s*".*?"', multiLine: true, caseSensitive: false), "fill='${icons[fn]}'");
                 var lsb = new StringBuffer()
-                    ..write("<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' baseProfile='full' width='76' height='76' viewBox='0 0 76.00 76.00' xml:space='preserve'>")
+                    ..write("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 76.00 76.00'>")
                     ..write(path)
                     ..write('</svg>');
                 paths.add(lsb.toString());

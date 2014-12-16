@@ -217,10 +217,10 @@ span.tag-low {
   height:100px;
 }
 .ui-field-select {
-  background-repeat: no-repeat;
-  background-position: right center;
-  border: 1px solid #dcdcdc;
-  @include gradient(#f9f9f9, #e9e9e9);
+  $color:#F2F2F2;
+  border:1px solid darken($color,10%);
+  @include box-shadow(inset 0 1px 0 0 lighten($color,10%));
+  background:$color no-repeat right center;
   select {
     opacity: 0;
     width:100%;
@@ -228,9 +228,7 @@ span.tag-low {
   .ui-select {
     position: absolute;
     font-weight: normal;
-    background-image: url(../images/ui/bullet_arrow_down.png);
-    background-repeat: no-repeat;
-    background-position: right 3px center;
+    background: url(../images/ui/bullet_arrow_down.png) no-repeat right 3px center;
     width: 100%;
   }
   .ui-select.disabled {
@@ -268,9 +266,7 @@ ul.ui-list {
 }
 .ui-field-input {
   .ui-loader {
-    background-image: url(../images/ui/tree/loading_white.gif);
-    background-repeat: no-repeat;
-    background-position: 99% 2px;
+    background:inherit url(../images/ui/tree/loading_white.gif) no-repeat 99% 2px;
   }
   input, textarea, select {
     background:none;
@@ -285,12 +281,10 @@ ul.ui-list {
     position: absolute;
     top: 0;
     right: 0;
-    background-position: center center;
-    background-color: #EEEEEE;
-    border-top: 1px solid #F9F9F9;
-    border-left: 1px solid #CDCDCD;
-    border-bottom: 1px solid #EEEEEE;
-    border-right: 1px solid #EEEEEE;
+    background: center center #EEEEEE;
+    border: 1px solid #EEEEEE;
+    border-top-color: #F9F9F9;
+    border-left-color: #CDCDCD;
     &.icon {
       padding-left: 0;
       @include border-top-right-radius(3px);
@@ -428,9 +422,7 @@ ul.ui-list {
   height: 22px;
   top: 0;
   left: 0;
-  background-image: url(../images/ui/bullet_arrow_down.png);
-  background-repeat: no-repeat;
-  background-position:50% 50%;
+  background:inherit url(../images/ui/bullet_arrow_down.png) no-repeat 50% 50%;
 }
 .ui-button-option-ul {
   z-index:99999;
@@ -682,13 +674,10 @@ html,body{
   background-color: #E5E5E5;
 }
 .ui-start-menu-childs {
-  background-image: url(../images/ui/menu_down.gif);
-  background-repeat: no-repeat;
-  background-position:180px 14px;
+  background: inherit url(../images/ui/menu_down.gif) no-repeat 180px 14px;
 }
 .ui-start-menu-button {
-  background-repeat: no-repeat;
-  background-position:5px 50%;
+  background: no-repeat 5px 50%;
   color:#EEEEEE;
   height:29px;
   line-height:30px;
@@ -1025,8 +1014,7 @@ html,body{
   width:5px;
   height:100%;
   float:left;
-  background:#EEEEEE url(../images/ui/knob_horizontal.png) no-repeat;
-  background-position: 50% 50%;
+  background:#EEEEEE url(../images/ui/knob_horizontal.png) no-repeat 50% 50%;
   cursor: ew-resize;
   border:1px solid #CDCDCD;
   border-bottom:none;
@@ -1172,24 +1160,16 @@ html,body{
     background-position:center center;
   }
   .ui-icon-arrow {
-    background-image: url(../images/ui/arrow_up.png);
-    background-repeat: no-repeat;
-    background-position:center top;
+    background: url(../images/ui/arrow_up.png) no-repeat center top;
   }
   .ui-icon-arrow a {
-    background-image: url(../images/ui/arrow_down.png);
-    background-repeat: no-repeat;
-    background-position:center bottom;
+    background: url(../images/ui/arrow_down.png) no-repeat center bottom;
   }
   .ui-icon-asc a {
-    background-image: url(../images/ui/arrow_up.png);
-    background-repeat: no-repeat;
-    background-position:center center;
+    background: url(../images/ui/arrow_up.png) no-repeat center center;
   }
   .ui-icon-desc a {
-    background-image: url(../images/ui/arrow_down.png);
-    background-repeat: no-repeat;
-    background-position:center center;
+    background: url(../images/ui/arrow_down.png) no-repeat center center;
   }
   table {
     background:#F2F2F2;
@@ -1449,8 +1429,7 @@ div.search {
     content: "";
     width: 0;
     height: 0;
-    border-width: 6px;
-    border-style: solid;
+    border: 6px solid;
   }
   &.show:after,
   &.show:before {
@@ -1688,8 +1667,7 @@ div.search {
 .editor-context {
   width:100%;
   height:100%;
-  background-repeat: no-repeat;
-  background-position:center center;
+  background: no-repeat center center;
 }
 .editor-tab {
   line-height:22px;
@@ -1732,8 +1710,7 @@ div.search {
   float:left;
   width:256px;
   height:256px;
-  background-image: url(../images/ui/color/color_picker_gradient.png);
-  background-repeat: no-repeat;
+  background:inherit url(../images/ui/color/color_picker_gradient.png) no-repeat;
   position:relative;
 }
 .ui-colorpicker-mid {
@@ -1741,9 +1718,7 @@ div.search {
   height:256px;
   width:35px;
   margin:0 10px 0 10px;
-  background-image: url(../images/ui/color/color_picker_bar.png);
-  background-repeat: no-repeat;
-  background-position: 50% 0;
+  background:inherit url(../images/ui/color/color_picker_bar.png) no-repeat 50% 0;
   position:relative;
 }
 .ui-colorpicker-right {
@@ -1764,8 +1739,7 @@ div.search {
   height:11px;
   top:-5px;
   left:-5px;
-  background-image: url(../images/ui/color/color_picker_circle.gif);
-  background-repeat: no-repeat;
+  background:inherit url(../images/ui/color/color_picker_circle.gif) no-repeat;
   position:absolute;
 }
 .ui-colorpicker-mid span {
@@ -1773,8 +1747,7 @@ div.search {
   height: 9px;
   width: 35px;
   top:-4px;
-  background-image: url(../images/ui/color/color_picker_arrows.gif);
-  background-repeat: no-repeat;
+  background:inherit url(../images/ui/color/color_picker_arrows.gif) no-repeat;
   position:absolute;
 }
 .ui-colorpicker-right .ui-field-input {
@@ -1795,9 +1768,7 @@ div.search {
   height:150px;
   border:1px solid #EEEEEE;
   margin:10px 0 0 10px;
-  background:#FFFFFF;
-  background-position:center;
-  background-repeat: no-repeat;
+  background:#FFFFFF center no-repeat;
 }
 .ui-file-clicked {
   border:1px solid #BBBBBB;
@@ -2261,9 +2232,7 @@ div.search {
   width:120px;
   height:120px;
   position:relative;
-  background:#FFFFFF;
-  background-position:50% 50%;
-  background-repeat: no-repeat;
+  background:#FFFFFF no-repeat 50% 50%;
   &.icon-large {
     background-size:120px 120px;
   }

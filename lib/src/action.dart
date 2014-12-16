@@ -128,7 +128,6 @@ class ButtonOption extends CJSElement {
 
     set dropDown(bool dropDown) {
         _dropDown = dropDown;
-        //sub.forEach((but) => but.setStyle(_dropDown? {'margin': '-1px 0 0 0'} : {'margin': '0 0 0 0'}));
     }
 
     getName() => _name;
@@ -151,12 +150,13 @@ class ButtonOption extends CJSElement {
     _showL() {
         domList.show();
         _showed = true;
-        addClass('ui-open');
+        var way = _dropDown? 'down' : 'up';
+        addClass('ui-open $way');
         var pos = domList.getRectangle(),
         width = getWidth(),
         height = domAction.getHeight();
         domList.appendTo(document.body)
-        .addClass(_dropDown? 'down' : 'up')
+        .addClass(way)
         .setStyle({
             'position':'absolute',
             'top':'${pos.top + height - (_dropDown? 0 : (domList.getHeight() + getHeight() - 1))}px',

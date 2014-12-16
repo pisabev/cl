@@ -291,9 +291,10 @@ ul.ui-list {
     border-left: 1px solid #CDCDCD;
     border-bottom: 1px solid #EEEEEE;
     border-right: 1px solid #EEEEEE;
-    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true',sizingMethod='image');
     &.icon {
       padding-left: 0;
+      @include border-top-right-radius(3px);
+      @include border-bottom-right-radius(3px);
       &:before {
         margin-left: -2px;
         top: -2px;
@@ -363,16 +364,19 @@ ul.ui-list {
   width:auto;
 }
 .ui-button-inner.ui-button-title, .ui-button-option .ui-button-inner {
-  border-color:#dcdcdc;
-  @include box-shadow(inset 0 1px 0 0 #ffffff);
-  @include gradient(#f9f9f9, #e9e9e9);
+  $color:#f9f9f9;
+  border-color:darken($color,10%);
+  @include box-shadow(inset 0 1px 0 0 lighten($color,10%));
+  @include gradient($color, darken($color,8%));
 }
 .ui-button-inner.ui-button-title.type2, .ui-button-option .ui-button-inner.type2 {
-  border-color:#384A62;
-  @include box-shadow(inset 0 1px 0 0 #4D6586);
-  @include gradient(#455A77, #3B4D66);
-  color:#CDCDCD;
-  text-shadow: 1px 1px 1px #36465D;
+  $color:#455A77;
+  $color-text:#CDCDCD;
+  border-color:darken($color,10%);
+  @include box-shadow(inset 0 1px 0 0 lighten($color,10%));
+  @include gradient($color, darken($color,8%));
+  color:$color-text;
+  text-shadow: 1px 1px 1px darken($color-text,50%);
 }
 .ui-button-option .ui-button, .ui-button-ul .ui-button {
   margin:0 !important;
@@ -385,11 +389,17 @@ ul.ui-list {
   @include border-top-left-radius(0);
   @include border-bottom-left-radius(0);
 }
-.ui-button-option.ui-open .ui-option .ui-button-inner {
+.ui-button-option.ui-open.down .ui-option .ui-button-inner {
   @include border-bottom-right-radius(0);
 }
-.ui-button-option.ui-open .ui-main .ui-button-inner {
+.ui-button-option.ui-open.down .ui-main .ui-button-inner {
   @include border-bottom-left-radius(0);
+}
+.ui-button-option.ui-open.up .ui-option .ui-button-inner {
+  @include border-top-right-radius(0);
+}
+.ui-button-option.ui-open.up .ui-main .ui-button-inner {
+  @include border-top-left-radius(0);
 }
 .ui-button-option-ul .ui-button-inner, .ui-button-ul .ui-button-inner {
   @include border-radius(0);
@@ -436,6 +446,9 @@ ul.ui-list {
     li {
       float: left;
       list-style: none;
+      &:not(:first-child) {
+        margin-left:-1px;
+      }
       &:last-child .ui-button-inner {
         @include border-top-right-radius(3px);
         @include border-bottom-right-radius(3px);
@@ -444,11 +457,15 @@ ul.ui-list {
         @include border-top-left-radius(3px);
         @include border-bottom-left-radius(3px);
       }
-    }
-    .ui-button.current .ui-button-inner {
-      background: #CDCDCD;
-      box-shadow: inherit;
-      border-color: #BCBCBC;
+      & .ui-button.current {
+        position:relative;
+        z-index:1;
+        & .ui-button-inner {
+          background: #CDCDCD;
+          box-shadow: inherit;
+          border-color: #BCBCBC;
+        }
+      }
     }
   }
 }
@@ -459,15 +476,16 @@ ul.ui-list {
   opacity:0.5;
 }
 .ui-button-active:hover .ui-button-inner {
-  @include gradient(#e9e9e9, #f9f9f9);
-  background-color:#e9e9e9;
+  $color:#f9f9f9;
+  @include gradient(darken($color,8%), $color);
+  background-color:darken($color,8%);
+  border-color:darken($color,10%);
 }
 .ui-button-active:hover .ui-button-inner.type2 {
-  @include gradient(#3B4D66, #455A77);
-  background-color:#3B4D66;
-}
-.ui-paginator .ui-button-active:hover .ui-button-inner {
-  border-color: #CDCDCD;
+  $color:#455A77;
+  @include gradient(darken($color,8%), $color);
+  background-color:darken($color,8%);
+  border-color:darken($color,10%);
 }
 
 /* UI Base Layout
@@ -1238,6 +1256,7 @@ html,body{
     line-height:24px;
     padding:3px;
     background:#FFFFFF;
+    vertical-align: top;
   }
   tbody td.num {
     padding:0 5px 0 5px;

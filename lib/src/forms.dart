@@ -747,6 +747,8 @@ class InputLoader extends InputFunction {
         return false;
     }
 
+    findEl(dynamic k) => list == null? null : list.firstWhere((el) => el[0]['k'] == k, orElse: () => null);
+
     _keyAction (e) {
         if(!_navAction(e, true)) {
             _hideList();
@@ -757,15 +759,13 @@ class InputLoader extends InputFunction {
     renderList (List o) {
         domList.removeChilds();
         list = new List();
-        var string = field.dom.value;
+        var string = '(${field.dom.value})';
         o.forEach((el) {
-            var e = new CJSElement(new LIElement()).addAction((e) => setValue([el['k'], el['v']]), 'mousedown');
-            var p = '(${string})';
-            e.setHtml(el['v'].replaceAllMapped(new RegExp(p, caseSensitive: false), (m) => '<strong>${m[0]}</strong>'));
-            domList.append(e);
-            list.add([el, e]);
+            var d = new CJSElement(new LIElement()).addAction((e) => setValue([el['k'], el['v']]), 'mousedown');
+            d.setHtml(el['v'].replaceAllMapped(new RegExp(string, caseSensitive: false), (m) => '<strong>${m[0]}</strong>'));
+            domList.append(d);
+            list.add([el, d]);
         });
-        _showList();
     }
 
     _showList() {
@@ -780,7 +780,7 @@ class InputLoader extends InputFunction {
             'position':'absolute',
             'top':'${pos.top + shift}px',
             'left':'${left.left}px',
-            'width': '${width}px'});
+            'min-width': '${width}px'});
     }
 
     _hideList() {
@@ -811,6 +811,7 @@ class InputLoader extends InputFunction {
     onLoad (data) {
         removeClass('loading');
         renderList(data);
+        _showList();
     }
 
 }

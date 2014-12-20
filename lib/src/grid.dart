@@ -109,7 +109,7 @@ class RowFormDataCell extends RowDataCell {
             var cont = new CJSElement(new DivElement())
                 .setStyle({'position':'relative'})
                 .appendTo(cell);
-            object.forEach((f) => _render(f, cont));
+            object.forEach((f) => _render(f, cont.dom));
         } else {
             if(object is Data && grid is GridData) {
                 object.addHook(Data.hook_value, () => grid.rowChanged(row));

@@ -265,6 +265,9 @@ span.tag-low {
 .ui-field-input input[disabled], .ui-field-area textarea[disabled], .ui-field-select select[disabled] {
   color: #AAAAAA; }
 
+.ui-field-input.disabled {
+  background: #FCFCFC; }
+
 .ui-field-input.date, .ui-field-input.function {
   padding-right: 25px; }
 
@@ -281,18 +284,24 @@ ul.ui-list {
   list-style: none;
   background: #EEEEEE;
   z-index: 999999;
+  overflow: auto;
+  overflow-x: hidden;
   -moz-box-shadow: 0 8px 6px -6px #C5C5C5;
   -webkit-box-shadow: 0 8px 6px -6px #C5C5C5;
   box-shadow: 0 8px 6px -6px #C5C5C5; }
   ul.ui-list li {
     cursor: pointer;
-    padding: 3px; }
-  ul.ui-list li:hover, ul.ui-list li.current, ul.ui-list li:hover *, ul.ui-list li.current * {
-    background: #3B4D66;
+    padding: 3px;
+    white-space: nowrap;
+    text-overflow: ellipsis; }
+  ul.ui-list li.current, ul.ui-list li.current * {
+    background: #3B4D66 !important;
     color: #FFFFFF; }
+  ul.ui-list li:hover, ul.ui-list li:hover * {
+    background: #E1E1E1; }
 
 .ui-field-input .ui-loader {
-  background: inherit url(../images/ui/tree/loading_white.gif) no-repeat 99% 2px; }
+  background: url(../images/ui/tree/loading_white.gif) no-repeat 99% 2px; }
 .ui-field-input input, .ui-field-input textarea, .ui-field-input select {
   background: none;
   border: none;
@@ -488,7 +497,7 @@ ul.ui-list {
   height: 22px;
   top: 0;
   left: 0;
-  background: inherit url(../images/ui/bullet_arrow_down.png) no-repeat 50% 50%; }
+  background: url(../images/ui/bullet_arrow_down.png) no-repeat 50% 50%; }
 
 .ui-button-option-ul {
   z-index: 99999; }
@@ -745,7 +754,7 @@ html, body {
   background-color: #E5E5E5; }
 
 .ui-start-menu-childs {
-  background: inherit url(../images/ui/menu_down.gif) no-repeat 180px 14px; }
+  background: url(../images/ui/menu_down.gif) no-repeat 180px 14px; }
 
 .ui-start-menu-button {
   background: no-repeat 5px 50%;
@@ -1641,7 +1650,7 @@ div.search {
   float: left;
   width: 256px;
   height: 256px;
-  background: inherit url(../images/ui/color/color_picker_gradient.png) no-repeat;
+  background: url(../images/ui/color/color_picker_gradient.png) no-repeat;
   position: relative; }
 
 .ui-colorpicker-mid {
@@ -1649,7 +1658,7 @@ div.search {
   height: 256px;
   width: 35px;
   margin: 0 10px 0 10px;
-  background: inherit url(../images/ui/color/color_picker_bar.png) no-repeat 50% 0;
+  background: url(../images/ui/color/color_picker_bar.png) no-repeat 50% 0;
   position: relative; }
 
 .ui-colorpicker-right {
@@ -1670,7 +1679,7 @@ div.search {
   height: 11px;
   top: -5px;
   left: -5px;
-  background: inherit url(../images/ui/color/color_picker_circle.gif) no-repeat;
+  background: url(../images/ui/color/color_picker_circle.gif) no-repeat;
   position: absolute; }
 
 .ui-colorpicker-mid span {
@@ -1678,7 +1687,7 @@ div.search {
   height: 9px;
   width: 35px;
   top: -4px;
-  background: inherit url(../images/ui/color/color_picker_arrows.gif) no-repeat;
+  background: url(../images/ui/color/color_picker_arrows.gif) no-repeat;
   position: absolute; }
 
 .ui-colorpicker-right .ui-field-input {

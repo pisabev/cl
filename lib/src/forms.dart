@@ -355,11 +355,13 @@ class Input extends _FieldBuilder<InputField> {
 
 	disable() {
 		field.disable();
+        addClass('disabled');
 		return this;
 	}
 
 	enable() {
 		field.enable();
+        removeClass('disabled');
 		return this;
 	}
 
@@ -675,6 +677,8 @@ class InputLoader extends InputFunction {
     CJSElement domList;
     List list;
     Function execute;
+    Timer _timer;
+    Future _executing;
 
     InputLoader ([type]) : super(type) {
         domList = new CJSElement(new UListElement())
@@ -688,6 +692,8 @@ class InputLoader extends InputFunction {
     _getCurrent () {
         int cur_index = -1;
         int index = 0;
+        if(list == null)
+            return cur_index;
         for(;index < list.length; index++)
             if(list[index][1].existClass('current')) {
                 cur_index = index;
@@ -697,7 +703,7 @@ class InputLoader extends InputFunction {
     }
 
     _moveIndex (p) {
-        if(list != null && list.length == 0)
+        if(list == null || list.length == 0)
             return false;
         var cur_indx = _getCurrent();
         if(cur_indx >= 0) {
@@ -720,14 +726,18 @@ class InputLoader extends InputFunction {
         if(k.isKeyDown()) {
             e.stopPropagation();
             e.preventDefault();
-            if(!no_exec)
+            if(!no_exec) {
                 _moveIndex(1);
+                _moveView();
+            }
             return true;
         } else if(k.isKeyUp()) {
             e.stopPropagation();
             e.preventDefault();
-            if(!no_exec)
+            if(!no_exec) {
                 _moveIndex(-1);
+                _moveView();
+            }
             return true;
         } else if(k.isKeyEnter()) {
             e.stopPropagation();
@@ -736,15 +746,27 @@ class InputLoader extends InputFunction {
                 var cur_indx = (list.length == 1) ? 0 : _getCurrent();
                 if (cur_indx >= 0) {
                     var cur = list[cur_indx];
-                    setValue([cur[0]['k'], cur[0]['v']]);
+                    setValue(cur[0]);
                     _hideList();
                 }
             } else if (getValue() == null) {
-                setValue([null, '']);
+                setValue(null);
             }
             return true;
         }
         return false;
+    }
+
+    _moveView() {
+        if(domList.dom.children.length == 0)
+            return;
+        var view_height = domList.getHeight();
+        var cell_height = domList.dom.children.first.offsetHeight;
+        var current_top = cell_height * _getCurrent();
+        if(domList.dom.scrollTop > current_top)
+            domList.dom.scrollTop = current_top;
+        if(domList.dom.scrollTop + view_height <= current_top)
+            domList.dom.scrollTop = current_top - view_height + cell_height;
     }
 
     findEl(dynamic k) => list == null? null : list.firstWhere((el) => el[0]['k'] == k, orElse: () => null);
@@ -761,11 +783,28 @@ class InputLoader extends InputFunction {
         list = new List();
         var string = '(${field.dom.value})';
         o.forEach((el) {
-            var d = new CJSElement(new LIElement()).addAction((e) => setValue([el['k'], el['v']]), 'mousedown');
+            var d = new CJSElement(new LIElement()).addAction((e) => setValue(el), 'mousedown');
             d.setHtml(el['v'].replaceAllMapped(new RegExp(string, caseSensitive: false), (m) => '<strong>${m[0]}</strong>'));
             domList.append(d);
             list.add([el, d]);
         });
+    }
+
+    setValue(dynamic data, [silent]) {
+        if(data == null)
+            return super.setValue([null, ''], silent);
+        else if (data is List)
+            return super.setValue([data[0], data[1]], silent);
+        else if (data is Map)
+            return super.setValue([data['k'], data['v']], silent);
+    }
+
+    setSuggest(String suggest) {
+        _executing = execute(suggest).then((data) {
+            if(data != null && data.length == 1)
+                setValue(data.first);
+        });
+        return this;
     }
 
     _showList() {
@@ -780,7 +819,9 @@ class InputLoader extends InputFunction {
             'position':'absolute',
             'top':'${pos.top + shift}px',
             'left':'${left.left}px',
-            'min-width': '${width}px'});
+            'width': '${width}px'});
+        if(domList.dom.children.length > 0)
+            domList.setStyle({'max-height': '${domList.dom.children.first.offsetHeight * 8}px'});
     }
 
     _hideList() {
@@ -795,22 +836,31 @@ class InputLoader extends InputFunction {
     _leave (e) {
         _hideList();
         if(getValue() == null)
-            setValue([null, '']);
+            setValue(null);
     }
 
     _proceedLoad (string) {
         list = null;
-        if(string == '') {
+        _cancel();
+        if(string.isEmpty) {
             _hideList();
         } else {
             addClass('loading');
-            execute(this, string);
+            _timer = new Timer(new Duration(milliseconds:300), () => _executing = execute(string).then(onLoad));
         }
+    }
+
+    _cancel() {
+        if(_timer != null)
+            _timer.cancel();
+        if(_executing != null)
+            _executing.timeout(new Duration(seconds:0), onTimeout: () => null);
     }
 
     onLoad (data) {
         removeClass('loading');
-        renderList(data);
+        if(data != null)
+            renderList(data);
         _showList();
     }
 

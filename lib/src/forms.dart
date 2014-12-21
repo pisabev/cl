@@ -651,7 +651,7 @@ class InputFunction extends Input {
 		domAction = new CJSElement(new AnchorElement())
     		.setClass('icon i-function')
 			.appendTo(this);
-        field.addAction((e) => setValue([null,'']), 'change');
+        field.addAction((e) => setValue(null), 'change');
     }
 
     setValue (List value, [bool silent = false]) {
@@ -834,6 +834,7 @@ class InputLoader extends InputFunction {
     }
 
     _leave (e) {
+        _cancel();
         _hideList();
         if(getValue() == null)
             setValue(null);

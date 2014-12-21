@@ -472,6 +472,7 @@ class GridList extends GridBase {
         row.draggable = true;
         var el = new CJSElement(row);
         el.addAction((e) {
+            e.stopPropagation();
             e.dataTransfer.setData('text', getRowIndex(el.dom).toString());
             e.dataTransfer.effectAllowed = 'move';
         },'dragstart')

@@ -143,6 +143,14 @@ class EventValidator {
         return false;
     }
 
+    isColon () {
+        var event = this.event,
+            code = event.which;
+        if (code && new String.fromCharCode(code) == ':')
+            return true;
+        return false;
+    }
+
     isKeyDown () {
         var event = this.event,
             code = event.which;
@@ -325,6 +333,16 @@ class Calendar {
         return d;
     }
 
+    static parseWithTime(String date) {
+        DateTime d;
+        try { d = new DateFormat('dd/MM/yyyy HH:mm').parse(date);} catch(e) {
+            try { d = new DateFormat('yyyy-MM-dd HH:mm').parse(date);} catch(e) {
+                d = null;
+            }
+        }
+        return d;
+    }
+
     static parseYear(String date) {
         DateTime d;
         try {d = new DateFormat('yyyy').parse(date);} catch(e) {
@@ -343,6 +361,10 @@ class Calendar {
 
     static string(DateTime date) {
         return new DateFormat('dd/MM/yyyy').format(date);
+    }
+
+    static stringWithtTime(DateTime date) {
+        return new DateFormat('dd/MM/yyyy HH:mm').format(date);
     }
 
     static getDateRange () {

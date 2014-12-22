@@ -146,13 +146,15 @@ class InputField<E extends InputElement> extends FormElement<E> {
     static const String INT = 'int';
     static const String FLOAT = 'float';
     static const String DATE = 'date';
+    static const String DATETIME = 'datetime';
 
     List _validate_value = new List();
     List _validate_input = new List();
 
     String type;
+    List range;
 
-    InputField (E element, [this.type]) : super (element) {
+    InputField (E element, [this.type, this.range]) : super (element) {
         switch(this.type) {
             case INT:
                 addValidation((e) {
@@ -172,6 +174,12 @@ class InputField<E extends InputElement> extends FormElement<E> {
                     return new Future.value(v.isBasic() || v.isNum() || v.isSlash());
                 }, onInput: true);
                 break;
+            case DATETIME:
+                addValidation((e) {
+                    var v = new utils.EventValidator(e);
+                    return new Future.value(v.isBasic() || v.isNum() || v.isSlash() || v.isColon());
+                }, onInput: true);
+                break;
         }
         addAction((e) => (getValue().toString() != dom.value)? setValue(dom.value, false) : null, 'blur');
         addAction(_validateValue, 'blur');
@@ -181,23 +189,35 @@ class InputField<E extends InputElement> extends FormElement<E> {
 
     setValue(dynamic value, [bool silent = false]) {
         if(type == INT) {
-            dom.value = (value == null)? '' : value.toString();
             if(value is String)
                 value = (!value.isEmpty)? int.parse(value) : null;
+            if(range is List) {
+                if (value > range[1])
+                    value = range[1];
+                if (value < range[0])
+                    value = range[0];
+            }
+            dom.value = (value == null)? '' : value.toString();
             super.setValue(value, silent);
         } else if(type == FLOAT) {
-            dom.value = (value == null)? '' : value.toString();
             if(value is String)
                 value = (!value.isEmpty)? double.parse(value) : null;
+            if(range is List) {
+                if (value > range[1])
+                    value = range[1];
+                if (value < range[0])
+                    value = range[0];
+            }
+            dom.value = (value == null)? '' : value.toString();
             super.setValue(value, silent);
-        } else if(type == DATE) {
+        } else if(type == DATE || type == DATETIME) {
             if(value is String)
-                value = utils.Calendar.parse(value);
+                value = type == DATETIME? utils.Calendar.parseWithTime(value) : utils.Calendar.parse(value);
             super.setValue(value, silent);
             if(value == null)
                 dom.value = '';
             else
-                dom.value = utils.Calendar.string(value);
+                dom.value = type == DATETIME? utils.Calendar.stringWithtTime(value) : utils.Calendar.string(value);
         } else {
             dom.value = (value == null)? '' : value.toString();
             super.setValue(value, silent);
@@ -332,7 +352,7 @@ abstract class _FieldBuilder<E extends FormElement> extends DataElement<SpanElem
 
 class Input extends _FieldBuilder<InputField> {
 
-	Input([type]) : super(new InputField(new InputElement(), type)) {
+	Input([type, range]) : super(new InputField(new InputElement(), type, range)) {
 		setClass('ui-field-input');
         field.addHook(InputField.hook_validate_error, onTypeError);
     	field.addHook(InputField.hook_validate_ok, onTypeOk);
@@ -572,6 +592,60 @@ class InputDate extends Input {
 		else
 			picker.set();
 		pop = new gui.Pop(picker, e);
+    }
+
+}
+
+class InputDateTime extends Input {
+    CJSElement domAction;
+    gui.Pop pop;
+
+    InputDateTime () : super ('datetime') {
+        addClass('date time');
+        domAction = new CJSElement(new AnchorElement())
+        .addAction(getDatePicker).setClass('icon i-calendar')
+        .appendTo(this);
+        setValue(new DateTime.now());
+    }
+
+    noAction () {
+        domAction.remove();
+        removeClass('date');
+        return this;
+    }
+
+    fieldUpdate (value) {
+        setValue(value);
+        pop.close();
+    }
+
+    disable() {
+        super.disable();
+        domAction.hide();
+    }
+
+    enable() {
+        super.enable();
+        domAction.show();
+    }
+
+    getValue() {
+        var d = super.getValue();
+        if(d != null)
+            d = d.toString();
+        return d;
+    }
+
+    getValue_() => super.getValue();
+
+    getDatePicker (e) {
+        var picker = new gui.DatePicker(fieldUpdate, time: true);
+        var v = getValue_();
+        if (v != null)
+            picker.set(v.year, v.month, v.day, v.hour, v.minute);
+        else
+            picker.set();
+        pop = new gui.Pop(picker, e);
     }
 
 }

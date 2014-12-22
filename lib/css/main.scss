@@ -247,6 +247,9 @@ span.tag-low {
 .ui-field-input.date {
   width:95px !important;
 }
+.ui-field-input.date.time {
+  width:130px !important;
+}
 .ui-field-input.date-range {
   width:167px !important;
 }
@@ -1337,7 +1340,7 @@ div.search {
 .ui-calendar {
   background:#E7E7E7;
   padding:5px;
-  .ui-cal-navigation, .ui-calendar-option {
+  .ui-cal-navigation, .ui-calendar-option, .ui-cal-time {
     overflow: hidden;
   }
   .ui-cal-navigation p {
@@ -1388,6 +1391,16 @@ div.search {
   table tbody span.today {
     font-weight:bold;
     background:#FFFFFF;
+  }
+  .ui-cal-time {
+    margin: 7px auto 0 auto;
+    width: 70px;
+  }
+  .ui-cal-time span {
+    float:left;
+    line-height:24px;
+    width:10px;
+    text-align:center;
   }
   .ui-calendar-option {
     margin-top:5px;

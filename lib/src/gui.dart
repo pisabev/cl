@@ -185,7 +185,7 @@ class DatePicker extends CJSElement {
 	static List month_days = [31, 0, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 	DateTime date;
 
-	int cur_y, cur_m, cur_d, ch_m, ch_y;
+	int cur_y, cur_m, cur_d, cur_hrs, cur_min, ch_m, ch_y;
 
 	Function callBack;
 
@@ -193,14 +193,20 @@ class DatePicker extends CJSElement {
 
 	CJSElement clicked;
 
+    bool time;
+
+    form.Input hours, minutes;
+
 	Queue<StreamSubscription> _l = new Queue();
 
-	DatePicker (this.callBack) : super(new DivElement()) {
+	DatePicker (this.callBack, {this.time: false}) : super(new DivElement()) {
 		setClass('ui-calendar');
 	    date = new DateTime.now();
 	    cur_y = date.year;
 	    cur_m = date.month;
 	    cur_d = date.day;
+        cur_hrs = date.hour;
+        cur_min = date.minute;
 	    ch_m = cur_m;
 	    ch_y = cur_y;
 	    createHTML();
@@ -250,12 +256,19 @@ class DatePicker extends CJSElement {
 	        c.append(new SpanElement());
 	    }
 
+        if(time) {
+            var time_cont = new CJSElement(new DivElement())..setClass('ui-cal-time').appendTo(this);
+            hours = new form.Input('int', [0, 23]).setWidth(30).appendTo(time_cont);
+            new CJSElement(new SpanElement())..setText(':').appendTo(time_cont);
+            minutes = new form.Input('int', [0, 59]).setWidth(30).appendTo(time_cont);
+        }
+
 	    var opt = new CJSElement(new DivElement())..setClass('ui-calendar-option').appendTo(this);
 	    var opt_cur = new action.Button().setTitle(Calendar.textToday()).appendTo(opt),
 	        opt_empty = new action.Button().setStyle({'float': 'right'}).setTitle(Calendar.textEmpty()).appendTo(opt);
 
 	    if (callBack is Function) {
-	        opt_cur.addAction((e) => callBack(new DateTime(cur_y, cur_m, cur_d)));
+	        opt_cur.addAction((e) => callBack(new DateTime(cur_y, cur_m, cur_d, cur_hrs, cur_m)));
 	        opt_empty.addAction((e) => callBack(null));
 	    }
 
@@ -264,7 +277,7 @@ class DatePicker extends CJSElement {
 	    domTbody = tbody;
 	}
 
-	set ([int y, int m, int d]) {
+	set ([int y, int m, int d, int hrs, int min]) {
 		ch_y = (y != null)? y : ch_y;
 		ch_m = (m != null)? m : ch_m;
 		int day_sel = d;
@@ -295,6 +308,14 @@ class DatePicker extends CJSElement {
 	            obj.clicked = new CJSElement(n).addClass('selected');
 	    };
 	    click(this);
+        if(time) {
+            hours.setValue(hrs);
+            minutes.setValue(min);
+            if(hrs == 0)
+                hours.setValue('00');
+            if(min == 0)
+                minutes.setValue('00');
+        }
 	    for (var i = 0; i < 42; i++) {
 	        var diff = i - (firstDay - Calendar.offset()),
 	        	x = (diff > 0 && diff <= month_days[ch_m - 1])? diff : '',
@@ -309,7 +330,10 @@ class DatePicker extends CJSElement {
 			span.innerHtml = x.toString();
 	        if (x != '') {
                 _l.addLast(cell.onClick.listen((e) {
-                    callBack(new DateTime(ch_y, ch_m, x));
+                    if(time)
+                        callBack(new DateTime(ch_y, ch_m, x, hours.getValue(), minutes.getValue()));
+                    else
+                        callBack(new DateTime(ch_y, ch_m, x));
                     click(this, cell.firstChild);
                 }));
 	        } else {

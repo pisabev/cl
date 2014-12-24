@@ -1,52 +1,50 @@
 part of utils;
 
 class Observer {
-	Map _hook;
+    Map _hook;
 
-	Observer () {
-		_hook = new Map<String, Queue>();
-	}
+    Observer () {
+        _hook = new Map<String, Queue>();
+    }
 
-	addHook (String scope, dynamic func, [bool first = false]) {
-		if(_hook[scope] == null)
-			_hook[scope] = new Queue();
-		if(func is Queue) {
-			_hook[scope].addAll(func);
-		} else if (func is Function) {
-			if(first)
-				_hook[scope].addFirst(func);
-			else
-				_hook[scope].add(func);
-		}
-	}
+    addHook (String scope, dynamic func, [bool first = false]) {
+        if(_hook[scope] == null)
+            _hook[scope] = new Queue();
+        if(func is Queue) {
+            _hook[scope].addAll(func);
+        } else if (func is Function) {
+            if(first)
+                _hook[scope].addFirst(func);
+            else
+                _hook[scope].add(func);
+        }
+    }
 
-	getHook ([String scope]) {
-		return scope != null? _hook[scope] : _hook;
-	}
+    getHook ([String scope]) => scope != null? _hook[scope] : _hook;
 
-	execHooks (String scope, [List<dynamic> list]) {
-		bool ret = true;
-		if(_hook[scope] is Queue) {
-			Iterator i = _hook[scope].iterator;
-			while(i.moveNext()) {
-				var r = (list != null)? i.current(list) : i.current();
-				if(r == false) {
-					ret = false;
-					break;
-				}
-			}
-		}
-		return ret;
-	}
+    Future<bool> execHooks (String scope, [dynamic object]) {
+        Completer completer = new Completer();
+        if(_hook[scope] is Queue) {
+            Iterator iterator = _hook[scope].iterator;
+            bool ret = true;
+            Future.doWhile(() {
+                if (!iterator.moveNext()) return false;
+                return new Future.sync(() => ret = (object != null)? iterator.current(object) : iterator.current());
+            }).then((_) => completer.complete(ret));
+        } else {
+            completer.complete(true);
+        }
+        return completer.future;
+    }
 
-	removeHook (String scope, [Function func]) {
-		if(func is Function) {
-			if(_hook[scope].contains(func))
-				_hook[scope].remove(func);
-		} else {
-			_hook[scope] = new Queue();
-		}
-	}
+    removeHook (String scope, [Function func]) {
+        if(func is Function) {
+            if(_hook[scope].contains(func))
+                _hook[scope].remove(func);
+        } else {
+            _hook[scope] = new Queue();
+        }
+    }
 }
 
 class Drag {

@@ -139,6 +139,104 @@ class FormElement<E extends InputElementBase> extends DataElement<E> {
 
 }
 
+abstract class InputTypeBase {
+    dynamic value;
+    set(v);
+    toString();
+    validateValue();
+    validateInput(e);
+}
+
+class InputTypeInt implements InputTypeBase {
+
+    List range;
+    int value;
+
+    InputTypeInt([this.range]);
+
+    set(dynamic v) {
+        value = (v is String)? int.parse(v, onError: (_) => null) : v;
+        if(range is List) {
+            value = math.max(value, range[0]);
+            value = math.min(value, range[1]);
+        }
+    }
+
+    toString() => value == null? '' : value.toString();
+
+    validateValue() => true;
+
+    validateInput(e) {
+        var v = new utils.EventValidator(e);
+        return new Future.value(v.isBasic() || v.isNum() || v.isPlus() || v.isMinus());
+    }
+}
+
+class InputTypeFloat implements InputTypeBase {
+
+    List range;
+    double value;
+
+    InputTypeFloat([this.range]);
+
+    set(dynamic v) {
+        value = (v is String)? double.parse(v, (_) => null) : v;
+        if(range is List) {
+            value = math.max(value, range[0]);
+            value = math.min(value, range[1]);
+        }
+    }
+
+    toString() => value == null? '' : value.toString();
+
+    validateValue() => true;
+
+    validateInput(e) {
+        var v = new utils.EventValidator(e);
+        return new Future.value(v.isBasic() || v.isNum() || v.isPlus() || v.isMinus() || v.isPoint());
+    }
+}
+
+class InputTypeDate implements InputTypeBase {
+
+    DateTime value;
+
+    InputTypeDate();
+
+    set(dynamic v) {
+        value = (v is String)? utils.Calendar.parse(v) : v;
+    }
+
+    toString() => value == null? '' : utils.Calendar.string(value);
+
+    validateValue() => true;
+
+    validateInput(e) {
+        var v = new utils.EventValidator(e);
+        return new Future.value(v.isBasic() || v.isNum() || v.isSlash());
+    }
+}
+
+class InputTypeDateTime implements InputTypeBase {
+
+    DateTime value;
+
+    InputTypeDateTime();
+
+    set(dynamic v) {
+        value = (v is String)? utils.Calendar.parseWithTime(v) : v;
+    }
+
+    toString() => value == null? '' : utils.Calendar.stringWithtTime(value);
+
+    validateValue() => true;
+
+    validateInput(e) {
+        var v = new utils.EventValidator(e);
+        return new Future.value(v.isBasic() || v.isNum() || v.isSlash() || v.isColon());
+    }
+}
+
 class InputField<E extends InputElement> extends FormElement<E> {
 
     static const String hook_validate_error = 'hook_validate_error';
@@ -147,77 +245,40 @@ class InputField<E extends InputElement> extends FormElement<E> {
     static const String FLOAT = 'float';
     static const String DATE = 'date';
     static const String DATETIME = 'datetime';
+    InputTypeBase input_type;
 
-    List _validate_value = new List();
-    List _validate_input = new List();
+    utils.Observer observer = new utils.Observer();
 
-    String type;
-    List range;
-
-    InputField (E element, [this.type, this.range]) : super (element) {
-        switch(this.type) {
+    InputField (E element, [type, range]) : super (element) {
+        addAction((e) => (getValue().toString() != dom.value)? setValue(dom.value, false) : null, 'blur');
+        switch(type) {
             case INT:
-                addValidation((e) {
-                    var v = new utils.EventValidator(e);
-                    return new Future.value(v.isBasic() || v.isNum() || v.isPlus() || v.isMinus());
-                }, onInput: true);
+                input_type = new InputTypeInt(range);
+                addValidation(input_type.validateInput, onInput: true);
                 break;
             case FLOAT:
-                addValidation((e) {
-                    var v = new utils.EventValidator(e);
-                    return new Future.value(v.isBasic() || v.isNum() || v.isPlus() || v.isMinus() || v.isPoint());
-                }, onInput: true);
+                input_type = new InputTypeFloat(range);
+                addValidation(input_type.validateInput, onInput: true);
                 break;
             case DATE:
-                addValidation((e) {
-                    var v = new utils.EventValidator(e);
-                    return new Future.value(v.isBasic() || v.isNum() || v.isSlash());
-                }, onInput: true);
+                input_type = new InputTypeDate();
+                addValidation(input_type.validateInput, onInput: true);
                 break;
             case DATETIME:
-                addValidation((e) {
-                    var v = new utils.EventValidator(e);
-                    return new Future.value(v.isBasic() || v.isNum() || v.isSlash() || v.isColon());
-                }, onInput: true);
+                input_type = new InputTypeDateTime();
+                addValidation(input_type.validateInput, onInput: true);
                 break;
         }
-        addAction((e) => (getValue().toString() != dom.value)? setValue(dom.value, false) : null, 'blur');
         addAction(_validateValue, 'blur');
         addAction(_validateInput, 'keydown');
         addAction((e) => e.keyCode == 13? setValue(dom.value, false) : null, 'keydown');
     }
 
     setValue(dynamic value, [bool silent = false]) {
-        if(type == INT) {
-            if(value is String)
-                value = (!value.isEmpty)? int.parse(value) : null;
-            if(range is List) {
-                if (value > range[1])
-                    value = range[1];
-                if (value < range[0])
-                    value = range[0];
-            }
-            dom.value = (value == null)? '' : value.toString();
-            super.setValue(value, silent);
-        } else if(type == FLOAT) {
-            if(value is String)
-                value = (!value.isEmpty)? double.parse(value) : null;
-            if(range is List) {
-                if (value > range[1])
-                    value = range[1];
-                if (value < range[0])
-                    value = range[0];
-            }
-            dom.value = (value == null)? '' : value.toString();
-            super.setValue(value, silent);
-        } else if(type == DATE || type == DATETIME) {
-            if(value is String)
-                value = type == DATETIME? utils.Calendar.parseWithTime(value) : utils.Calendar.parse(value);
-            super.setValue(value, silent);
-            if(value == null)
-                dom.value = '';
-            else
-                dom.value = type == DATETIME? utils.Calendar.stringWithtTime(value) : utils.Calendar.string(value);
+        if(input_type != null) {
+            input_type.set(value);
+            dom.value = input_type.toString();
+            super.setValue(input_type.value);
         } else {
             dom.value = (value == null)? '' : value.toString();
             super.setValue(value, silent);
@@ -226,35 +287,29 @@ class InputField<E extends InputElement> extends FormElement<E> {
     }
 
     Future _validateValue (e) {
-        if(getValue() == null || (type == null && getValue().isEmpty))
-            return new Future.value();
-        return Future.wait(_validate_value.map((f) => f(e))).then((List res) {
-            if(res.any((r) => r == false)) {
+        return observer.execHooks('value', e).then((valid) {
+            if(valid) {
+                execHooks(hook_validate_ok);
+            } else {
                 _valid = false;
                 execHooks(hook_validate_error);
-            } else {
-                _valid = true;
-                execHooks(hook_validate_ok);
             }
         });
     }
 
     Future _validateInput (e) {
-        return Future.wait(_validate_input.map((f) => f(e))).then((List res) {
-            if(res.any((r) => r == false)) {
+        return observer.execHooks('input', e).then((valid) {
+            if(valid) {
+                execHooks(hook_validate_ok);
+            } else {
                 e.preventDefault();
                 execHooks(hook_validate_error);
-            } else {
-                execHooks(hook_validate_ok);
             }
         });
     }
 
     addValidation(Function func, {onInput: false}) {
-        if(onInput)
-            _validate_input.add(func);
-        else
-            _validate_value.add(func);
+        observer.addHook(onInput? 'input' : 'value', func);
         return this;
     }
 

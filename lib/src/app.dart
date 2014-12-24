@@ -600,8 +600,10 @@ class Win {
 	}
 
 	minimize() {
-        if(observer.execHooks('minimize'))
-            win.hide();
+        observer.execHooks('minimize').then((result) {
+			if(result)
+				win.hide();
+		});
 		return this;
 	}
 
@@ -689,10 +691,12 @@ class Win {
 	}
 
 	close() {
-		if(observer.execHooks('close')) {
-			_resize_cont.remove();
-			win.remove();
-		}
+		observer.execHooks('close').then((result) {
+			if(result) {
+				_resize_cont.remove();
+				win.remove();
+			}
+		});
 	}
 
     addKeyAction(utils.KeyAction action) => _key_actions.add(action);

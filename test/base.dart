@@ -1,212 +1,20 @@
 part of test;
 
-serverCall(contr, obj, func, load) {
-    print('server call');
-    func({});
-}
-
-class Confirmer {
-    cl_app.Application ap;
-    String message, title;
-    cl.CJSElement mesDom, actDom, yesDom, noDom;
-    int width = 300;
-
-    Confirmer (this.ap);
-
-    _createHTML () {
-        yesDom = new cl_action.Button().setTitle('Yes').setStyle({'float':'right'});
-        noDom = new cl_action.Button().setTitle('No').setStyle({'float':'right'});
-        mesDom = new cl.CJSElement(new DivElement()).setClass('ui-message');
-        mesDom.dom.text = message;
-    }
-
-    setMessage (String mes) {
-        message = mes;
-        return this;
-    }
-
-    confirm (Function callBack) {
-        _createHTML();
-        var html = new cl.ContainerDataLight().append(mesDom);
-        var html2 = new cl.ContainerOption();
-        new cl_action.Menu(html2).add(noDom).add(yesDom);
-        cl_app.Win win = ap.winmanager.loadBoundWin({'width': width, 'height': 0, 'title': 'Warning', 'icon': 'warning'});
-        win.getContent()
-            ..addRow(html)
-            ..addRow(html2);
-        yesDom.addAction((e) {
-            win.close();
-            callBack();
-        }, 'click');
-        noDom.addAction((e) => win.close(), 'click');
-        win.render(400, null);
-    }
-
-}
-
-class WinAsk {
-    cl_app.Application ap;
-    Map o;
-    cl_app.Win w;
-    cl.Container data, option;
-    cl_action.Button ok;
-    Function on_error, on_render;
-
-    WinAsk (this.ap, this.o) {
-        createDom();
-    }
-    createDom () {
-        data = new cl.ContainerDataLight('padded');
-        option = new cl.ContainerOption();
-        ok = new cl_action.Button()
-        .setTitle('Ok')
-        .setIcon('save')
-        .setStyle({'float':'right'});
-        new cl_action.Menu(option).add(ok);
-    }
-
-    appendHtml (html) {
-        data.append(html);
-        return this;
-    }
-
-    onClick ([Function func]) {
-        if(func == null)
-            func = () => true;
-        var f = (e) {
-            if (func())
-                w.close();
-            else if (on_error is Function)
-                on_error();
-        };
-        this.ok.addAction(f, 'click');
-        return this;
-    }
-
-    onError (Function func) {
-        on_error = func;
-        return this;
-    }
-
-    onRender(Function func) {
-        on_render = func;
-        return this;
-    }
-
-    render () {
-        w = ap.winmanager.loadBoundWin(o);
-        w.getContent()
-            ..addRow(data)
-            ..addRow(option);
-        w.render(o['width'], o['height']);
-        if(on_render is Function)
-            on_render();
-    }
-}
-
-class Hint extends cl.CJSElement {
-    Function callBack;
-    int time = 300;
-    var timer_show, timer_close;
-    cl.CJSElement hintDom;
-
-    Hint () : super(new AnchorElement()) {
-        setHtml('?');
-        addAction(startShow, 'mouseover');
-        addAction(stopShow, 'mouseout');
-        addAction(startClose, 'mouseout');
-
-        hintDom = new cl.CJSElement(new DivElement())
-        .setClass('ui-hint')
-        .addAction(stopClose, 'mouseover')
-        .addAction(startClose, 'mouseout');
-
-    }
-
-    setCallBack (Function callBack) {
-        this.callBack = callBack;
-        return this;
-    }
-
-    setData (data) {
-        hintDom.setHtml(data);
-        return this;
-    }
-
-    startShow (e) {
-        callBack();
-        timer_show = new Timer(new Duration(milliseconds:time), () => showHint(e));
-    }
-
-    stopShow  (e) {
-        timer_show.cancel();
-    }
-
-    startClose (e) {
-        timer_close = new Timer(new Duration(milliseconds:time), () => closeHint());
-    }
-
-    stopClose (e) {
-        timer_close.cancel();
-    }
-
-    showHint (MouseEvent e) {
-        var top = e.page.y - 10;
-        var left = e.page.x + 20;
-        if ((left + 220) > new cl.CJSElement(document.body).getWidth())
-            left = e.page.x - 220;
-        hintDom
-        .setStyle({'top': '${top}px', 'left': '${left}px'})
-        .appendTo(document.body);
-    }
-
-    closeHint () {
-        hintDom.remove();
-    }
-}
-
-class HintManager {
-    dynamic route;
-    cl.CJSElement hint;
-    String position;
-    Map data = new Map();
-
-    HintManager ([String this.position]);
-
-    setRoute (route) {
-        this.route = route;
-        return this;
-    }
-
-    set (title, key) {
-        data[key] = new Map();
-        data[key]['hint'] = new Hint();
-        data[key]['data'] = null;
-        data[key]['hint'].setCallBack(() => initData(key));
-        var c = new cl.CJSElement(new DivElement()).setClass('ui-hint-spot');
-        var t = new cl.CJSElement(new SpanElement())
-        .setHtml(title)
-        .appendTo(c);
-        data[key]['hint'].appendTo(c);
-        if(position == 'right' || position == 'left')
-            c.setStyle({'float':position});
-        return c;
-    }
-
-    initData (key) {
-        if(data[key]['data'] != null)
-            data[key]['hint'].setData(data[key]['data']);
-        else {
-            serverCall(route.reverse([key]), {}, (response) {
-                if(response != null)
-                    data[key]['data'] = response;
-                data[key]['hint'].setData(data[key]['data']);
-            }, null);
-        }
-    }
+class INTL {
+	static Delete_warning() => 'message';
+	static Save_and_close() => 'message';
+	static Save() => 'message';
+	static Refresh() => 'message';
+	static Delete() => 'delete';
+	static Print() => 'print';
+	static Clean() => 'Clean';
+	static Language() => 'Language';
+	static Filter() => 'Filter';
 }
 
 abstract class ItemBase {
+    cl_app.Application ap;
+
     static const String save_before = 'save_before';
     static const String save_after = 'save_after';
     static const String get_before = 'get_before';
@@ -222,7 +30,7 @@ abstract class ItemBase {
     dynamic data_response;
     cl_util.Observer observer;
 
-    ItemBase ([int id = 0]) {
+    ItemBase (this.ap, [int id = 0]) {
         _id = id;
         observer = new cl_util.Observer();
     }
@@ -241,41 +49,44 @@ abstract class ItemBase {
 
     get ([loading]) {
         if(_id != null && _id != 0) {
-            if(observer.execHooks(get_before)) {
+            observer.execHooks(get_before).then((result) {
+                if(!result)
+                    return;
                 data_send['id'] = _id;
-                serverCall(contr_get, data_send, (data) {
+				ap.serverCall(contr_get, data_send, loading)
+                .then((data) {
                     if(_setData(data))
                         observer.execHooks(get_after);
-                }, loading);
-            }
+                }).catchError(ap.warning);
+            });
         }
-        else
-            _setData();
     }
     del ([loading]) {
         if(_id != null && _id != 0) {
-            if(observer.execHooks(del_before)) {
+            observer.execHooks(del_before).then((result) {
+                if(!result)
+                    return;
                 data_send['id'] = _id;
-                serverCall(contr_del, data_send, (data) {
+				ap.serverCall(contr_del, data_send, loading)
+                .then((data) {
                     if(_setData(data))
                         observer.execHooks(del_after);
-                }, loading);
-            }
+                }).catchError(ap.warning);
+            });
         }
-        else
-            _setData();
     }
 
     save ([loading]) {
-        if(observer.execHooks(save_before)) {
+        observer.execHooks(save_before).then((result) {
+            if(!result)
+                return;
             data_send['id'] = _id;
-            serverCall(contr_save, data_send, (data) {
+			ap.serverCall(contr_save, data_send, loading)
+            .then((data) {
                 if(_setData(data))
                     observer.execHooks(save_after);
-            }, loading);
-        }
-        else
-            _setData();
+            }).catchError(ap.warning);
+        });
     }
 
     addHook (scope, func, [first]) {
@@ -290,7 +101,6 @@ abstract class ItemBase {
 }
 
 abstract class ItemBuilder extends ItemBase implements cl_app.Item {
-    cl_app.Application ap;
     Map w;
     cl_app.WinApp wapi;
     String contr = '';
@@ -305,7 +115,7 @@ abstract class ItemBuilder extends ItemBase implements cl_app.Item {
     bool __answer = false;
     var dom_inner, dom_bottom;
 
-    ItemBuilder(this.ap, [id = 0]) : super (id) {
+    ItemBuilder(ap, [id = 0]) : super (ap, id) {
         prepareControllers();
         winApi();
         initUI();
@@ -320,16 +130,17 @@ abstract class ItemBuilder extends ItemBase implements cl_app.Item {
             setDefaults();
     }
 
-    ItemBuilder.bound(this.ap, [id = 0]) : super (id);
+    ItemBuilder.bound(ap, [id = 0]) : super (ap, id);
 
     setUI();
 
     setDefaults();
 
     prepareControllers() {
-        //contr_get = contr_get.reverse([]);
-        //contr_save = contr_save.reverse([]);
-        //contr_del = contr_del.reverse([]);
+        contr_get = contr_get.reverse([]);
+        contr_save = contr_save.reverse([]);
+        if(contr_del != null)
+            contr_del = contr_del.reverse([]);
     }
 
     setData () {
@@ -382,9 +193,10 @@ abstract class ItemBuilder extends ItemBase implements cl_app.Item {
             __answer = false;
             return true;
         }
-        var confirm = new Confirmer(ap);
-        confirm.setMessage(message != null? message : 'Warning delete');
-        confirm.confirm(() {__answer = true; del();});
+        new cl_app.Questioner(ap)
+            ..message = (message != null)? message : INTL.Delete_warning()
+            ..onYes = () {__answer = true; del(); return true;}
+            ..render();
         return false;
     }
 
@@ -411,8 +223,8 @@ abstract class ItemBuilder extends ItemBase implements cl_app.Item {
     createTab  (id, [name, obj]) {
         obj = (obj != null)? obj : new cl_form.GridForm(form);
         obj.addHook(cl_form.Data.hook_value, () => setBottomState(true))
-        .addHook(cl_form.Data.hook_value, () => tab.tabChanged())
-        .addHook(cl_form.Data.hook_require, () {tab.activeTab(id); return false; });
+            .addHook(cl_form.Data.hook_value, () => tab.tabChanged())
+            .addHook(cl_form.Data.hook_require, () {tab.activeTab(id); return false; });
         tab.addTab(id, name, obj);
         tab.fillParent();
         //wapi.initLayout();
@@ -439,11 +251,12 @@ abstract class ItemBuilder extends ItemBase implements cl_app.Item {
 
     setActionsBottom () {
         actions_bottom = [
-            new cl_action.Button().setName('save_true').setState(false).setTitle('Запиши и затвори').setIcon('save').addAction((e) => saveIt(true)),
-            new cl_action.Button().setName('save').setState(false).setTitle('Запиши').setIcon('save').addAction((e) => saveIt(false)),
-            new cl_action.Button().setName('clear').setState(false).setTitle('Презареди').setIcon('change').addAction((e) => get('')),
-            new cl_action.Button().setName('del').setState(false).setTitle('Изтрий').setStyle({'float':'right'}).setIcon('delete').addAction((e) => del(''))
+            new cl_action.Button().setName('save_true').setState(false).setTitle(INTL.Save_and_close()).setIcon('save').addAction((e) => saveIt(true)),
+            new cl_action.Button().setName('save').setState(false).setTitle(INTL.Save()).setIcon('save').addAction((e) => saveIt(false)),
+            new cl_action.Button().setName('clear').setState(false).setTitle(INTL.Refresh()).setIcon('change').addAction((e) => get(''))
         ];
+        if(contr_del != null)
+            actions_bottom.add(new cl_action.Button().setName('del').setState(false).setTitle(INTL.Delete()).setStyle({'float':'right'}).setIcon('delete').addAction((e) => del('')));
     }
 
     setBottomState (bool way) {
@@ -458,12 +271,12 @@ abstract class ItemBuilder extends ItemBase implements cl_app.Item {
     }
 
     close () {
-        if(__close_set) {
-            wapi.close();
-            return true;
-        }
+        if(__close_set)
+            closeWin();
         return true;
     }
+
+    closeWin () => wapi.close();
 
     readData () {
         if(data_response != null && data_response['id'] != null)
@@ -481,6 +294,8 @@ abstract class Listing implements cl_app.Item {
     static const String del_before = 'del_before';
     static const String del_after = 'del_after';
     static const String print_before = 'print_before';
+
+    dynamic lang_select;
 
     dynamic contr_get, contr_del, contr_print, contr_pdf;
 
@@ -506,7 +321,8 @@ abstract class Listing implements cl_app.Item {
 
     Listing(this.ap, [bool noautoload = false]) {
         contr_get = contr_get.reverse([]);
-        contr_del = contr_del.reverse([]);
+        if(contr_del != null)
+            contr_del = contr_del.reverse([]);
         wapi = new cl_app.WinApp(ap);
         wapi.load(w, this);
         //wapi.addCloseHook(() {this.getData = function(){}; return true;}.bind(this));
@@ -517,10 +333,10 @@ abstract class Listing implements cl_app.Item {
         setPaginator();
         initHooks();
         initAction();
-        wapi.render();
         initTable();
         addHook(del_before, () => ask());
         addHook(del_after, getData);
+        wapi.render();
         if(!noautoload)
             getData();
     }
@@ -529,8 +345,8 @@ abstract class Listing implements cl_app.Item {
 
     initHTML () {
         html = {'top':new cl.ContainerOption('ui-option-top'),
-            'inner':new cl.ContainerData(),
-            'bottom':new cl.ContainerOption('ui-option-bottom')};
+                'inner':new cl.ContainerData(),
+                'bottom':new cl.ContainerOption('ui-option-bottom')};
         html['body_right'] = wapi.win.getContent()
             ..addRow(html['top'])
             ..addRow(html['inner'])
@@ -540,9 +356,9 @@ abstract class Listing implements cl_app.Item {
     initMenu () {
         menu = new cl_action.Menu(html['top']);
         if(mode == 'list') {
-            menu.add(new cl_action.Button().setState(false).setName('del').setTitle('Изтрий').setIcon('delete').addAction(delData));
+            menu.add(new cl_action.Button().setState(false).setName('del').setTitle(INTL.Delete()).setIcon('delete').addAction(delData));
             if(contr_print != null) {
-                var p = new cl_action.ButtonOption().setState(false).setName('print').setTitle('Печат').setIcon('printer').addAction(printData);
+                var p = new cl_action.ButtonOption().setState(false).setName('print').setTitle(INTL.Print()).setIcon('printer').addAction(printData);
                 if(contr_pdf != null)
                     p.addSub(new cl_action.Button().setTitle('PDF').setIcon('page-white-acrobat').addAction(pdfData));
                 menu.add(p);
@@ -567,7 +383,7 @@ abstract class Listing implements cl_app.Item {
     }
 
     initTable () {
-        grid = new cl_form.GridList();
+        grid = new cl_form.GridListFixed();
         var h = new List();
         if(mode == MODE_LIST) {
             m_check = new cl_form.Check().setValue(1).setChecked(false).addAction(checkAll).setStyle({'margin':'5px'});
@@ -598,29 +414,29 @@ abstract class Listing implements cl_app.Item {
             }
             h.add(gc);
         });
-        if(mode == MODE_LIST)
-            h.add(new cl_form.GridColumn('edit')..width = '1%');
+        h.add(new cl_form.GridColumn('edit')..width = '1%');
 
-        var filter = new cl_action.ButtonOption().setName('filter').setState(false).setTitle('Филтър').setIcon('filter').addAction(filterGet),
-        clear = new cl_action.Button().setName('clear').setTitle('Изчисти').setIcon('clear').addAction(filterClear),
-        refresh = new cl_action.Button().setName('refresh').setTitle('Презареди').setIcon('change').addAction(filterGet);
+        var filter = new cl_action.ButtonOption().setName('filter').setState(false).setTitle(INTL.Filter()).setIcon('filter').addAction(filterGet),
+            clear = new cl_action.Button().setName('clear').setTitle(INTL.Clean()).setIcon('clear').addAction(filterClear),
+            refresh = new cl_action.Button().setName('refresh').setTitle(INTL.Refresh()).setIcon('change').addAction(filterGet);
         filter.addSub(clear);
         menu.add(filter);
         menu.add(refresh);
 
         grid.initGridHeader(h)
-        .addHook(cl_form.GridList.hook_row, customRow)
-        .addHook(cl_form.GridList.hook_row, initRow);
+            .addHook(cl_form.GridList.hook_row, customRow)
+            .addHook(cl_form.GridList.hook_row, initRow);
 
         var cont = new cl.CJSElement(new DivElement())
-        .setStyle({'overflow':'auto', 'height': '100%'})
-        .append(grid);
+            .setStyle({'overflow':'auto', 'height': '100%'})
+            .append(grid);
 
         var order = initOrder();
         if(order != null && order.length == 2)
             grid.setOrder(order[0], order[1]);
 
         grid.addHook(cl_form.GridList.hook_order, getData);
+        wapi.addLayoutHook(() => grid.observer.execHooks(cl_form.GridList.hook_layout));
 
         html['inner'].setStyle({'overflow':'hidden'}).append(cont);
     }
@@ -672,25 +488,27 @@ abstract class Listing implements cl_app.Item {
             __answer = false;
             return true;
         }
-        var confirm = new Confirmer(ap);
-        confirm.setMessage((message != null)? message : 'Изтрий warning');
-        confirm.confirm(() {__answer = true; delData();});
+        new cl_app.Questioner(ap)
+            ..message = (message != null)? message : INTL.Delete_warning()
+            ..onYes = () {__answer = true; delData(); return true;}
+            ..render();
         return false;
     }
 
     initRow (arr) {
         var chk = new cl_form.Check().setName(arr[1][key]).setStyle({'margin':'5px'});
-        chk.addAction((e) => check(chk, e),'mousedown');
+        chk.addAction((e) => check(chk, e), 'mousedown');
+        chk.addAction((e) => e.stopPropagation(), 'click');
         chk.addAction((e) => e.preventDefault(), 'click');
         _chk_to_row[chk.hashCode] = arr[0];
         if (mode == MODE_CHOOSE)
-            arr[0].onMouseDown.listen((e) => onClick(grid.rowToMap(arr[0])));
+            arr[0].onClick.listen((e) => onClick(grid.rowToMap(arr[0])));
         else if(mode == MODE_LIST)
-            arr[0].onMouseDown.listen((e) => check(chk, e));
+            arr[0].onClick.listen((e) => arr[1]['edit'].object.dom.click());
         chks.add(chk);
         arr[1]['check'] = chk;
         if(arr[1]['edit'] != null)
-            arr[1]['edit'].addAction((e) => e.stopPropagation(), 'mousedown');
+            arr[1]['edit'].addAction((e) => e.stopPropagation(), 'click');
         return arr;
     }
 
@@ -699,27 +517,37 @@ abstract class Listing implements cl_app.Item {
     }
 
     actionSend (type, controller) {
-        if(observer.execHooks(type + '_before')) {
-            serverCall(controller, params, (data) {
-                if(_setData(data))
-                    observer.execHooks(type + '_after');
-            }, html['inner']);
-        }
-        else
-            _setData();
+        observer.execHooks(type + '_before').then((result) {
+            if(result) {
+                ap.serverCall(controller, params, html['inner'])
+                .then((data) {
+                    if(_setData(data))
+                        observer.execHooks(type + '_after');
+                }).catchError(ap.warning);
+            } else {
+                _setData();
+            }
+        });
     }
 
     delData ([e]) => actionSend('del', contr_del);
 
-    printData ([e]) {
-        if(observer.execHooks(print_before))
-            window.open('${contr_print.reverse([params['ids'].join(',')]).substring(1)}', '');
+    printer(contr) {
+        observer.execHooks(print_before).then((result) {
+        	if(!result)
+        		return;
+            var c = new cl_app.Confirmer(ap)
+                ..title = INTL.Language()
+                ..type = 'language'
+                ..onOk = () => window.location.href = contr.reverse([lang_select.getValue(), params['ids'].join(',')]).substring(1);
+            c.container.setStyle({'padding':'10px'}).append(lang_select);
+            c.render(width:200);
+        });
     }
 
-    pdfData ([e]) {
-        if(observer.execHooks(print_before))
-            window.location.href = '${contr_pdf.reverse([params['ids'].join(',')]).substring(1)}';
-    }
+    printData ([e]) => printer(contr_print);
+
+    pdfData ([e]) => printer(contr_pdf);
 
     getData () => actionSend('get', contr_get);
 
@@ -730,9 +558,11 @@ abstract class Listing implements cl_app.Item {
 
     setData () {
         paginator.setValue(data_response['total'], true);
+        var scroll = grid.scrollTop;
         grid.empty();
         if(data_response['result'] != null)
             grid.renderIt(data_response['result']);
+        grid.scrollTop = scroll;
         return true;
     }
 
@@ -754,7 +584,7 @@ abstract class Listing implements cl_app.Item {
         return true;
     }
 
-    onClick(arr){}
+	onClick(arr){}
 
     check (el,e) {
         if(el.isChecked())
@@ -890,7 +720,7 @@ abstract class Report implements cl_app.Item {
 
     initMenuBottom () {
         menu_bottom = new cl_action.Menu(html['bottom']);
-        var p = new cl_action.ButtonOption().setState(false).setName('print').setTitle('Print').setIcon('printer').addAction(printData);
+        var p = new cl_action.ButtonOption().setState(false).setName('print').setTitle(INTL.Print()).setIcon('printer').addAction(printData);
         p.addSub(new cl_action.Button().setTitle('PDF').setIcon('page-white-acrobat').addAction(pdfData));
         p.addSub(new cl_action.Button().setTitle('CSV').setIcon('page-white-excel').addAction(csvData));
         menu_bottom.add(p);
@@ -909,7 +739,7 @@ abstract class Report implements cl_app.Item {
     }
 
     initTable () {
-        grid = new cl_form.GridList();
+        grid = new cl_form.GridListFixed();
         var h = initHeader();
         h.forEach((el) {
             if(el['sortable'])
@@ -917,7 +747,7 @@ abstract class Report implements cl_app.Item {
             if(el['filter'])
                 form.add(el['filter']);
         });
-        grid.initHeader(h).addRowHookAfter(customRow);
+        grid.initHeader(h).addRowHook(customRow).addRowHookAfter(customRowAfter);
         var cont = new cl.CJSElement(new DivElement())
             ..setStyle({'height':'100%', 'overflow':'auto'})
             ..append(grid);
@@ -927,6 +757,7 @@ abstract class Report implements cl_app.Item {
             grid.setOrder(order[0], order[1]);
 
         grid.addHook(cl_form.GridList.hook_order, getData);
+        wapi.addLayoutHook(() => grid.observer.execHooks(cl_form.GridList.hook_layout));
 
         html['inner'].setStyle({'overflow':'hidden'}).append(cont);
         grid.hide();
@@ -936,9 +767,9 @@ abstract class Report implements cl_app.Item {
     initFooter ();
     setFooter (Map data);
 
-    customRow (arr) {
-        return arr;
-    }
+    customRow (arr) => arr;
+
+    customRowAfter (arr) => arr;
 
     filterGet () => getData();
 
@@ -960,16 +791,18 @@ abstract class Report implements cl_app.Item {
     }
 
     getData ([e]) {
-        if(observer.execHooks(get_before)) {
-            serverCall(contr_get, params, (data) {
-                if(_setData(data))
-                    observer.execHooks(get_after);
-            }, html['inner']);
-        }
-        else
-            _setData();
+        observer.execHooks(get_before).then((result) {
+            if(result) {
+                ap.serverCall(contr_get, params, html['inner'])
+                .then((data) {
+                    if(_setData(data))
+                        observer.execHooks(get_after);
+                }).catchError(ap.warning);
+            } else {
+                _setData();
+            }
+        });
     }
-
 
     _setData ([data = null]) {
         data_response = data;
@@ -996,11 +829,11 @@ abstract class Report implements cl_app.Item {
 }
 
 class SelectList extends cl_form.Select {
-
-    static const String hook_render = 'hook_render';
-    static const String hook_call = 'hook_call';
-    static const String hook_value = 'hook_value';
-    static const String hook_before = 'hook_before';
+    cl_app.Application ap;
+	static const String hook_render = 'hook_render';
+	static const String hook_call = 'hook_call';
+	static const String hook_value = 'hook_value';
+	static const String hook_before = 'hook_before';
 
     var contr;
     Map param = new Map();
@@ -1009,7 +842,7 @@ class SelectList extends cl_form.Select {
     cl_util.Observer observer;
     bool isLoading = false;
 
-    SelectList(this.contr, this.first, [callback, callbackb]) : super() {
+	SelectList(this.ap, this.contr, this.first, [callback, callbackb, type]) : super(type) {
         observer = new cl_util.Observer();
         observer.addHook(hook_render, renderList);
         observer.addHook(hook_call, callback is Function? callback : () => true);
@@ -1021,19 +854,21 @@ class SelectList extends cl_form.Select {
         return this;
     }
 
-    load () {
+    load ([contr]) {
         if(isLoading)
             return this;
-        if(observer.execHooks(hook_before)) {
+        observer.execHooks(hook_before).then((result) {
+            if(!result)
+                return;
             isLoading = true;
-            serverCall(contr, param, (data) {
+			ap.serverCall(contr == null? this.contr : contr, param, this).then((data) {
                 list = data;
                 observer.execHooks(hook_render);
                 observer.execHooks(hook_value);
                 observer.execHooks(hook_call);
                 isLoading = false;
-            }, null);
-        }
+            }).catchError(ap.warning);
+        });
         return this;
     }
 
@@ -1041,18 +876,19 @@ class SelectList extends cl_form.Select {
         cleanOptions();
         if(first is List && first.length == 2)
             addOption(first[0], first[1]);
-        list.forEach((v) => addOption(v['k'], v['v']));
+		list.forEach((v) => addOption(v['k'], v['v']));
         return true;
     }
 
     setValue (value, [bool silent = false]) {
         if(value != null && getOptionsCount() == 0) {
-            observer.removeHook(hook_value);
+			observer.removeHook(hook_value);
             observer.addHook(hook_value, () => setValue(value, silent));
             load();
         } else {
-            super.setValue(value, silent);
+			super.setValue(value, silent);
         }
+        return this;
     }
 }
 
@@ -1065,7 +901,6 @@ abstract class ItemOperation extends ItemBase implements cl_app.Item {
     static const String del_before = 'del_before';
     static const String del_after = 'del_after';
 
-    cl_app.Application ap;
     Map w;
     cl_app.WinApp wapi;
     Map html;
@@ -1077,10 +912,10 @@ abstract class ItemOperation extends ItemBase implements cl_app.Item {
     int top_height = 150;
     bool __close_set = false;
 
-    ItemOperation(this.ap, [id = 0]) : super (id) {
-        contr_get = contr_get.reverse([]);
-        contr_save = contr_save.reverse([]);
-        contr_del = contr_del.reverse([]);
+    ItemOperation(ap, [id = 0]) : super (ap, id) {
+		contr_get = contr_get.reverse([]);
+	    contr_save = contr_save.reverse([]);
+	    contr_del = contr_del.reverse([]);
         wapi = new cl_app.WinApp(ap);
         wapi.load(w, this);
         initHTML();
@@ -1101,8 +936,8 @@ abstract class ItemOperation extends ItemBase implements cl_app.Item {
 
     initHTML () {
         html = {'right_options_top': new cl.ContainerOption('ui-option-top'),
-            'right_inner': new cl.ContainerData(),
-            'right_options_bottom': new cl.ContainerOption('ui-option-bottom')};
+                'right_inner': new cl.ContainerData(),
+                'right_options_bottom': new cl.ContainerOption('ui-option-bottom')};
         html['body_right'] = wapi.win.getContent()
             ..addRow(html['right_options_top'])
             ..addRow(html['right_inner'])
@@ -1117,28 +952,33 @@ abstract class ItemOperation extends ItemBase implements cl_app.Item {
     topCreate () {
         top_form = new cl_form.Form();
 
+        getHook(tab, id) => () {tab.activeTab(id); return true; };
+
         var tab = new cl_gui.Tab().appendTo(html['right_options_top'].setHeight(top_height));
         html['right_options_top'].setStyle({'padding':'0px'});
-        int i = 0;
+		int i = 0;
         top_form_elements.forEach((page) {
             var div = new cl.CJSElement(new DivElement()).setClass('custom-order-tab');
             tab.addTab(i + 1, page['title'], div);
 
-            var cols = [];
+            int size = (100/page['data'].length).floor();
+            int j = 0;
             page['data'].forEach((col) {
                 var t = new cl_form.GridForm(top_form);
+                t.addHook(cl_form.Data.hook_require, getHook(tab, i + 1));
                 col.forEach((el) {
-                    if(el.length == 2)
-                        t.addRow([el[0], el[1]]);
+                    if(el.length > 1)
+                        t.addRow(el);
                     else
                         top_form.add(el[0]);
                 });
-                cols.add(t);
+                size = (page['size'] is List)? page['size'][j] : size;
+                t.setStyle({'width':size.toString() + '%', 'float':'left'}).appendTo(div);
+                j++;
             });
-            cols.forEach((col) => col.setStyle({'width':(100/cols.length).floor().toString() + '%', 'float':'left'}).appendTo(div));
-            tab.activeTab(i + 1);
-            i++;
+			i++;
         });
+        tab.activeTab(1);
         wapi.win.getContent().addHookLayout(tab);
     }
 
@@ -1178,6 +1018,7 @@ abstract class ItemOperation extends ItemBase implements cl_app.Item {
         grid.addHook(hook_value, onChange);
         top_form.addHook(hook_value, onChange);
         addHook(get_after, setData);
+        addHook(get_after, () {onChange(false); return true;});
         addHook(get_after, () {wapi.setTitle(setWinTitle(getId())); return true;});
         addHook(save_before, sendData);
         addHook(save_before, onChangeAll);
@@ -1186,15 +1027,27 @@ abstract class ItemOperation extends ItemBase implements cl_app.Item {
         addHook(save_after, get);
     }
 
-    sendData () {
-        data_send = {
-            'id': getId(),
-            'data': {
-                'operation_top': top_form.toOBJ(),
-                'operation_rows': grid.getValue()
-            }
-        };
+    checkData () {
+        var req = top_form.getRequired();
+        if (req.length > 0) {
+            req.first.focus();
+            return false;
+        }
         return true;
+    }
+
+    sendData () {
+        if(checkData()) {
+            data_send = {
+                'id': getId(),
+                'data': {
+                    'operation_top': top_form.toOBJ(),
+                    'operation_rows': grid.getValue()
+                }
+            };
+            return true;
+        }
+        return false;
     }
 
     setData () {
@@ -1205,7 +1058,6 @@ abstract class ItemOperation extends ItemBase implements cl_app.Item {
             grid.setValue(data_response['operation_rows']);
             grid.show();
         }
-        onChange(false);
         return true;
     }
 
@@ -1236,6 +1088,7 @@ abstract class ItemOperation extends ItemBase implements cl_app.Item {
 }
 
 abstract class DashBoard implements cl_app.Item {
+    cl_app.Application ap;
     cl_app.WinApp wapi;
     Map html;
     cl_form.Form form;
@@ -1243,7 +1096,7 @@ abstract class DashBoard implements cl_app.Item {
     Map w;
     dynamic contr;
 
-    DashBoard(ap) {
+    DashBoard(this.ap) {
         contr = contr.reverse([]);
         wapi = new cl_app.WinApp(ap);
         wapi.load(w, this);
@@ -1256,33 +1109,30 @@ abstract class DashBoard implements cl_app.Item {
             ..addRow(html['inner']);
     }
 
-    getStats() => serverCall(contr, form.toOBJ(), handleStatisticsResult, html['inner']);
+    getStats() => ap.serverCall(contr, form.toOBJ(), html['inner']).then(handleStatisticsResult).catchError(ap.warning);
 
     handleStatisticsResult(data);
 
 }
 
 class FileAttach extends cl_form.DataElement {
-    List images, conts;
+    List images;
+    Map conts;
     cl_action.FileUploader uploader;
     cl.CJSElement container;
     String path_upload, path_tmp, path_media;
 
     FileAttach(this.container, uploader, this.path_upload, this.path_tmp, this.path_media) : super(uploader) {
-        this.uploader = uploader;
+		this.uploader = uploader;
         uploader.setUpload(path_upload);
-        uploader.observer.addHook(cl_action.FileUploader.hook_loading, (files) {
-            conts = [];
-            files.forEach((_) => conts.add(contentDraw()));
+        uploader.observer.addHook(cl_action.FileUploader.hook_loading, (file) {
+            conts[file] = contentDraw();
             return true;
         });
-        uploader.observer.addHook(cl_action.FileUploader.hook_loaded, (files) {
-            int i = 0;
-            files.forEach((image) {
-                var img = formValue(image);
-                images.add(img);
-                contentLoad(img, conts[i], images.length - 1, path_tmp);
-            });
+        uploader.observer.addHook(cl_action.FileUploader.hook_loaded, (file) {
+            var img = formValue(file);
+            images.add(img);
+            contentLoad(img, conts[file], images.length - 1, path_tmp);
             execHooks(cl_form.Data.hook_value);
             return true;
         });
@@ -1293,11 +1143,11 @@ class FileAttach extends cl_form.DataElement {
         var link = new cl.CJSElement(new AnchorElement()).setStyle({'line-height':'24px','display':'block'}).appendTo(cont);
         link.dom.target = '_blank';
         var img = new cl.CJSElement(new ImageElement()).setStyle({'vertical-align':'middle'}).appendTo(link);
-        img.dom.src = 'images/ui/loader.gif';
+        img.dom.src = 'packages/cjs/images/ui/loader.gif';
         var del = new cl.CJSElement(new AnchorElement()).setStyle({'position':'absolute','top':'0px','right':'0px','display':'block'})
-        .setClass('i-tag-remove icon')
-        .hide()
-        .appendTo(cont);
+            .setClass('i-tag-remove icon')
+            .hide()
+            .appendTo(cont);
         cont.addAction((e) => del.show(),'mouseover').addAction((e) => del.hide(),'mouseout');
         container.append(cont);
         return {
@@ -1309,9 +1159,9 @@ class FileAttach extends cl_form.DataElement {
     }
 
     disable () {
-        conts.forEach((cont) {
-            cont.cont.removeAction();
-            cont.del.remove();
+         conts.forEach((k, cont) {
+            cont['cont'].removeAction();
+            cont['del'].remove();
         });
         remove();
     }
@@ -1337,12 +1187,12 @@ class FileAttach extends cl_form.DataElement {
         cont['link'].dom.title = img['source'];
         cont['link'].dom.text = img['source'];
         cont['del'].addAction((e) => onDelete(img, cont, cur));
-        conts.add(cont);
+        conts[img['source']] = cont;
     }
 
     setValue (dynamic value, [bool silent = false]) {
-        images = [];
-        conts = [];
+        images = new List();
+        conts = new Map();
         container.removeChilds();
         if(value is List) {
             value.forEach((img) {
@@ -1383,9 +1233,9 @@ class ComplexField extends cl.CJSElement {
     setTitle (dynamic title) {
         this.title = title;
         domTitle
-        .removeChilds()
-        .append((title is String)? new Text(title) : title)
-        .show();
+            .removeChilds()
+            .append((title is String)? new Text(title) : title)
+            .show();
         return this;
     }
 
@@ -1393,22 +1243,3 @@ class ComplexField extends cl.CJSElement {
         return this.title;
     }
 }
-
-/*class DocumentDecoder {
-    String document;
-
-    DocumentDecoder(this.document);
-
-    execute () {
-        var sub = document.substring(0,2);
-        var id = int.parse(document.substring(2));
-        switch(sub) {
-            case 'IO': ap.load('Order'+id, () =>  new Order(id)); break;
-            case 'PO': ap.load('Purchase'+id, () => new Purchase(id)); break;
-            case 'RO': ap.load('Revision'+id, () => new Revision(id)); break;
-            case 'SO': ap.load('Sale'+id, () => new Sale(id)); break;
-            case 'TO': ap.load('StoreTransfer'+id, () => new StoreTransfer(id)); break;
-        }
-    }
-
-}*/

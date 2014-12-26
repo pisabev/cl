@@ -49,44 +49,38 @@ abstract class ItemBase {
 
     get ([loading]) {
         if(_id != null && _id != 0) {
-            observer.execHooks(get_before).then((result) {
-                if(!result)
-                    return;
+            if(observer.execHooks(get_before)) {
                 data_send['id'] = _id;
-				ap.serverCall(contr_get, data_send, loading)
+                ap.serverCall(contr_get, data_send, loading)
                 .then((data) {
                     if(_setData(data))
                         observer.execHooks(get_after);
                 }).catchError(ap.warning);
-            });
+            }
         }
     }
     del ([loading]) {
         if(_id != null && _id != 0) {
-            observer.execHooks(del_before).then((result) {
-                if(!result)
-                    return;
+            if(observer.execHooks(del_before)) {
                 data_send['id'] = _id;
-				ap.serverCall(contr_del, data_send, loading)
+                ap.serverCall(contr_del, data_send, loading)
                 .then((data) {
                     if(_setData(data))
                         observer.execHooks(del_after);
                 }).catchError(ap.warning);
-            });
+            }
         }
     }
 
     save ([loading]) {
-        observer.execHooks(save_before).then((result) {
-            if(!result)
-                return;
+        if(observer.execHooks(save_before)) {
             data_send['id'] = _id;
-			ap.serverCall(contr_save, data_send, loading)
+            ap.serverCall(contr_save, data_send, loading)
             .then((data) {
                 if(_setData(data))
                     observer.execHooks(save_after);
             }).catchError(ap.warning);
-        });
+        }
     }
 
     addHook (scope, func, [first]) {
@@ -223,8 +217,8 @@ abstract class ItemBuilder extends ItemBase implements cl_app.Item {
     createTab  (id, [name, obj]) {
         obj = (obj != null)? obj : new cl_form.GridForm(form);
         obj.addHook(cl_form.Data.hook_value, () => setBottomState(true))
-            .addHook(cl_form.Data.hook_value, () => tab.tabChanged())
-            .addHook(cl_form.Data.hook_require, () {tab.activeTab(id); return false; });
+        .addHook(cl_form.Data.hook_value, () => tab.tabChanged())
+        .addHook(cl_form.Data.hook_require, () {tab.activeTab(id); return false; });
         tab.addTab(id, name, obj);
         tab.fillParent();
         //wapi.initLayout();
@@ -345,8 +339,8 @@ abstract class Listing implements cl_app.Item {
 
     initHTML () {
         html = {'top':new cl.ContainerOption('ui-option-top'),
-                'inner':new cl.ContainerData(),
-                'bottom':new cl.ContainerOption('ui-option-bottom')};
+            'inner':new cl.ContainerData(),
+            'bottom':new cl.ContainerOption('ui-option-bottom')};
         html['body_right'] = wapi.win.getContent()
             ..addRow(html['top'])
             ..addRow(html['inner'])
@@ -417,19 +411,19 @@ abstract class Listing implements cl_app.Item {
         h.add(new cl_form.GridColumn('edit')..width = '1%');
 
         var filter = new cl_action.ButtonOption().setName('filter').setState(false).setTitle(INTL.Filter()).setIcon('filter').addAction(filterGet),
-            clear = new cl_action.Button().setName('clear').setTitle(INTL.Clean()).setIcon('clear').addAction(filterClear),
-            refresh = new cl_action.Button().setName('refresh').setTitle(INTL.Refresh()).setIcon('change').addAction(filterGet);
+        clear = new cl_action.Button().setName('clear').setTitle(INTL.Clean()).setIcon('clear').addAction(filterClear),
+        refresh = new cl_action.Button().setName('refresh').setTitle(INTL.Refresh()).setIcon('change').addAction(filterGet);
         filter.addSub(clear);
         menu.add(filter);
         menu.add(refresh);
 
         grid.initGridHeader(h)
-            .addHook(cl_form.GridList.hook_row, customRow)
-            .addHook(cl_form.GridList.hook_row, initRow);
+        .addHook(cl_form.GridList.hook_row, customRow)
+        .addHook(cl_form.GridList.hook_row, initRow);
 
         var cont = new cl.CJSElement(new DivElement())
-            .setStyle({'overflow':'auto', 'height': '100%'})
-            .append(grid);
+        .setStyle({'overflow':'auto', 'height': '100%'})
+        .append(grid);
 
         var order = initOrder();
         if(order != null && order.length == 2)
@@ -517,32 +511,28 @@ abstract class Listing implements cl_app.Item {
     }
 
     actionSend (type, controller) {
-        observer.execHooks(type + '_before').then((result) {
-            if(result) {
-                ap.serverCall(controller, params, html['inner'])
-                .then((data) {
-                    if(_setData(data))
-                        observer.execHooks(type + '_after');
-                }).catchError(ap.warning);
-            } else {
-                _setData();
-            }
-        });
+        if(observer.execHooks(type + '_before')) {
+            ap.serverCall(controller, params, html['inner'])
+            .then((data) {
+                if(_setData(data))
+                    observer.execHooks(type + '_after');
+            }).catchError(ap.warning);
+        }
+        else
+            _setData();
     }
 
     delData ([e]) => actionSend('del', contr_del);
 
     printer(contr) {
-        observer.execHooks(print_before).then((result) {
-        	if(!result)
-        		return;
+        if(observer.execHooks(print_before)) {
             var c = new cl_app.Confirmer(ap)
                 ..title = INTL.Language()
                 ..type = 'language'
                 ..onOk = () => window.location.href = contr.reverse([lang_select.getValue(), params['ids'].join(',')]).substring(1);
             c.container.setStyle({'padding':'10px'}).append(lang_select);
             c.render(width:200);
-        });
+        }
     }
 
     printData ([e]) => printer(contr_print);
@@ -584,7 +574,7 @@ abstract class Listing implements cl_app.Item {
         return true;
     }
 
-	onClick(arr){}
+    onClick(arr){}
 
     check (el,e) {
         if(el.isChecked())
@@ -791,18 +781,17 @@ abstract class Report implements cl_app.Item {
     }
 
     getData ([e]) {
-        observer.execHooks(get_before).then((result) {
-            if(result) {
-                ap.serverCall(contr_get, params, html['inner'])
-                .then((data) {
-                    if(_setData(data))
-                        observer.execHooks(get_after);
-                }).catchError(ap.warning);
-            } else {
-                _setData();
-            }
-        });
+        if(observer.execHooks(get_before)) {
+            ap.serverCall(contr_get, params, html['inner'])
+            .then((data) {
+                if(_setData(data))
+                    observer.execHooks(get_after);
+            }).catchError(ap.warning);
+        }
+        else
+            _setData();
     }
+
 
     _setData ([data = null]) {
         data_response = data;
@@ -830,10 +819,10 @@ abstract class Report implements cl_app.Item {
 
 class SelectList extends cl_form.Select {
     cl_app.Application ap;
-	static const String hook_render = 'hook_render';
-	static const String hook_call = 'hook_call';
-	static const String hook_value = 'hook_value';
-	static const String hook_before = 'hook_before';
+    static const String hook_render = 'hook_render';
+    static const String hook_call = 'hook_call';
+    static const String hook_value = 'hook_value';
+    static const String hook_before = 'hook_before';
 
     var contr;
     Map param = new Map();
@@ -842,7 +831,7 @@ class SelectList extends cl_form.Select {
     cl_util.Observer observer;
     bool isLoading = false;
 
-	SelectList(this.ap, this.contr, this.first, [callback, callbackb, type]) : super(type) {
+    SelectList(this.ap, this.contr, this.first, [callback, callbackb, type]) : super(type) {
         observer = new cl_util.Observer();
         observer.addHook(hook_render, renderList);
         observer.addHook(hook_call, callback is Function? callback : () => true);
@@ -857,18 +846,16 @@ class SelectList extends cl_form.Select {
     load ([contr]) {
         if(isLoading)
             return this;
-        observer.execHooks(hook_before).then((result) {
-            if(!result)
-                return;
+        if(observer.execHooks(hook_before)) {
             isLoading = true;
-			ap.serverCall(contr == null? this.contr : contr, param, this).then((data) {
+            ap.serverCall(contr == null? this.contr : contr, param, this).then((data) {
                 list = data;
                 observer.execHooks(hook_render);
                 observer.execHooks(hook_value);
                 observer.execHooks(hook_call);
                 isLoading = false;
             }).catchError(ap.warning);
-        });
+        }
         return this;
     }
 
@@ -876,17 +863,17 @@ class SelectList extends cl_form.Select {
         cleanOptions();
         if(first is List && first.length == 2)
             addOption(first[0], first[1]);
-		list.forEach((v) => addOption(v['k'], v['v']));
+        list.forEach((v) => addOption(v['k'], v['v']));
         return true;
     }
 
     setValue (value, [bool silent = false]) {
         if(value != null && getOptionsCount() == 0) {
-			observer.removeHook(hook_value);
+            observer.removeHook(hook_value);
             observer.addHook(hook_value, () => setValue(value, silent));
             load();
         } else {
-			super.setValue(value, silent);
+            super.setValue(value, silent);
         }
         return this;
     }
@@ -913,9 +900,9 @@ abstract class ItemOperation extends ItemBase implements cl_app.Item {
     bool __close_set = false;
 
     ItemOperation(ap, [id = 0]) : super (ap, id) {
-		contr_get = contr_get.reverse([]);
-	    contr_save = contr_save.reverse([]);
-	    contr_del = contr_del.reverse([]);
+        contr_get = contr_get.reverse([]);
+        contr_save = contr_save.reverse([]);
+        contr_del = contr_del.reverse([]);
         wapi = new cl_app.WinApp(ap);
         wapi.load(w, this);
         initHTML();
@@ -936,8 +923,8 @@ abstract class ItemOperation extends ItemBase implements cl_app.Item {
 
     initHTML () {
         html = {'right_options_top': new cl.ContainerOption('ui-option-top'),
-                'right_inner': new cl.ContainerData(),
-                'right_options_bottom': new cl.ContainerOption('ui-option-bottom')};
+            'right_inner': new cl.ContainerData(),
+            'right_options_bottom': new cl.ContainerOption('ui-option-bottom')};
         html['body_right'] = wapi.win.getContent()
             ..addRow(html['right_options_top'])
             ..addRow(html['right_inner'])
@@ -956,7 +943,7 @@ abstract class ItemOperation extends ItemBase implements cl_app.Item {
 
         var tab = new cl_gui.Tab().appendTo(html['right_options_top'].setHeight(top_height));
         html['right_options_top'].setStyle({'padding':'0px'});
-		int i = 0;
+        int i = 0;
         top_form_elements.forEach((page) {
             var div = new cl.CJSElement(new DivElement()).setClass('custom-order-tab');
             tab.addTab(i + 1, page['title'], div);
@@ -976,7 +963,7 @@ abstract class ItemOperation extends ItemBase implements cl_app.Item {
                 t.setStyle({'width':size.toString() + '%', 'float':'left'}).appendTo(div);
                 j++;
             });
-			i++;
+            i++;
         });
         tab.activeTab(1);
         wapi.win.getContent().addHookLayout(tab);
@@ -1123,7 +1110,7 @@ class FileAttach extends cl_form.DataElement {
     String path_upload, path_tmp, path_media;
 
     FileAttach(this.container, uploader, this.path_upload, this.path_tmp, this.path_media) : super(uploader) {
-		this.uploader = uploader;
+        this.uploader = uploader;
         uploader.setUpload(path_upload);
         uploader.observer.addHook(cl_action.FileUploader.hook_loading, (file) {
             conts[file] = contentDraw();
@@ -1145,9 +1132,9 @@ class FileAttach extends cl_form.DataElement {
         var img = new cl.CJSElement(new ImageElement()).setStyle({'vertical-align':'middle'}).appendTo(link);
         img.dom.src = 'packages/cjs/images/ui/loader.gif';
         var del = new cl.CJSElement(new AnchorElement()).setStyle({'position':'absolute','top':'0px','right':'0px','display':'block'})
-            .setClass('i-tag-remove icon')
-            .hide()
-            .appendTo(cont);
+        .setClass('i-tag-remove icon')
+        .hide()
+        .appendTo(cont);
         cont.addAction((e) => del.show(),'mouseover').addAction((e) => del.hide(),'mouseout');
         container.append(cont);
         return {
@@ -1159,7 +1146,7 @@ class FileAttach extends cl_form.DataElement {
     }
 
     disable () {
-         conts.forEach((k, cont) {
+        conts.forEach((k, cont) {
             cont['cont'].removeAction();
             cont['del'].remove();
         });
@@ -1233,9 +1220,9 @@ class ComplexField extends cl.CJSElement {
     setTitle (dynamic title) {
         this.title = title;
         domTitle
-            .removeChilds()
-            .append((title is String)? new Text(title) : title)
-            .show();
+        .removeChilds()
+        .append((title is String)? new Text(title) : title)
+        .show();
         return this;
     }
 

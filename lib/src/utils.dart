@@ -41,8 +41,13 @@ class Observer {
         if(_hook[scope] is Queue) {
             Iterator iterator = _hook[scope].iterator;
             bool ret = true;
-            while(!iterator.moveNext())
-                ret = (object != null)? iterator.current(object) : iterator.current();
+            while(iterator.moveNext()) {
+                var r = (object != null)? iterator.current(object) : iterator.current();
+                if(r == false) {
+                    ret = false;
+                    break;
+                }
+            }
             return ret;
         } else {
             return true;

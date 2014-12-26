@@ -287,7 +287,7 @@ class InputField<E extends InputElement> extends FormElement<E> {
     }
 
     Future _validateValue (e) {
-        return observer.execHooks('value', e).then((valid) {
+        return observer.execHooksAsync('value', e).then((valid) {
             if(valid) {
                 execHooks(hook_validate_ok);
             } else {
@@ -298,7 +298,7 @@ class InputField<E extends InputElement> extends FormElement<E> {
     }
 
     Future _validateInput (e) {
-        return observer.execHooks('input', e).then((valid) {
+        return observer.execHooksAsync('input', e).then((valid) {
             if(valid) {
                 execHooks(hook_validate_ok);
             } else {

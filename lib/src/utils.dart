@@ -22,7 +22,7 @@ class Observer {
 
     getHook ([String scope]) => scope != null? _hook[scope] : _hook;
 
-    Future<bool> execHooks (String scope, [dynamic object]) {
+    Future<bool> execHooksAsync (String scope, [dynamic object]) {
         Completer completer = new Completer();
         if(_hook[scope] is Queue) {
             Iterator iterator = _hook[scope].iterator;
@@ -35,6 +35,18 @@ class Observer {
             completer.complete(true);
         }
         return completer.future;
+    }
+
+    bool execHooks (String scope, [dynamic object]) {
+        if(_hook[scope] is Queue) {
+            Iterator iterator = _hook[scope].iterator;
+            bool ret = true;
+            while(!iterator.moveNext())
+                ret = (object != null)? iterator.current(object) : iterator.current();
+            return ret;
+        } else {
+            return true;
+        }
     }
 
     removeHook (String scope, [Function func]) {

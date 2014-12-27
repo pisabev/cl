@@ -278,7 +278,7 @@ class InputField<E extends InputElement> extends FormElement<E> {
         if(input_type != null) {
             input_type.set(value);
             dom.value = input_type.toString();
-            super.setValue(input_type.value);
+            super.setValue(input_type.value, silent);
         } else {
             dom.value = (value == null)? '' : value.toString();
             super.setValue(value, silent);

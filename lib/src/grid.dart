@@ -29,7 +29,7 @@ class GridColumn {
     GridColumn(this.key);
 
     renderTitle() {
-        var cont = new CJSElement(new DivElement())
+        var cont = new CLElement(new DivElement())
             .setStyle({'position':'relative'})
             .appendTo(header_title_cell);
         if(title is String)
@@ -46,10 +46,10 @@ class GridColumn {
         header_title_cell.append(cont.dom);
         if(sortable) {
             header_title_cell.style.paddingRight = '20px';
-            var el = new CJSElement(new SpanElement())
+            var el = new CLElement(new SpanElement())
                 .setClass('ui-icon-arrow')
                 .appendTo(cont);
-            new CJSElement(new AnchorElement()).appendTo(el).addAction((e) {
+            new CLElement(new AnchorElement()).appendTo(el).addAction((e) {
                 if (grid.order.isEmpty || grid.order['field'] != key || grid.order['way'] == 'DESC')
                     grid.setOrder(key, 'ASC');
                 else
@@ -70,7 +70,7 @@ class GridColumn {
 
     renderFilter() {
         if(filter is List) {
-            var cont = new CJSElement(new DivElement())
+            var cont = new CLElement(new DivElement())
                 .setStyle({'position':'relative'})
                 .appendTo(header_filter_cell);
             filter.forEach((f) => cont.append(f.dom));
@@ -106,7 +106,7 @@ class RowFormDataCell extends RowDataCell {
 
     _render(object, cell) {
         if(object is List) {
-            var cont = new CJSElement(new DivElement())
+            var cont = new CLElement(new DivElement())
                 .setStyle({'position':'relative'})
                 .appendTo(cell);
             object.forEach((f) => _render(f, cont.dom));
@@ -115,7 +115,7 @@ class RowFormDataCell extends RowDataCell {
                 object.addHook(Data.hook_value, () => grid.rowChanged(row));
                 object.addHook(Data.hook_require, grid.observer.getHook(Data.hook_require));
             }
-            if (object is CJSElement)
+            if (object is CLElement)
                 cell.append(object.dom);
             else if (object is Element)
                 cell.append(object);
@@ -131,7 +131,7 @@ class RowFormDataCell extends RowDataCell {
             return object.getValue();
         else if(object is List)
             return object.where((o) => o is Data).map((o) => _getValue(o)).toList();
-        else if(object is CJSElement)
+        else if(object is CLElement)
             return null;
         else
             return object;
@@ -170,12 +170,12 @@ class Render extends RenderBase {
 
 
 class GridBase extends DataElement<TableElement> {
-    CJSElement thead, tbody, tfoot;
+    CLElement thead, tbody, tfoot;
 
-    GridBase() : super (new CJSElement(new TableElement())) {
-        thead = new CJSElement(dom.createTHead()).appendTo(this);
-        tbody = new CJSElement(dom.createTBody()).appendTo(this);
-        tfoot = new CJSElement(dom.createTFoot()).appendTo(this);
+    GridBase() : super (new CLElement(new TableElement())) {
+        thead = new CLElement(dom.createTHead()).appendTo(this);
+        tbody = new CLElement(dom.createTBody()).appendTo(this);
+        tfoot = new CLElement(dom.createTFoot()).appendTo(this);
     }
 
     hideHeader () {
@@ -470,7 +470,7 @@ class GridList extends GridBase {
 
     _setDraggable (row) {
         row.draggable = true;
-        var el = new CJSElement(row);
+        var el = new CLElement(row);
         el.addAction((e) {
             e.stopPropagation();
             e.dataTransfer.setData('text', getRowIndex(el.dom).toString());
@@ -541,15 +541,15 @@ class GridListFixed extends GridList {
 
         var width = getWidth();
         for (var i = 0; i < thead.dom.childNodes[0].childNodes.length; i++)
-            widths.add(new CJSElement(thead.dom.childNodes[0].childNodes[i]).getWidth());
+            widths.add(new CLElement(thead.dom.childNodes[0].childNodes[i]).getWidth());
         for (var i = 0; i < tbody.dom.childNodes[0].childNodes.length; i++)
-            widths2.add(new CJSElement(tbody.dom.childNodes[0].childNodes[i]).getWidth());
+            widths2.add(new CLElement(tbody.dom.childNodes[0].childNodes[i]).getWidth());
 
-        var parent = new CJSElement(dom.parentNode);
-        var table_in = new CJSElement(new TableElement());
+        var parent = new CLElement(dom.parentNode);
+        var table_in = new CLElement(new TableElement());
 
-        cont_head = new CJSElement(new DivElement()).setClass('ui-table-list shadow').append(table_in);
-        cont_body = new CJSElement(new DivElement()).setStyle({'overflow':'auto', 'position': 'relative'})
+        cont_head = new CLElement(new DivElement()).setClass('ui-table-list shadow').append(table_in);
+        cont_body = new CLElement(new DivElement()).setStyle({'overflow':'auto', 'position': 'relative'})
             .addAction((e) {
                 cont_head.dom.scrollLeft = cont_body.dom.scrollLeft;
             },'scroll')
@@ -563,9 +563,9 @@ class GridListFixed extends GridList {
         widths[widths.length - 1] += scroll_bar;
 
         for (var i = 0; i < thead.dom.childNodes[0].childNodes.length; i++)
-            new CJSElement(thead.dom.childNodes[0].childNodes[i]).setStyle({'width':'${widths[i]}px'});
+            new CLElement(thead.dom.childNodes[0].childNodes[i]).setStyle({'width':'${widths[i]}px'});
         for (var i = 0; i < tbody.dom.childNodes[0].childNodes.length; i++)
-            new CJSElement(tbody.dom.childNodes[0].childNodes[i]).setStyle({'width':'${widths2[i]}px'});
+            new CLElement(tbody.dom.childNodes[0].childNodes[i]).setStyle({'width':'${widths2[i]}px'});
 
         if(_focus_el != null)
             _focus_el.focus();
@@ -578,7 +578,7 @@ class GridListFixed extends GridList {
         _focus_el = document.activeElement;
         if(cont_head != null && cont_head.dom.parentNode != null) {
             append(thead);
-            new CJSElement(cont_head.dom.parentNode).append(this);
+            new CLElement(cont_head.dom.parentNode).append(this);
             cont_head.remove();
             cont_body.remove();
             setStyle({'width': '100%'});
@@ -781,12 +781,12 @@ class Selector {
     List selection = new List();
     GridColumn gc;
     int pos;
-    CJSElement label;
+    CLElement label;
     Sumator sum;
 
     Selector (this.sum);
 
-    startSelection (CJSElement el, MouseEvent e) {
+    startSelection (CLElement el, MouseEvent e) {
         e.stopPropagation();
         pos = el.dom.cellIndex;
         if(label != null)
@@ -803,7 +803,7 @@ class Selector {
             setSelection(el, SELECTION_START);
             setSelection(el, SELECTION_END);
             getCells().forEach((td) {
-                var elem = new CJSElement(td);
+                var elem = new CLElement(td);
                 elem.addAction((e) => moveSelection(elem), 'mouseover');
             });
         }
@@ -811,7 +811,7 @@ class Selector {
 
     stopSelection ([e]) {
         getCells().forEach((td) {
-            new CJSElement(td).removeAction('mouseover');
+            new CLElement(td).removeAction('mouseover');
         });
     }
 
@@ -819,7 +819,7 @@ class Selector {
         setSelection(el, SELECTION_END);
     }
 
-    setSelection (CJSElement element, position) {
+    setSelection (CLElement element, position) {
         selection[position] = getCellPos(element.dom);
         applySelectionHighlight();
     }
@@ -850,14 +850,14 @@ class Selector {
     applySelectionHighlight () {
         clearSelectionHighlight();
         getCells(getSelectionRect()).forEach((td) {
-            new CJSElement(td)
+            new CLElement(td)
                 .addClass('highlighted');
         });
     }
 
     clearSelectionHighlight () {
         getCells().forEach((td) {
-            new CJSElement(td)
+            new CLElement(td)
                 .removeClass('highlighted');
         });
     }
@@ -883,7 +883,7 @@ class Selector {
 
     clearSelectionBorders () {
         getCells().forEach((td){
-            new CJSElement(td).removeClass('top')
+            new CLElement(td).removeClass('top')
                 .removeClass('bottom')
                 .removeClass('left')
                 .removeClass('right');
@@ -904,7 +904,7 @@ class Selector {
             var tr = gc.grid.tbody.dom.childNodes[i];
             if(tr.nodeName == 'TR') {
                 var td = tr.cells[pos];
-                if(new CJSElement(td).existClass('highlighted'))
+                if(new CLElement(td).existClass('highlighted'))
                     s.add(td);
             }
         }
@@ -947,12 +947,12 @@ class Selector {
         });
         var last = sel[sel.length - 1];
         if(label == null) {
-            label = new CJSElement(new SpanElement())
+            label = new CLElement(new SpanElement())
                 .addClass('sum-label');
         }
         gc.grid.setStyle({'position':'relative'});
         label.appendTo(gc.grid);
-        var el = new CJSElement(last),
+        var el = new CLElement(last),
             offset = el.getHeight(),
             pos_tbody = gc.grid.getRectangle(),
             pos_cell = el.getRectangle(),
@@ -972,7 +972,7 @@ class Selector {
         this.gc = gc;
         selection = [getCellPos(), getCellPos()];
         getCells().forEach((td){
-            var el = new CJSElement(td);
+            var el = new CLElement(td);
             el.addClass('hightlightable');
             el.addAction((e) => startSelection(el, e), 'mousedown')
             .addAction((e) {

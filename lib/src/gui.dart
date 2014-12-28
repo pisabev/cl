@@ -1,13 +1,13 @@
 part of gui;
 
-class Pop extends CJSElement {
-	CJSElement doc;
+class Pop extends CLElement {
+	CLElement doc;
     int width, height = 0;
     Rectangle view;
 
-    Pop (CJSElement content, e) : super(new DivElement()) {
+    Pop (CLElement content, e) : super(new DivElement()) {
 		setClass('ui-popUp');
-		doc = new CJSElement(document.body);
+		doc = new CLElement(document.body);
 	    view = doc.getRectangle();
 		doc.addAction(clickPosition, 'mousedown.pop');
 		set(content, e);
@@ -54,8 +54,8 @@ class Pop extends CJSElement {
 	}
 }
 
-class Tab extends CJSElement {
-    CJSElement tab_options, tab_options_inner, tab_content;
+class Tab extends CLElement {
+    CLElement tab_options, tab_options_inner, tab_content;
     Map views = new Map();
     Map view_cur;
     dynamic id_cur;
@@ -66,27 +66,27 @@ class Tab extends CJSElement {
     }
 
     createHTML() {
-        tab_options = new CJSElement(new DivElement())
+        tab_options = new CLElement(new DivElement())
             .setClass('ui-tab-options')
             .appendTo(this);
-        tab_options_inner = new CJSElement(new DivElement())
+        tab_options_inner = new CLElement(new DivElement())
             .setClass('ui-tab-options-inner')
             .appendTo(tab_options);
-        tab_content = new CJSElement(new DivElement())
+        tab_content = new CLElement(new DivElement())
             .setClass('ui-tab-choice')
             .appendTo(this);
     }
 
     addTab (id, String title, o) {
-        var choice = new CJSElement(new DivElement())
+        var choice = new CLElement(new DivElement())
             .setClass('ui-tab-choice-inner')
             .appendTo(tab_content)
             .append(o);
-        var option = new CJSElement(new AnchorElement())
+        var option = new CLElement(new AnchorElement())
             .setClass('ui-tab-link')
             .addAction((e) => activeTab(id))
             .appendTo(tab_options_inner);
-        var span = new CJSElement(new SpanElement())
+        var span = new CLElement(new SpanElement())
             .appendTo(option);
         if(title == null)
             option.hide();
@@ -156,7 +156,7 @@ class Tab extends CJSElement {
     }
 
     fillParent () {
-		var parent = new CJSElement(dom.parentNode);
+		var parent = new CLElement(dom.parentNode);
         tab_content.setHeight(parent.getHeightInner() - tab_options.getHeight());
         return this;
     }
@@ -180,7 +180,7 @@ class Tab extends CJSElement {
     }
 }
 
-class DatePicker extends CJSElement {
+class DatePicker extends CLElement {
 
 	static List month_days = [31, 0, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 	DateTime date;
@@ -189,9 +189,9 @@ class DatePicker extends CJSElement {
 
 	Function callBack;
 
-	CJSElement domTbody, domMonth, domYear;
+	CLElement domTbody, domMonth, domYear;
 
-	CJSElement clicked;
+	CLElement clicked;
 
     bool time;
 
@@ -214,15 +214,15 @@ class DatePicker extends CJSElement {
 
 	createHTML () {
 		var e = new DivElement();
-	    var nav = new CJSElement(new DivElement())..setClass('ui-cal-navigation').appendTo(this),
-	    	nav_left = new CJSElement(new DivElement())..setClass('ui-cal-nav-left').appendTo(nav),
-	        nav_right = new CJSElement(new DivElement())..setClass('ui-cal-nav-right').appendTo(nav);
+	    var nav = new CLElement(new DivElement())..setClass('ui-cal-navigation').appendTo(this),
+	    	nav_left = new CLElement(new DivElement())..setClass('ui-cal-nav-left').appendTo(nav),
+	        nav_right = new CLElement(new DivElement())..setClass('ui-cal-nav-right').appendTo(nav);
 
 		new action.Button()
 	        .setIcon('controls-previous')
 	        .addAction((e) {ch_m -= 1; set(); }, 'click')
 	        .appendTo(nav_left);
-	    var label_month = new CJSElement(new ParagraphElement())..appendTo(nav_left);
+	    var label_month = new CLElement(new ParagraphElement())..appendTo(nav_left);
 	    new action.Button()
 	        .setIcon('controls-next')
 	        .addAction((e) {ch_m += 1; set(); }, 'click')
@@ -232,15 +232,15 @@ class DatePicker extends CJSElement {
 	        .setIcon('controls-previous')
 	        .addAction((e) {ch_y -= 1; set(); }, 'click')
 	        .appendTo(nav_right);
-	    var label_year = new CJSElement(new ParagraphElement())..appendTo(nav_right);
+	    var label_year = new CLElement(new ParagraphElement())..appendTo(nav_right);
 	    new action.Button()
 	        .setIcon('controls-next')
 	        .addAction((e) {ch_y += 1; set(); }, 'click')
 	        .appendTo(nav_right);
 
-	    var table = new CJSElement(new TableElement())..appendTo(this);
-	    var thead = new CJSElement(table.dom.createTHead())..appendTo(table),
-	        tbody = new CJSElement(table.dom.createTBody())..appendTo(table);
+	    var table = new CLElement(new TableElement())..appendTo(this);
+	    var thead = new CLElement(table.dom.createTHead())..appendTo(table),
+	        tbody = new CLElement(table.dom.createTBody())..appendTo(table);
 
 	    var row = thead.dom.insertRow(-1);
 	    for (var day = 0; day < 7; day++) {
@@ -257,13 +257,13 @@ class DatePicker extends CJSElement {
 	    }
 
         if(time) {
-            var time_cont = new CJSElement(new DivElement())..setClass('ui-cal-time').appendTo(this);
+            var time_cont = new CLElement(new DivElement())..setClass('ui-cal-time').appendTo(this);
             hours = new form.Input('int', [0, 23]).setWidth(30).appendTo(time_cont);
-            new CJSElement(new SpanElement())..setText(':').appendTo(time_cont);
+            new CLElement(new SpanElement())..setText(':').appendTo(time_cont);
             minutes = new form.Input('int', [0, 59]).setWidth(30).appendTo(time_cont);
         }
 
-	    var opt = new CJSElement(new DivElement())..setClass('ui-calendar-option').appendTo(this);
+	    var opt = new CLElement(new DivElement())..setClass('ui-calendar-option').appendTo(this);
 	    var opt_cur = new action.Button().setTitle(Calendar.textToday()).appendTo(opt),
 	        opt_empty = new action.Button().setStyle({'float': 'right'}).setTitle(Calendar.textEmpty()).appendTo(opt);
 
@@ -305,7 +305,7 @@ class DatePicker extends CJSElement {
 	        if(obj.clicked != null)
 	            obj.clicked.removeClass('selected');
 	        if(n != null)
-	            obj.clicked = new CJSElement(n).addClass('selected');
+	            obj.clicked = new CLElement(n).addClass('selected');
 	    };
 	    click(this);
         if(time) {
@@ -344,7 +344,7 @@ class DatePicker extends CJSElement {
     }
 }
 
-class DatePickerRange extends CJSElement{
+class DatePickerRange extends CLElement{
 
 	form.Input inputFrom, inputTo;
 	form.Select choice;
@@ -354,8 +354,8 @@ class DatePickerRange extends CJSElement{
 
 	DatePickerRange (this.callBack) : super(new DivElement()) {
 		setClass('ui-calendar-picker-range');
-		var domTop = new CJSElement(new DivElement())..setClass('ui-calendar-picker-range-top').appendTo(this),
-			domBottom = new CJSElement(new DivElement())..setClass('ui-calendar-picker-range-bottom').appendTo(this);
+		var domTop = new CLElement(new DivElement())..setClass('ui-calendar-picker-range-top').appendTo(this),
+			domBottom = new CLElement(new DivElement())..setClass('ui-calendar-picker-range-bottom').appendTo(this);
 
 	    choice = new form.Select();
 	    inputFrom = new form.InputDate().noAction().setStyle({'float':'left', 'width':'75px', 'margin-left': '3px'});
@@ -718,7 +718,7 @@ class TreeChoice extends TreeCheck {
     }
 }
 
-class TreeBuilder<E extends Tree> extends CJSElement {
+class TreeBuilder<E extends Tree> extends CLElement {
     E main, current;
     Map indexOfObjects = new Map();
     List checkObj;

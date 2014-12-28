@@ -125,7 +125,7 @@ class EventCollection {
 
 }
 
-class MonthCell extends CJSElement {
+class MonthCell extends CLElement {
 
     DateTime date;
 
@@ -133,7 +133,7 @@ class MonthCell extends CJSElement {
 
 }
 
-class HourRow extends CJSElement {
+class HourRow extends CLElement {
 
     int hour;
 
@@ -145,7 +145,7 @@ class HourRow extends CJSElement {
 
 }
 
-class DayCol extends CJSElement with EventCollection {
+class DayCol extends CLElement with EventCollection {
 
     DateTime date;
 
@@ -155,20 +155,20 @@ class DayCol extends CJSElement with EventCollection {
 
     bool days = false;
 
-    CJSElement day_cont, day_drag;
+    CLElement day_cont, day_drag;
 
     DayCol(date, this.calendar) : super(new Element.td()) {
         this.date = calendar._normDate(date);
-        var outer = new CJSElement(new DivElement()).setClass('day-container').appendTo(this);
-        day_cont = new CJSElement(new DivElement()).setClass('day-inner').appendTo(outer);
+        var outer = new CLElement(new DivElement()).setClass('day-container').appendTo(this);
+        day_cont = new CLElement(new DivElement()).setClass('day-inner').appendTo(outer);
         if(calendar.now.compareTo(this.date) == 0) {
             addClass('now');
-            var mark = new CJSElement(new DivElement()).setClass('hour-mark');
+            var mark = new CLElement(new DivElement()).setClass('hour-mark');
             var nh = new DateTime.now();
             mark.setStyle({'top':'${(nh.hour*60 + nh.minute)/1.43}px'});
             outer.append(mark);
         }
-        day_drag = new CJSElement(new DivElement()).setClass('day-container-drag').appendTo(this);
+        day_drag = new CLElement(new DivElement()).setClass('day-container-drag').appendTo(this);
     }
 
     _intersectEvents(List<Event> events) {
@@ -220,13 +220,13 @@ class DayCol extends CJSElement with EventCollection {
                 var cell_height = 21,
                     top = ((indx_start.hour * 60 + indx_start.minute)/30) * cell_height - 1,
                     height = _diff(indx_start, indx_end)/30 * cell_height + 2;
-                var cont = new CJSElement(new DivElement())
+                var cont = new CLElement(new DivElement())
                         .addClass('event-cont-hour')
                         .addAction((e) => e.stopPropagation(), 'mousedown'),
-                    dom = new CJSElement(new DivElement())
+                    dom = new CLElement(new DivElement())
                         .addClass('inner')
                         .appendTo(cont),
-                    resize = new CJSElement(new DivElement())
+                    resize = new CLElement(new DivElement())
                         .addClass('resize')
                         .addAction((e) => e.stopPropagation(), 'mousedown')
                         .setText('=').appendTo(cont);
@@ -254,9 +254,9 @@ class DayCol extends CJSElement with EventCollection {
 
 }
 
-class MonthRow extends CJSElement with EventCollection {
+class MonthRow extends CLElement with EventCollection {
 
-    CJSElement table_main, table_grid, tbody_main, tbody_grid;
+    CLElement table_main, table_grid, tbody_main, tbody_grid;
 
     EventCalendar calendar;
 
@@ -271,10 +271,10 @@ class MonthRow extends CJSElement with EventCollection {
 
     createDom() {
         addClass('cal-row');
-        table_main = new CJSElement(new TableElement())..appendTo(this)..addClass('cal-back');
-        table_grid = new CJSElement(new TableElement())..appendTo(this)..addClass('cal-grid');
-        tbody_main = new CJSElement(table_main.dom.createTBody())..appendTo(table_main);
-        tbody_grid = new CJSElement(table_main.dom.createTBody())..appendTo(table_grid);
+        table_main = new CLElement(new TableElement())..appendTo(this)..addClass('cal-back');
+        table_grid = new CLElement(new TableElement())..appendTo(this)..addClass('cal-grid');
+        tbody_main = new CLElement(table_main.dom.createTBody())..appendTo(table_main);
+        tbody_grid = new CLElement(table_main.dom.createTBody())..appendTo(table_grid);
         TableRowElement row_main = tbody_main.dom.insertRow(-1);
         TableRowElement row_grid_title = tbody_grid.dom.insertRow(-1);
 
@@ -348,23 +348,23 @@ class MonthRow extends CJSElement with EventCollection {
                 DateTime event_end = calendar._normDate(event.end);
                 DateTime indx_start = utils.Calendar.max(event_start, dates.first);
                 DateTime indx_end = utils.Calendar.min(event_end, dates.last);
-                var cell = new CJSElement(getIndexBydate(row, indx_start));
+                var cell = new CLElement(getIndexBydate(row, indx_start));
                 cell.addAction((e) => e.stopPropagation(), 'mousedown');
                 var r = _diff(indx_start, indx_end) + 1;
                 cell.dom.colSpan = r;
                 cell.setClass('event');
-                var div = new CJSElement(new DivElement()).setClass('event-cont');
+                var div = new CLElement(new DivElement()).setClass('event-cont');
                 if(event.isPassed())
                     div.addClass('light');
                 if(event.isAllDayEvent()) {
                     if (indx_start.compareTo(event_start) > 0) {
-                        new CJSElement(new DivElement()).setClass('arrow-left1').appendTo(div);
-                        new CJSElement(new DivElement()).setClass('arrow-left2').appendTo(div);
+                        new CLElement(new DivElement()).setClass('arrow-left1').appendTo(div);
+                        new CLElement(new DivElement()).setClass('arrow-left2').appendTo(div);
                         div.addClass('margin-left');
                     }
                     if (indx_end.compareTo(event_end) < 0) {
-                        new CJSElement(new DivElement()).setClass('arrow-right1').appendTo(div);
-                        new CJSElement(new DivElement()).setClass('arrow-right2').appendTo(div);
+                        new CLElement(new DivElement()).setClass('arrow-right1').appendTo(div);
+                        new CLElement(new DivElement()).setClass('arrow-right2').appendTo(div);
                         div.addClass('margin-right');
                     }
                 } else {
@@ -378,7 +378,7 @@ class MonthRow extends CJSElement with EventCollection {
                     drg.setStyle({'top':'${e.page.y - rect.top - 10}px', 'left':'${e.page.x - rect.left - 50}px'});
                 new utils.Drag(div)
                     ..start((e) {
-                        drg = new CJSElement(new DivElement())
+                        drg = new CLElement(new DivElement())
                             .setClass('event-cont-drag')
                             .setText(event.title)
                             .appendTo(div);
@@ -441,10 +441,10 @@ class WeekRow extends MonthRow {
 
     createDom() {
         addClass('cal-row week');
-        table_main = new CJSElement(new TableElement())..appendTo(this)..addClass('cal-back week');
-        table_grid = new CJSElement(new TableElement())..appendTo(this)..addClass('cal-grid week');
-        tbody_main = new CJSElement(table_main.dom.createTBody())..appendTo(table_main);
-        tbody_grid = new CJSElement(table_main.dom.createTBody())..appendTo(table_grid);
+        table_main = new CLElement(new TableElement())..appendTo(this)..addClass('cal-back week');
+        table_grid = new CLElement(new TableElement())..appendTo(this)..addClass('cal-grid week');
+        tbody_main = new CLElement(table_main.dom.createTBody())..appendTo(table_main);
+        tbody_grid = new CLElement(table_main.dom.createTBody())..appendTo(table_grid);
         TableRowElement row_main = tbody_main.dom.insertRow(-1);
         TableRowElement row_grid_title = tbody_grid.dom.insertRow(-1);
 
@@ -471,13 +471,13 @@ class WeekRow extends MonthRow {
 class EventCalendar {
 
     Container dom, cal, nav, body;
-    CJSElement head, domMonth, week_dom, day_cont;
+    CLElement head, domMonth, week_dom, day_cont;
 
     List<Event> events = new List();
 
     DateTime now, cur;
 
-    CJSElement contr_left, contr_right;
+    CLElement contr_left, contr_right;
 
     CalendarHelper calendar_helper;
 
@@ -495,8 +495,8 @@ class EventCalendar {
         dom.addCol(cal);
         dom.addRow(nav);
         dom.addRow(body..auto = true);
-        var nav_left = new CJSElement(new DivElement())..setClass('cal-nav-left').appendTo(nav),
-            nav_right = new CJSElement(new DivElement())..setClass('cal-nav-right').appendTo(nav);
+        var nav_left = new CLElement(new DivElement())..setClass('cal-nav-left').appendTo(nav),
+            nav_right = new CLElement(new DivElement())..setClass('cal-nav-right').appendTo(nav);
 
         new action.Button()
         .setTitle(INTL.Today())
@@ -531,7 +531,7 @@ class EventCalendar {
 
         button.setCurrent(1);
 
-        domMonth = new CJSElement(new ParagraphElement())..appendTo(nav_left);
+        domMonth = new CLElement(new ParagraphElement())..appendTo(nav_left);
 
         var n = new DateTime.now();
         now = new DateTime(n.year, n.month, n.day);
@@ -669,14 +669,14 @@ class EventCalendar {
             next_date = next_date.add(new Duration(days:1));
         }
         body.removeChilds();
-        head = new CJSElement(new TableElement())..setClass('week-head')..appendTo(body);
-        week_dom = new CJSElement(new DivElement())..setClass('week-cont')..appendTo(body);
-        var table_scroll = new CJSElement(new TableElement())..setClass('week-scroll')..appendTo(week_dom);
-        var thead_top = new CJSElement(head.dom.createTHead())..appendTo(head),
-            tbody_top = new CJSElement(head.dom.createTBody())..appendTo(head);
+        head = new CLElement(new TableElement())..setClass('week-head')..appendTo(body);
+        week_dom = new CLElement(new DivElement())..setClass('week-cont')..appendTo(body);
+        var table_scroll = new CLElement(new TableElement())..setClass('week-scroll')..appendTo(week_dom);
+        var thead_top = new CLElement(head.dom.createTHead())..appendTo(head),
+            tbody_top = new CLElement(head.dom.createTBody())..appendTo(head);
 
-        var thead = new CJSElement(table_scroll.dom.createTHead())..appendTo(table_scroll),
-            tbody = new CJSElement(table_scroll.dom.createTBody())..appendTo(table_scroll);
+        var thead = new CLElement(table_scroll.dom.createTHead())..appendTo(table_scroll),
+            tbody = new CLElement(table_scroll.dom.createTBody())..appendTo(table_scroll);
 
         TableRowElement row = tbody_top.dom.insertRow(-1);
         TableRowElement row_scroll_first = tbody.dom.insertRow(-1);
@@ -693,10 +693,10 @@ class EventCalendar {
         row_scroll_first.append(first_scroll2);
         var hour = new Element.td();
         hour.className = 'first';
-        day_cont = new CJSElement(new DivElement()).setClass('day');
+        day_cont = new CLElement(new DivElement()).setClass('day');
         first_scroll2.append(day_cont.dom);
 
-        var mark = new CJSElement(new DivElement()).setClass('hour-mark');
+        var mark = new CLElement(new DivElement()).setClass('hour-mark');
         var nh = new DateTime.now();
         hour.append(mark.dom);
         row_scroll.append(hour);
@@ -705,7 +705,7 @@ class EventCalendar {
         var hour_rows = new List();
         for(int i = 0; i < 24; i++) {
             var h = (i<10)? '0$i' : '$i';
-            var t = new CJSElement(new DivElement()).setClass('hour')..dom.text = '$i:00';
+            var t = new CLElement(new DivElement()).setClass('hour')..dom.text = '$i:00';
             hour.append(t.dom);
             for(int j = 0; j < 2; j++) {
                 var hr = new HourRow(i, j*30);
@@ -718,7 +718,7 @@ class EventCalendar {
         var cell_top_events = new Element.td();
         cell_top_events.colSpan = dates.length;
         row_top_events.append(cell_top_events);
-        new CJSElement(new DivElement()).appendTo(body).setClass('closing');
+        new CLElement(new DivElement()).appendTo(body).setClass('closing');
 
         dragm = new DragMonthContainer(body)..calendar = this;
         dragd = new DragDayContainer()..calendar = this;
@@ -750,9 +750,9 @@ class EventCalendar {
 
     _prepareViewMonth() {
         body.removeChilds();
-        head = new CJSElement(new TableElement())..setClass('cal-head')..appendTo(body);
-        var thead = new CJSElement(head.dom.createTHead())..appendTo(head),
-        tbody = new CJSElement(head.dom.createTBody())..appendTo(head);
+        head = new CLElement(new TableElement())..setClass('cal-head')..appendTo(body);
+        var thead = new CLElement(head.dom.createTHead())..appendTo(head),
+        tbody = new CLElement(head.dom.createTBody())..appendTo(head);
 
         TableRowElement row = thead.dom.insertRow(-1);
         for (var day = 0; day < 7; day++) {
@@ -846,7 +846,7 @@ class EventCalendar {
 
 class DragMonthContainer {
 
-    CJSElement dom, drag_cont;
+    CLElement dom, drag_cont;
 
     EventCalendar calendar;
 
@@ -855,7 +855,7 @@ class DragMonthContainer {
     MonthCell start_cell, end_cell;
 
     DragMonthContainer(this.dom) {
-        drag_cont = new CJSElement(new DivElement()).setClass('drag-cont');
+        drag_cont = new CLElement(new DivElement()).setClass('drag-cont');
     }
 
     setDragable(MonthRow row) {
@@ -920,7 +920,7 @@ class DragMonthContainer {
         math.Rectangle top = calendar.body.getRectangle();
         m.forEach((k, v) {
             math.Rectangle rect = v.first;
-            new CJSElement(new DivElement())
+            new CLElement(new DivElement())
             .setClass('grid')
             .setStyle({
                 'width': '${v.last.left - rect.left + rect.width + 1}px',
@@ -1032,12 +1032,12 @@ class DragDayContainer {
         dm = new List();
         rects.forEach((rect) {
             if(rect != null) {
-                CJSElement drag_cont = rect['day'].day_drag;
+                CLElement drag_cont = rect['day'].day_drag;
                 var t = drag_cont.getRectangle();
                 math.MutableRectangle rectangle = rect['rect'];
                 rectangle.top -= t.top;
                 rectangle.left = 0;
-                var e = new CJSElement(new DivElement()).setClass('day-event').setRectangle(rectangle);
+                var e = new CLElement(new DivElement()).setClass('day-event').setRectangle(rectangle);
                 drag_cont.append(e);
                 dm.add(e);
             }
@@ -1093,13 +1093,13 @@ class DragDayContainer {
 
 }
 
-class CalendarHelper extends CJSElement {
+class CalendarHelper extends CLElement {
 
     DateTime cur;
 
     EventCalendar calendar;
 
-    CJSElement domTbody, domMonth;
+    CLElement domTbody, domMonth;
 
     CalendarHelperDrag drag;
 
@@ -1114,9 +1114,9 @@ class CalendarHelper extends CJSElement {
 
     createDom () {
         var e = new DivElement();
-        var nav = new CJSElement(new DivElement())..setClass('cal-nav').appendTo(this),
-        nav_left = new CJSElement(new DivElement())..setClass('cal-nav-left').appendTo(nav),
-        nav_right = new CJSElement(new DivElement())..setClass('cal-nav-right').appendTo(nav);
+        var nav = new CLElement(new DivElement())..setClass('cal-nav').appendTo(this),
+        nav_left = new CLElement(new DivElement())..setClass('cal-nav-left').appendTo(nav),
+        nav_right = new CLElement(new DivElement())..setClass('cal-nav-right').appendTo(nav);
 
         new action.Button()
         .setIcon('controls-previous')
@@ -1132,11 +1132,11 @@ class CalendarHelper extends CJSElement {
             set();
         }, 'click')
         .appendTo(nav_left);
-        var label_month = new CJSElement(new ParagraphElement())..appendTo(nav_left);
+        var label_month = new CLElement(new ParagraphElement())..appendTo(nav_left);
 
-        var table = new CJSElement(new TableElement())..appendTo(this);
-        var thead = new CJSElement(table.dom.createTHead())..appendTo(table),
-        tbody = new CJSElement(table.dom.createTBody())..appendTo(table);
+        var table = new CLElement(new TableElement())..appendTo(this);
+        var thead = new CLElement(table.dom.createTHead())..appendTo(table),
+        tbody = new CLElement(table.dom.createTBody())..appendTo(table);
 
         var row = thead.dom.insertRow(-1);
         for (var day = 0; day < 7; day++) {
@@ -1194,7 +1194,7 @@ class CalendarHelper extends CJSElement {
     }
 }
 
-class CalendarHelperCell extends CJSElement {
+class CalendarHelperCell extends CLElement {
 
     DateTime date;
 
@@ -1219,7 +1219,7 @@ class CalendarHelperDrag {
                 cell.addAction((e) => over(cell, e), 'mouseover');
             });
         });
-        new CJSElement(document.body).addAction((e) {
+        new CLElement(document.body).addAction((e) {
             start_cell = null;
         },'mouseup');
     }

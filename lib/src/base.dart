@@ -1,14 +1,14 @@
 part of base;
 
-class CJSElement<E extends Element> {
+class CLElement<E extends Element> {
 
     E dom;
     Map _events 	= new Map<String, Map>();
     bool _state 	= true;
     static Expando exp = new Expando();
 
-    CJSElement(d) {
-        dom = (d is CJSElement)? d.dom : d;
+    CLElement(d) {
+        dom = (d is CLElement)? d.dom : d;
         if(exp[dom] != null)
             _events = exp[dom];
         else
@@ -136,7 +136,7 @@ class CJSElement<E extends Element> {
     }
 
     fillParent() {
-        CJSElement p = new CJSElement(dom.parentNode);
+        CLElement p = new CLElement(dom.parentNode);
         setHeight(p.getHeightInner());
         return this;
     }
@@ -207,7 +207,7 @@ class CJSElement<E extends Element> {
     }
 
     append (child) {
-        if(child is CJSElement)
+        if(child is CLElement)
             dom.append(child.dom);
         else
             dom.append(child);
@@ -215,7 +215,7 @@ class CJSElement<E extends Element> {
     }
 
     appendTo(parent) {
-        if(parent is CJSElement)
+        if(parent is CLElement)
             parent.dom.append(dom);
         else
             parent.append(dom);
@@ -234,7 +234,7 @@ class CJSElement<E extends Element> {
 
 }
 
-class Container extends CJSElement<DivElement> {
+class Container extends CLElement<DivElement> {
 
 	bool auto = false;
 
@@ -247,7 +247,7 @@ class Container extends CJSElement<DivElement> {
 		observer = new Observer();
 	}
 
-	Container addHookLayout(CJSElement element) {
+	Container addHookLayout(CLElement element) {
 		observer.addHook('hook_layout', element.fillParent);
 		return this;
 	}
@@ -292,7 +292,7 @@ class Container extends CJSElement<DivElement> {
                 next = getNextCol(col);
                 prev_width = prev.getWidth();
                 next_width = next.getWidth();
-                res = new CJSElement(new DivElement()).setClass('ui-slider-shadow');
+                res = new CLElement(new DivElement()).setClass('ui-slider-shadow');
                 box = col.getRectangle();
                 res.setRectangle(box);
                 document.body.append(res.dom);
@@ -445,8 +445,8 @@ class ElementCollection {
     }
 }
 
-class LoadElement extends CJSElement {
-    CJSElement container;
+class LoadElement extends CLElement {
+    CLElement container;
 
 	LoadElement (this.container) : super(new DivElement()) {
 		container.setStyle({'position':'relative'});

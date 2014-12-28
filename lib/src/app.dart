@@ -75,11 +75,11 @@ class Application {
 
         container.append(page.dom);
 
-        var timer = new CJSElement(new DivElement()).setClass('ui-addon ui-timer').appendTo(addons);
+        var timer = new CLElement(new DivElement()).setClass('ui-addon ui-timer').appendTo(addons);
         var timer_func = ([_]) => timer.dom.innerHtml = new DateFormat('Hm', 'en_US').format(new DateTime.now());
         new Timer.periodic(new Duration(seconds:1), timer_func);
         timer_func();
-        system = new CJSElement(new AnchorElement()).setClass('ui-addon icon message').appendTo(addons);
+        system = new CLElement(new AnchorElement()).setClass('ui-addon icon message').appendTo(addons);
 		count = new SpanElement()..style.display = 'none';
 		count.onClick.listen((e) {
 			showNotify();
@@ -196,14 +196,14 @@ class Application {
 
     _onError(ErrorEvent e) {
     	//e.message;
-        new CJSElement(new SpanElement()).appendTo(system).dom.text = '!';
+        new CLElement(new SpanElement()).appendTo(system).dom.text = '!';
     }
 
 }
 
-class Notify extends CJSElement {
+class Notify extends CLElement {
 
-	var inner = new CJSElement(new DivElement());
+	var inner = new CLElement(new DivElement());
 
 	Notify() : super(new DivElement()) {
 		addClass('ui-notify');
@@ -211,7 +211,7 @@ class Notify extends CJSElement {
 		addAction((e) => e.stopPropagation(),'mousedown');
 	}
 
-	addRow(CJSElement el) => inner.append(el);
+	addRow(CLElement el) => inner.append(el);
 
 	render(List data) {print('sdsd');
 		inner.removeChilds();
@@ -327,16 +327,16 @@ class ResourceManager {
 
 class Win {
 
-	CJSElement container;
+	CLElement container;
 
 	Container win;
 	Container win_top;
 	Container win_body;
 
-	CJSElement win_title;
-	CJSElement win_close;
-	CJSElement win_max;
-	CJSElement win_min;
+	CLElement win_title;
+	CLElement win_close;
+	CLElement win_max;
+	CLElement win_min;
 
 	math.MutableRectangle body;
 	math.MutableRectangle box;
@@ -348,7 +348,7 @@ class Win {
 	int _min_width		= 200;
 	int _min_height		= 50;
 
-	CJSElement _resize_cont;
+	CLElement _resize_cont;
 	Rectangle _resize_rect;
 	Map _resize_contr;
 
@@ -361,7 +361,7 @@ class Win {
 
     List<utils.KeyAction> _key_actions = new List();
 
-	Win (CJSElement cont) {
+	Win (CLElement cont) {
 		container = cont;
 		_createHtml();
 		_setWinActions();
@@ -377,17 +377,17 @@ class Win {
 		win_body = new Container()..setClass('content');
 		win_body.auto = true;
 
-		win_title = new CJSElement(new HeadingElement.h3());
+		win_title = new CLElement(new HeadingElement.h3());
 		win_title.dom.text = 'Win';
-		win_close = new CJSElement(new AnchorElement())
+		win_close = new CLElement(new AnchorElement())
 					..setClass('ui-win-close')
 					..addAction((MouseEvent e) => e.stopPropagation(), 'mousedown')
 					..addAction((MouseEvent e) => close(), 'click');
-		win_max = new CJSElement(new AnchorElement())
+		win_max = new CLElement(new AnchorElement())
 					..setClass('ui-win-max')
 					..addAction((MouseEvent e) => e.stopPropagation(), 'mousedown')
 					..addAction((MouseEvent e) => maximize(), 'click');
-		win_min = new CJSElement(new AnchorElement())
+		win_min = new CLElement(new AnchorElement())
 					..setClass('ui-win-min')
 					..addAction((MouseEvent e) => e.stopPropagation(), 'mousedown')
 					..addAction((MouseEvent e) => minimize(), 'click');
@@ -402,17 +402,17 @@ class Win {
 			..addRow(win_top)
 			..addRow(win_body);
 
-		CJSElement top_left = new CJSElement(new DivElement())..setClass('ui-win-corner-top-left');
-		CJSElement top_right = new CJSElement(new DivElement())..setClass('ui-win-corner-top-right');
-		CJSElement bottom_left = new CJSElement(new DivElement())..setClass('ui-win-corner-bottom-left');
-		CJSElement bottom_right = new CJSElement(new DivElement())..setClass('ui-win-corner-bottom-right');
-		CJSElement top = new CJSElement(new DivElement())..setClass('ui-win-top');
-		CJSElement right = new CJSElement(new DivElement())..setClass('ui-win-right');
-		CJSElement bottom = new CJSElement(new DivElement())..setClass('ui-win-bottom');
-		CJSElement left = new CJSElement(new DivElement())..setClass('ui-win-left');
+		CLElement top_left = new CLElement(new DivElement())..setClass('ui-win-corner-top-left');
+		CLElement top_right = new CLElement(new DivElement())..setClass('ui-win-corner-top-right');
+		CLElement bottom_left = new CLElement(new DivElement())..setClass('ui-win-corner-bottom-left');
+		CLElement bottom_right = new CLElement(new DivElement())..setClass('ui-win-corner-bottom-right');
+		CLElement top = new CLElement(new DivElement())..setClass('ui-win-top');
+		CLElement right = new CLElement(new DivElement())..setClass('ui-win-right');
+		CLElement bottom = new CLElement(new DivElement())..setClass('ui-win-bottom');
+		CLElement left = new CLElement(new DivElement())..setClass('ui-win-left');
 
-		_resize_cont = new CJSElement(new DivElement())..setClass('ui-win-resize');
-		_resize_contr = <String, CJSElement> {
+		_resize_cont = new CLElement(new DivElement())..setClass('ui-win-resize');
+		_resize_contr = <String, CLElement> {
 			't_c': top.appendTo(win),
 			'r_c': right.appendTo(win),
 			'b_c': bottom.appendTo(win),
@@ -551,7 +551,7 @@ class Win {
 
 	setTitle(dynamic title) {
         win_title.removeChilds();
-		if(title is CJSElement) {
+		if(title is CLElement) {
 			win_title.append(title);
 		} else {
 			win_title.dom.text = title;
@@ -705,8 +705,8 @@ class WinManager {
     String tab_clas_active = 'ui-win-tab-active';
     List cache_wins = new List();
     List cache_wins_bound = new List();
-    CJSElement desk_cont;
-    CJSElement tabs_cont;
+    CLElement desk_cont;
+    CLElement tabs_cont;
     static const int zIndexWin = 500;
     static const int zIndexBound = 900;
 	Map _map = new Map();
@@ -758,9 +758,9 @@ class WinManager {
     }
 
     Map createTab (String title, [String icon]) {
-        var div = new CJSElement(new DivElement()).setClass(this.tab_clas),
-            span = new CJSElement(new SpanElement()).appendTo(div),
-            link = new CJSElement(new AnchorElement()).appendTo(span);
+        var div = new CLElement(new DivElement()).setClass(this.tab_clas),
+            span = new CLElement(new SpanElement()).appendTo(div),
+            link = new CLElement(new AnchorElement()).appendTo(span);
 		link.dom.text = title;
         if(icon != null)
             link.setClass(icon + ' icon');
@@ -834,18 +834,18 @@ class WinManager {
 }
 
 class IconManager {
-    CJSElement container;
+    CLElement container;
     List icons = new List();
 
     IconManager (this.container);
 
     add (o) {
-        var cont = new CJSElement(new AnchorElement())
+        var cont = new CLElement(new AnchorElement())
         .addAction((e) => o['action']());
-        new CJSElement(new DivElement())
+        new CLElement(new DivElement())
         .setClass('${o['icon']} icon-big')
         .appendTo(cont);
-        var h3 = new CJSElement(new HeadingElement.h3())
+        var h3 = new CLElement(new HeadingElement.h3())
         .appendTo(cont);
         cont.addClass('desktop-icon');
         h3.dom.text = o['title'];
@@ -884,11 +884,11 @@ class IconManager {
     }
 }
 
-class StartMenu extends CJSElement {
+class StartMenu extends CLElement {
 
     String title, icon;
 
-    CJSElement cont_top, cont_body, cont_left, cont_right, button;
+    CLElement cont_top, cont_body, cont_left, cont_right, button;
 
     bool rendered = false;
 
@@ -903,24 +903,24 @@ class StartMenu extends CJSElement {
     }
 
     createDom () {
-        cont_top = new CJSElement(new DivElement()).setClass('ui-start-menu-top')
+        cont_top = new CLElement(new DivElement()).setClass('ui-start-menu-top')
             .appendTo(this)
             .addAction(_domClick,'click');
-        cont_body = new CJSElement(new DivElement())
+        cont_body = new CLElement(new DivElement())
             .setClass('ui-start-menu-body')
             .appendTo(this);
-        cont_left = new CJSElement(new DivElement())
+        cont_left = new CLElement(new DivElement())
             .setClass('ui-start-menu-left')
             .appendTo(cont_body)
             .addAction(_domClick,'click');
-        cont_right = new CJSElement(new DivElement())
+        cont_right = new CLElement(new DivElement())
             .setClass('ui-start-menu-right')
             .appendTo(cont_body)
             .addAction(_domClick,'click');
     }
 
     createButton () {
-        button = new CJSElement(new AnchorElement())
+        button = new CLElement(new AnchorElement())
             .setClass('ui-start-menu-button')
             .setStyle({'background-image': 'url(${icon})'})
             .addAction(_onClick,'click');
@@ -946,7 +946,7 @@ class StartMenu extends CJSElement {
         var height = menu.childs[0].getHeight();
         cont_body.setHeight(count*height + 50);
         setStyle({'top':'${pos.top - getHeight()}px', 'left':'${pos.left}px'});
-        var doc = new CJSElement(document);
+        var doc = new CLElement(document);
 		doc.addAction((e) {
             removeMenu();
             doc.removeAction('click.start');
@@ -1008,7 +1008,7 @@ class StartMenu extends CJSElement {
     }
 
     setUser (String user) {
-        var u = new CJSElement(new SpanElement())
+        var u = new CLElement(new SpanElement())
             .setClass('ui-app-user icon user')
             .appendTo(cont_top);
 		u.dom.text = user;
@@ -1023,7 +1023,7 @@ class StartMenu extends CJSElement {
     }
 }
 
-class StartMenuElement extends CJSElement {
+class StartMenuElement extends CLElement {
     String title, icon;
 
     Function action;
@@ -1031,7 +1031,7 @@ class StartMenuElement extends CJSElement {
 
 	StartMenuElement parent;
 
-    CJSElement cont;
+    CLElement cont;
 
 	int level = 0;
 
@@ -1050,7 +1050,7 @@ class StartMenuElement extends CJSElement {
 
     createDom () {
 		addAction(showSub, 'mouseover');
-        var a = new CJSElement(new AnchorElement())
+        var a = new CLElement(new AnchorElement())
             .addAction((e) => action(), 'click')
 			.addAction((e) => _m.removeMenu(), 'click')
             .appendTo(this);
@@ -1089,7 +1089,7 @@ class StartMenuElement extends CJSElement {
         if(childs.length == 0)
             return false;
         if (cont == null) {
-            cont = new CJSElement(new DivElement())
+            cont = new CLElement(new DivElement())
                 .setClass('ui-start-menu-left-inner');
             var h = getHeight();
             var height = 0;
@@ -1110,7 +1110,7 @@ class StartMenuElement extends CJSElement {
     _fixHeight() {
         var pos = getRectangle();
         var reach = pos.top + cont.getHeight();
-        var diff = reach - new CJSElement(document.body).getHeight();
+        var diff = reach - new CLElement(document.body).getHeight();
         var top = pos.top;
         if (diff > 0)
             top -= diff;
@@ -1127,14 +1127,14 @@ class StartMenuElement extends CJSElement {
     }
 }
 
-class UnactivePage extends CJSElement {
+class UnactivePage extends CLElement {
 
     UnactivePage (Application app, [int zIndex = 889]) : super(new DivElement()) {
         var el = document.getElementById('ui-unactivepage');
         if (el != null) {
             el.remove();
         } else {
-            var container = new CJSElement(app.container).setStyle({'position':'relative'});
+            var container = new CLElement(app.container).setStyle({'position':'relative'});
             dom.id = 'ui-unactivepage';
             appendTo(app.container);
             setStyle({'z-index': zIndex.toString(),
@@ -1153,11 +1153,11 @@ class Item {
 
 }
 
-class Hint extends CJSElement {
+class Hint extends CLElement {
     Function callBack;
     int time = 300;
     var timer_show, timer_close;
-    CJSElement hintDom;
+    CLElement hintDom;
 
     Hint () : super(new AnchorElement()) {
         setHtml('?');
@@ -1165,7 +1165,7 @@ class Hint extends CJSElement {
         addAction(_stopShow, 'mouseout');
         addAction(_startClose, 'mouseout');
 
-        hintDom = new CJSElement(new DivElement())
+        hintDom = new CLElement(new DivElement())
         .setClass('ui-hint')
         .addAction(_stopClose, 'mouseover')
         .addAction(_startClose, 'mouseout');
@@ -1195,7 +1195,7 @@ class Hint extends CJSElement {
     showHint (MouseEvent e) {
         var top = e.page.y - 10;
         var left = e.page.x + 20;
-        if ((left + 220) > new CJSElement(document.body).getWidth())
+        if ((left + 220) > new CLElement(document.body).getWidth())
             left = e.page.x - 220;
         hintDom
         .setStyle({'top': '${top}px', 'left': '${left}px'})
@@ -1209,7 +1209,7 @@ class Hint extends CJSElement {
 class HintManager {
     Application ap;
     dynamic route;
-    CJSElement hint;
+    CLElement hint;
     String position;
     Map data = new Map();
 
@@ -1225,8 +1225,8 @@ class HintManager {
         data[key]['hint'] = new Hint();
         data[key]['data'] = null;
         data[key]['hint'].setCallBack(() => initData(key));
-        var c = new CJSElement(new DivElement()).setClass('ui-hint-spot');
-        var t = new CJSElement(new SpanElement())
+        var c = new CLElement(new DivElement()).setClass('ui-hint-spot');
+        var t = new CLElement(new SpanElement())
         .setHtml(title)
         .appendTo(c);
         data[key]['hint'].appendTo(c);
@@ -1251,7 +1251,7 @@ class HintManager {
 class Messager {
     Application ap;
     String _type, _title, _message, _details;
-    CJSElement _mesDom;
+    CLElement _mesDom;
 
     Messager (this.ap) {
         createDom();
@@ -1283,7 +1283,7 @@ class Messager {
 }
 
 class Questioner extends Messager {
-    CJSElement _yesDom, _noDom;
+    CLElement _yesDom, _noDom;
     Function _callback_yes = () => true, _callback_no = () => true;
 
     Questioner (ap) : super(ap) {
@@ -1321,7 +1321,7 @@ class Questioner extends Messager {
 }
 
 class Confirmer extends Messager {
-    CJSElement okDom;
+    CLElement okDom;
     Function _callback = () => true;
 
     Confirmer (ap) : super(ap) {
@@ -1354,20 +1354,20 @@ class Confirmer extends Messager {
     }
 }
 
-class GadgetBase extends CJSElement {
+class GadgetBase extends CLElement {
 	Application ap;
     String title;
 	String contr;
 	Map params;
-    CJSElement domContent;
+    CLElement domContent;
 
-    GadgetBase(this.ap, this.title, [this.contr, this.params]) : super (new CJSElement(new DivElement()).setClass('ui-gadget-outer')) {
+    GadgetBase(this.ap, this.title, [this.contr, this.params]) : super (new CLElement(new DivElement()).setClass('ui-gadget-outer')) {
         createDom();
     }
 
     createDom () {
-        new CJSElement(new HeadingElement.h2()).appendTo(this)..dom.text = this.title;
-        domContent = new CJSElement(new DivElement()).appendTo(this).setClass('ui-gadget-inner');
+        new CLElement(new HeadingElement.h2()).appendTo(this)..dom.text = this.title;
+        domContent = new CLElement(new DivElement()).appendTo(this).setClass('ui-gadget-inner');
     }
 }
 

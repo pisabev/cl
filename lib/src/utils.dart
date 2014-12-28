@@ -65,7 +65,7 @@ class Observer {
 }
 
 class Drag {
-    CJSElement object;
+    CLElement object;
     String _namespace;
 
     Function _start, _on, _end = (_) {};

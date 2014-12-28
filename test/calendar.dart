@@ -1,6 +1,5 @@
 library test;
 
-import 'dart:async';
 import 'package:cjs/app.dart' as cl_app;
 import 'package:cjs/forms.dart' as cl_form;
 import 'package:cjs/action.dart' as cl_action;
@@ -8,7 +7,6 @@ import 'package:cjs/gui.dart' as cl_gui;
 import 'package:cjs/utils.dart' as cl_util;
 import 'package:cjs/base.dart' as cl;
 import 'package:cjs/calendar.dart' as calendar;
-import 'package:intl/intl.dart';
 import 'dart:html';
 
 part 'base.dart';

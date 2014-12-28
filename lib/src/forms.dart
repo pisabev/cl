@@ -100,7 +100,7 @@ class DataList extends Data {
     }
 }
 
-class DataElement<E extends Element> extends CJSElement<E> with Data {
+class DataElement<E extends Element> extends CLElement<E> with Data {
 
     DataElement (dom) : super(dom);
 
@@ -514,11 +514,11 @@ class Check extends FormElement<CheckboxInputElement> {
 
 class Select extends _FieldBuilder<FormElement> {
 
-    CJSElement domValue;
+    CLElement domValue;
     String _type;
 
     Select ([this._type = 'int']) : super (new FormElement(new SelectElement())) {
-		domValue = new CJSElement(new SpanElement())..setClass('ui-select');
+		domValue = new CLElement(new SpanElement())..setClass('ui-select');
 		field.remove();
 		append(domValue);
 		field.appendTo(this);
@@ -544,7 +544,7 @@ class Select extends _FieldBuilder<FormElement> {
     }
 
     addOption (dynamic value, dynamic title) {
-        new CJSElement(new OptionElement(data: title.toString(), value: value.toString()))..appendTo(field);
+        new CLElement(new OptionElement(data: title.toString(), value: value.toString()))..appendTo(field);
         _setShadowValue();
         if(field.dom.options.length == 1)
             setValue(value, true);
@@ -568,7 +568,7 @@ class Select extends _FieldBuilder<FormElement> {
 
     addOptionGroup (String group) {
 		var opt = new OptGroupElement()..label = group;
-		new CJSElement(opt).appendTo(field);
+		new CLElement(opt).appendTo(field);
         return this;
     }
 
@@ -598,12 +598,12 @@ class Select extends _FieldBuilder<FormElement> {
 }
 
 class InputDate extends Input {
-    CJSElement domAction;
+    CLElement domAction;
 	gui.Pop pop;
 
     InputDate () : super ('date') {
         addClass('date');
-        domAction = new CJSElement(new AnchorElement())
+        domAction = new CLElement(new AnchorElement())
             .addAction(getDatePicker).setClass('icon i-calendar')
 			.appendTo(this);
         setValue(new DateTime.now());
@@ -652,12 +652,12 @@ class InputDate extends Input {
 }
 
 class InputDateTime extends Input {
-    CJSElement domAction;
+    CLElement domAction;
     gui.Pop pop;
 
     InputDateTime () : super ('datetime') {
         addClass('date time');
-        domAction = new CJSElement(new AnchorElement())
+        domAction = new CLElement(new AnchorElement())
         .addAction(getDatePicker).setClass('icon i-calendar')
         .appendTo(this);
         setValue(new DateTime.now());
@@ -707,7 +707,7 @@ class InputDateTime extends Input {
 
 class InputDateRange extends _FieldBuilder<InputField> {
 	FormElement<InputElementBase> field2;
-	CJSElement domAction;
+	CLElement domAction;
 	gui.Pop pop;
 
 	InputDateRange () : super (new InputField(new InputElement(), 'date')){
@@ -717,7 +717,7 @@ class InputDateRange extends _FieldBuilder<InputField> {
 		field2.setStyle({'width':'70px','float':'left'});
 		field2.addAction((e) => focus(), 'focus');
     	field2.addAction((e) => blur(), 'blur');
-		domAction = new CJSElement(new AnchorElement())
+		domAction = new CLElement(new AnchorElement())
 		    .addAction(getDatePicker).setClass('icon i-calendar')
 			.appendTo(this);
         field.addHook(InputField.hook_validate_error, onTypeError);
@@ -772,12 +772,12 @@ class InputDateRange extends _FieldBuilder<InputField> {
 }
 
 class InputFunction extends Input {
-    CJSElement domAction;
+    CLElement domAction;
     int valuetrue;
 
     InputFunction ([type]) : super(type) {
         addClass('function');
-		domAction = new CJSElement(new AnchorElement())
+		domAction = new CLElement(new AnchorElement())
     		.setClass('icon i-function')
 			.appendTo(this);
         field.addAction((e) => setValue(null), 'change');
@@ -803,14 +803,14 @@ class InputFunction extends Input {
 }
 
 class InputLoader extends InputFunction {
-    CJSElement domList;
+    CLElement domList;
     List list;
     Function execute;
     Timer _timer;
     Future _executing;
 
     InputLoader ([type]) : super(type) {
-        domList = new CJSElement(new UListElement())
+        domList = new CLElement(new UListElement())
             .addClass('ui-list')
             .hide().appendTo(this);
         field.addAction((e) => _navAction(e, false), 'keydown');
@@ -912,7 +912,7 @@ class InputLoader extends InputFunction {
         list = new List();
         var string = '(${field.dom.value})';
         o.forEach((el) {
-            var d = new CJSElement(new LIElement()).addAction((e) => setValue(el), 'mousedown');
+            var d = new CLElement(new LIElement()).addAction((e) => setValue(el), 'mousedown');
             d.setHtml(el['v'].replaceAllMapped(new RegExp(string, caseSensitive: false), (m) => '<strong>${m[0]}</strong>'));
             domList.append(d);
             list.add([el, d]);
@@ -998,8 +998,8 @@ class InputLoader extends InputFunction {
 
 abstract class _Lang extends DataElement<DivElement> {
 
-    CJSElement domInner;
-    CJSElement<ImageElement> flag;
+    CLElement domInner;
+    CLElement<ImageElement> flag;
 	List langs = new List();
     Map flags = new Map();
     static Map _static = {
@@ -1010,8 +1010,8 @@ abstract class _Lang extends DataElement<DivElement> {
     _Lang (List lang) : super (new DivElement()){
         _static['objects'].add(this);
 		setStyle({'position':'relative'});
-        domInner = new CJSElement(new DivElement()).setStyle({'overflow':'hidden'}).appendTo(this);
-        flag = new CJSElement(new ImageElement())
+        domInner = new CLElement(new DivElement()).setStyle({'overflow':'hidden'}).appendTo(this);
+        flag = new CLElement(new ImageElement())
             .setStyle({'position':'absolute', 'top':'4px', 'right':'4px', 'opacity':'0.5', 'cursor':'pointer'})
             .appendTo(this);
 		flag
@@ -1309,19 +1309,19 @@ class Paginator extends DataElement {
 
 class Editor extends DataElement {
     app.Application ap;
-	CJSElement<DivElement> frame;
+	CLElement<DivElement> frame;
     TextArea field;
-    CJSElement head, body, footer, path;
+    CLElement head, body, footer, path;
 	utils.Drag drag;
 
     action.Menu menu;
     Map menu_els;
 
-    CJSElement _parent_dom;
+    CLElement _parent_dom;
     int _b_height;
     bool _fullscreen = false;
 
-	CJSElement _fixover;
+	CLElement _fixover;
 	math.Point _res_pos;
 	int _res;
 
@@ -1386,9 +1386,9 @@ class Editor extends DataElement {
     }
 
     _createHTML () {
-        head = new CJSElement(new DivElement()).setClass('ui-editor-header').appendTo(this);
-        body = new CJSElement(new DivElement()).setClass('ui-editor-body').appendTo(this);
-        footer = new CJSElement(new DivElement()).setClass('ui-editor-footer').addClass('ui-editor-footer-resize').appendTo(this);
+        head = new CLElement(new DivElement()).setClass('ui-editor-header').appendTo(this);
+        body = new CLElement(new DivElement()).setClass('ui-editor-body').appendTo(this);
+        footer = new CLElement(new DivElement()).setClass('ui-editor-footer').addClass('ui-editor-footer-resize').appendTo(this);
 
 		drag = new utils.Drag(footer, 'editor')
         	..start(_resizeBefore)
@@ -1396,8 +1396,8 @@ class Editor extends DataElement {
         	..end(_resizeAfter);
 
         field = new TextArea().hide().setStyle({'width':'100%'}).appendTo(body);
-        path = new CJSElement(new SpanElement()).setStyle({'float':'left','white-space':'nowrap','line-height':'26px','padding-left':'3px'}).appendTo(footer);
-        frame = new CJSElement(new DivElement())
+        path = new CLElement(new SpanElement()).setStyle({'float':'left','white-space':'nowrap','line-height':'26px','padding-left':'3px'}).appendTo(footer);
+        frame = new CLElement(new DivElement())
 				.setClass('iframe')
 				.addAction(_getPath, 'mousedown').appendTo(body)
 				.addAction(_onBlur, 'keyup');
@@ -1435,7 +1435,7 @@ class Editor extends DataElement {
 
     _resizeBefore (e) {
         e.stopPropagation();
-        _fixover = new CJSElement(new DivElement())
+        _fixover = new CLElement(new DivElement())
             .setStyle({
                 'position':'absolute',
                 'width':'100%',
@@ -1484,8 +1484,8 @@ class Editor extends DataElement {
             footer.addClass('ui-editor-footer-resize');
             drag.enable = true;
         } else {
-            _parent_dom = new CJSElement(dom.parentNode);
-            var doc = new CJSElement(document.body).append(setStyle({
+            _parent_dom = new CLElement(dom.parentNode);
+            var doc = new CLElement(document.body).append(setStyle({
                 'position':'absolute',
                 'width':'100%',
                 'top':'0px',
@@ -1544,9 +1544,9 @@ class Editor extends DataElement {
     setEditable (e) {
         var ifr = getExecutableElement();
         ifr.contentEditable = "true";
-        new CJSElement(ifr).addAction(getPath, 'mousedown');
+        new CLElement(ifr).addAction(getPath, 'mousedown');
         //if(ifr.body)
-			new CJSElement(ifr).addAction(_onBlur, 'keyup');
+			new CLElement(ifr).addAction(_onBlur, 'keyup');
         setIframeValue(getValue());
         return this;
     }*/
@@ -1600,7 +1600,7 @@ class Editor extends DataElement {
             show();
             close = true;
         }
-		var parent = new CJSElement(dom.parentNode);
+		var parent = new CLElement(dom.parentNode);
         body.setHeight(parent.getHeight() - head.getHeight() - footer.getHeight() - parent.getHeightInnerShift());
         if(close) {
             hide();
@@ -1644,14 +1644,14 @@ class Tag extends DataElement {
         var form = new Form();
         form.add(new Data().setName('value').setValue(value[0], silent));
         forms.add(form);
-        var tag = new CJSElement(new SpanElement())
+        var tag = new CLElement(new SpanElement())
             .setClass('ui-field-tag')
             .appendTo(this);
-        new CJSElement(new SpanElement())
+        new CLElement(new SpanElement())
             .setClass('ui-field-tag-inner')
             .setText(value[1])
             .appendTo(tag);
-        new CJSElement(new AnchorElement())
+        new CLElement(new AnchorElement())
             .setClass('icon i-tag-remove')
             .addAction((e) => _remove(form,tag))
             .appendTo(tag);
@@ -1689,12 +1689,12 @@ abstract class FileManagerBase {
     String base;
     Map icons;
     gui.TreeBuilder tree;
-    CJSElement tree_dom;
+    CLElement tree_dom;
     gui.Tree current;
 
     FileManagerBase(this.ap, this.base, this.main, this.icons);
 
-    initTree (CJSElement tree_dom, [String call = '/directory/list']) {
+    initTree (CLElement tree_dom, [String call = '/directory/list']) {
         this.tree_dom = tree_dom;
         tree = new gui.TreeBuilder({
             'value': '[ $main ]',
@@ -1752,7 +1752,7 @@ abstract class FileManagerBase {
     edit (e) {
         var field = current.domValue;
         var input = new Input();
-        new CJSElement(field).setHtml('').removeClass('active').append(input);
+        new CLElement(field).setHtml('').removeClass('active').append(input);
         input.setValue(current.value).focus().select();
         var called = false;
         var addCatRefresh = (KeyEvent e) {
@@ -1787,7 +1787,7 @@ abstract class FileManagerBase {
         var html = {'inner': new ContainerDataLight()};
         wapi.load({'title': INTL.Move_to(), 'icon': 'redo', 'type':'bound'}, this);
         wapi.win.getContent().addRow(html['inner']);
-        var container = new CJSElement(new DivElement()).setClass('ui-tree-cont');
+        var container = new CLElement(new DivElement()).setClass('ui-tree-cont');
         html['inner'].dom.innerHtml = '';
         html['inner'].append(container);
         var moveTo = (folder) {
@@ -1906,7 +1906,7 @@ class FileManager extends FileManagerBase {
         .then((data) {
             html['right_inner'].removeChilds();
             data.forEach((f) {
-                var c = new CJSElement(new DivElement())
+                var c = new CLElement(new DivElement())
                 .addClass('ui-filemanager-image')
                 .appendTo(html['right_inner']);
                 var o = {

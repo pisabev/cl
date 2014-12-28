@@ -1,13 +1,13 @@
 part of action;
 
-class Button extends CJSElement {
-    CJSElement<ButtonElement> domAction;
+class Button extends CLElement {
+    CLElement<ButtonElement> domAction;
     List sub = new List();
 	String _name;
 
     Button () : super (new SpanElement()) {
 		setClass('ui-button');
-        domAction = new CJSElement(new ButtonElement()).setClass('ui-button-inner').appendTo(this);
+        domAction = new CLElement(new ButtonElement()).setClass('ui-button-inner').appendTo(this);
         setState(true);
     }
 
@@ -20,8 +20,8 @@ class Button extends CJSElement {
 
     addSub (button) {
         sub.add(button);
-		var ul = new CJSElement(new UListElement())..appendTo(this);
-		new CJSElement(new LIElement())..appendTo(ul).append(button);
+		var ul = new CLElement(new UListElement())..appendTo(this);
+		new CLElement(new LIElement())..appendTo(ul).append(button);
         return this;
     }
 
@@ -38,7 +38,7 @@ class Button extends CJSElement {
     }
 
     setTip(String text, [String pos = 'bottom']) {
-        CJSElement tip;
+        CLElement tip;
         Timer timer;
         bool offset_top = false;
         bool offset_left = false;
@@ -51,7 +51,7 @@ class Button extends CJSElement {
         addAction((e) {
             if(state) {
                 var rect = getRectangle();
-                tip = new CJSElement(new DivElement())
+                tip = new CLElement(new DivElement())
                     ..addClass('ui-data-tip $pos-tip')
                     ..setAttribute('data-tips', text)
                     ..setStyle({
@@ -94,10 +94,10 @@ class Button extends CJSElement {
     }
 }
 
-class ButtonOption extends CJSElement {
+class ButtonOption extends CLElement {
     Button domAction;
     Button domActionOptions;
-    CJSElement domList;
+    CLElement domList;
     bool _showed = false;
     List sub = new List();
     String _name;
@@ -109,7 +109,7 @@ class ButtonOption extends CJSElement {
         domAction = new Button().appendTo(this).addClass('ui-main');
         domActionOptions = new Button().appendTo(this).addClass('ui-option');
         domActionOptions.addAction(_showList,'click');
-        domList = new CJSElement(new UListElement()).addClass('ui-button-option-ul').appendTo(this).hide();
+        domList = new CLElement(new UListElement()).addClass('ui-button-option-ul').appendTo(this).hide();
         setState(true);
     }
 
@@ -136,7 +136,7 @@ class ButtonOption extends CJSElement {
         sub.add(button);
         button.addAction((e) => e.stopPropagation(), 'mousedown');
         button.addAction((e) => _hideL(), 'click');
-        new CJSElement(new LIElement()).append(button).appendTo(domList);
+        new CLElement(new LIElement()).append(button).appendTo(domList);
         return this;
     }
 
@@ -162,7 +162,7 @@ class ButtonOption extends CJSElement {
             'top':'${pos.top + height - (_dropDown? 0 : (domList.getHeight() + getHeight() - 1))}px',
             'left':'${pos.left}px',
             'width': '${width}px'});
-        var doc = new CJSElement(document);
+        var doc = new CLElement(document);
         doc.addAction((MouseEvent e) {
             doc.removeAction('mousedown.button_option');
             if(sub.any((but) => but.domAction.dom != e.target))
@@ -180,7 +180,7 @@ class ButtonOption extends CJSElement {
             'top':'0px',
             'left':'0px'});
         domList.hide();
-        new CJSElement(document).removeAction('mousedown.button_option');
+        new CLElement(document).removeAction('mousedown.button_option');
     }
 
     setIcon (icon, [pos]) {
@@ -210,21 +210,21 @@ class ButtonOption extends CJSElement {
     }
 }
 
-class ButtonGroup extends CJSElement {
+class ButtonGroup extends CLElement {
     Button current;
-    CJSElement domList;
+    CLElement domList;
     List sub = new List();
 
     ButtonGroup () : super (new SpanElement()) {
         setClass('ui-button-group');
-        domList = new CJSElement(new UListElement()).addClass('ui-button-ul').appendTo(this);
+        domList = new CLElement(new UListElement()).addClass('ui-button-ul').appendTo(this);
     }
 
     addSub (button) {
         sub.add(button);
         int num = sub.length - 1;
         button.addAction((e) => setCurrent(num), 'click');
-        new CJSElement(new LIElement()).append(button).appendTo(domList);
+        new CLElement(new LIElement()).append(button).appendTo(domList);
         return this;
     }
 
@@ -238,11 +238,11 @@ class ButtonGroup extends CJSElement {
 
 }
 
-class Link extends CJSElement {
-  	CJSElement domAction;
+class Link extends CLElement {
+  	CLElement domAction;
 
   	Link () : super(new SpanElement()) {
-		domAction = new CJSElement(new AnchorElement()).appendTo(this);
+		domAction = new CLElement(new AnchorElement()).appendTo(this);
   	}
 
   	setIcon (icon, [pos]) {
@@ -261,7 +261,7 @@ class Link extends CJSElement {
 }
 
 class Menu extends ElementCollection {
-    CJSElement container;
+    CLElement container;
 
     Menu (this.container) {
         container.addClass('ui-menu');
@@ -303,7 +303,7 @@ class FileUploader extends Button {
     static const String hook_loading = 'hook_loading';
     static const String hook_loaded = 'hook_loaded';
 
-    CJSElement input;
+    CLElement input;
     dynamic id;
     utils.Observer observer;
 
@@ -332,7 +332,7 @@ class FileUploader extends Button {
     }
 
     createForm () {
-        input = new CJSElement(new InputElement());
+        input = new CLElement(new InputElement());
         input.dom
             ..type = 'file'
             ..name = 'filename[]'
@@ -372,7 +372,7 @@ class FileUploader extends Button {
     static const String hook_loading = 'hook_loading';
     static const String hook_loaded = 'hook_loaded';
 
-    CJSElement form;
+    CLElement form;
     dynamic id;
     utils.Observer observer;
 
@@ -401,10 +401,10 @@ class FileUploader extends Button {
     }
 
     createForm () {
-        form = new CJSElement(new FormElement());
+        form = new CLElement(new FormElement());
         form.dom.method = 'post';
         form.dom.enctype = 'multipart/form-data';
-        var input = new CJSElement(new InputElement());
+        var input = new CLElement(new InputElement());
         input.dom.type = 'file';
         input.dom.name = 'filename[]';
         input.dom.multiple = true;
@@ -439,8 +439,8 @@ class FileUploader extends Button {
         var clean = () => iframe_cont.remove();
         var frame = () {
             var n = 'f${new Random().nextInt(1000) * 99999}';
-            iframe_cont = new CJSElement(new DivElement()).appendTo(document.body);
-            iframe = new CJSElement(new IFrameElement());
+            iframe_cont = new CLElement(new DivElement()).appendTo(document.body);
+            iframe = new CLElement(new IFrameElement());
             iframe.dom.src = 'about:blank';
             iframe.dom.id = n;
             iframe.dom.name = n;

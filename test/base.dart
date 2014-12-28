@@ -421,7 +421,7 @@ abstract class Listing implements cl_app.Item {
         .addHook(cl_form.GridList.hook_row, customRow)
         .addHook(cl_form.GridList.hook_row, initRow);
 
-        var cont = new cl.CJSElement(new DivElement())
+        var cont = new cl.CLElement(new DivElement())
         .setStyle({'overflow':'auto', 'height': '100%'})
         .append(grid);
 
@@ -627,12 +627,12 @@ abstract class Listing implements cl_app.Item {
     }
 
     rowCheck (el) {
-        new cl.CJSElement(_chk_to_row[el.hashCode]).addClass('selected');
+        new cl.CLElement(_chk_to_row[el.hashCode]).addClass('selected');
         el.setChecked(true);
     }
 
     rowUncheck (el) {
-        new cl.CJSElement(_chk_to_row[el.hashCode]).removeClass('selected');
+        new cl.CLElement(_chk_to_row[el.hashCode]).removeClass('selected');
         el.setChecked(false);
     }
 }
@@ -738,7 +738,7 @@ abstract class Report implements cl_app.Item {
                 form.add(el['filter']);
         });
         grid.initHeader(h).addRowHook(customRow).addRowHookAfter(customRowAfter);
-        var cont = new cl.CJSElement(new DivElement())
+        var cont = new cl.CLElement(new DivElement())
             ..setStyle({'height':'100%', 'overflow':'auto'})
             ..append(grid);
 
@@ -945,7 +945,7 @@ abstract class ItemOperation extends ItemBase implements cl_app.Item {
         html['right_options_top'].setStyle({'padding':'0px'});
         int i = 0;
         top_form_elements.forEach((page) {
-            var div = new cl.CJSElement(new DivElement()).setClass('custom-order-tab');
+            var div = new cl.CLElement(new DivElement()).setClass('custom-order-tab');
             tab.addTab(i + 1, page['title'], div);
 
             int size = (100/page['data'].length).floor();
@@ -1106,7 +1106,7 @@ class FileAttach extends cl_form.DataElement {
     List images;
     Map conts;
     cl_action.FileUploader uploader;
-    cl.CJSElement container;
+    cl.CLElement container;
     String path_upload, path_tmp, path_media;
 
     FileAttach(this.container, uploader, this.path_upload, this.path_tmp, this.path_media) : super(uploader) {
@@ -1126,12 +1126,12 @@ class FileAttach extends cl_form.DataElement {
     }
 
     contentDraw () {
-        var cont = new cl.CJSElement(new DivElement()).setStyle({'position':'relative', 'padding-right':'20px', 'overflow':'hidden','float':'left'});
-        var link = new cl.CJSElement(new AnchorElement()).setStyle({'line-height':'24px','display':'block'}).appendTo(cont);
+        var cont = new cl.CLElement(new DivElement()).setStyle({'position':'relative', 'padding-right':'20px', 'overflow':'hidden','float':'left'});
+        var link = new cl.CLElement(new AnchorElement()).setStyle({'line-height':'24px','display':'block'}).appendTo(cont);
         link.dom.target = '_blank';
-        var img = new cl.CJSElement(new ImageElement()).setStyle({'vertical-align':'middle'}).appendTo(link);
+        var img = new cl.CLElement(new ImageElement()).setStyle({'vertical-align':'middle'}).appendTo(link);
         img.dom.src = 'packages/cjs/images/ui/loader.gif';
-        var del = new cl.CJSElement(new AnchorElement()).setStyle({'position':'absolute','top':'0px','right':'0px','display':'block'})
+        var del = new cl.CLElement(new AnchorElement()).setStyle({'position':'absolute','top':'0px','right':'0px','display':'block'})
         .setClass('i-tag-remove icon')
         .hide()
         .appendTo(cont);
@@ -1207,13 +1207,13 @@ class FileAttach extends cl_form.DataElement {
     formValue (source) => {'source': source,'opt': 1};
 }
 
-class ComplexField extends cl.CJSElement {
-    cl.CJSElement domTitle;
-    cl.CJSElement field;
+class ComplexField extends cl.CLElement {
+    cl.CLElement domTitle;
+    cl.CLElement field;
     dynamic title;
 
-    ComplexField (this.field) : super(new cl.CJSElement(new DivElement())..setClass('ui-field')) {
-        domTitle = new cl.CJSElement(new SpanElement())..setClass('ui-field-title')..hide()..appendTo(dom);
+    ComplexField (this.field) : super(new cl.CLElement(new DivElement())..setClass('ui-field')) {
+        domTitle = new cl.CLElement(new SpanElement())..setClass('ui-field-title')..hide()..appendTo(dom);
         append(field);
     }
 

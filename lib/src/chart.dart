@@ -1,7 +1,7 @@
 part of chart;
 
 class Chart {
-	CJSElement container;
+	CLElement container;
 	int width =              0;
 	int height =             0;
 	SvgSvgElement svg;

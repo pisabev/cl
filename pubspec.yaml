@@ -1,10 +1,10 @@
-name: cjs
+name: cl
 author: Petar Sabev
-description: UI Framework
+description: Centryl UI Framework
 version: 1.0.0
 dependencies:
   intl: any
   barback: any
   path: any
 transformers:
-- cjs/transformer/svginliner
+- cl/transformer/svginliner
